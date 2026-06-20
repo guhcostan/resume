@@ -42,9 +42,11 @@ Import the repo at [vercel.com/new](https://vercel.com/new). No config needed.
 
 ### GitHub Pages
 A workflow at [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) builds
-and deploys on every push to `main`. Enable **Settings → Pages → Source: GitHub
-Actions**. The workflow sets `NEXT_PUBLIC_BASE_PATH` to the repo name automatically;
-for a custom domain or user/org page, leave it empty.
+the static site on every push to `main` and publishes it to the **`gh-pages`**
+branch (via `peaceiris/actions-gh-pages`, which avoids the Actions artifact storage
+quota). One-time setup: **Settings → Pages → Source: Deploy from a branch →
+Branch: `gh-pages` / `(root)`**. The workflow sets `NEXT_PUBLIC_BASE_PATH` to the
+repo name automatically; for a custom domain or user/org page, leave it empty.
 
 ---
 
