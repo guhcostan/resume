@@ -100,8 +100,6 @@ const shared = {
   links: {
     linkedin: "https://www.linkedin.com/in/guhcostan",
     github: "https://github.com/guhcostan",
-    website: "https://guhcostan.dev",
-    blog: "https://guhcostan.dev/blog",
   },
 };
 

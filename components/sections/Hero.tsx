@@ -6,7 +6,6 @@ import { Terminal } from "@/components/Terminal";
 import {
   DownloadIcon,
   GitHubIcon,
-  GlobeIcon,
   LinkedInIcon,
   MailIcon,
   MapPinIcon,
@@ -93,15 +92,6 @@ export function Hero() {
             className="transition-colors hover:text-indigo-500"
           >
             <LinkedInIcon className="h-5 w-5" />
-          </a>
-          <a
-            href={profile.links.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Website"
-            className="transition-colors hover:text-indigo-500"
-          >
-            <GlobeIcon className="h-5 w-5" />
           </a>
         </div>
         </div>

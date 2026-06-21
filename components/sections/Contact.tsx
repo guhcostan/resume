@@ -3,12 +3,7 @@
 import { useLocale } from "@/components/LanguageProvider";
 import { profile } from "@/lib/content";
 import { Section } from "@/components/sections/Section";
-import {
-  GitHubIcon,
-  GlobeIcon,
-  LinkedInIcon,
-  MailIcon,
-} from "@/components/icons";
+import { GitHubIcon, LinkedInIcon, MailIcon } from "@/components/icons";
 
 export function Contact() {
   const { t } = useLocale();
@@ -47,15 +42,6 @@ export function Contact() {
             className="transition-colors hover:text-indigo-500"
           >
             <LinkedInIcon className="h-5 w-5" />
-          </a>
-          <a
-            href={profile.links.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Website"
-            className="transition-colors hover:text-indigo-500"
-          >
-            <GlobeIcon className="h-5 w-5" />
           </a>
         </div>
       </div>

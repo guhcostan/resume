@@ -9,7 +9,7 @@ export const PROFILE_FACTS = `
 Name: Gustavo Costa
 Headline: Lead Mobile & Frontend Engineer · React Native · TypeScript · AI-Powered Features & Agents · Tech Anchor @ Thoughtworks
 Location: São Sebastião, São Paulo, Brazil
-Contact: guhcostan@gmail.com · linkedin.com/in/guhcostan · github.com/guhcostan · guhcostan.dev
+Contact: guhcostan@gmail.com · linkedin.com/in/guhcostan · github.com/guhcostan
 Languages: Portuguese (native), English (professional), Spanish (professional)
 
 Summary:
