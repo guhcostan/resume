@@ -42,6 +42,7 @@ export interface ContentShape {
     aiHighlight: string;
     ctaEmail: string;
     ctaResume: string;
+    ctaPdf: string;
   };
   terminal: {
     prompt: string;
@@ -128,6 +129,7 @@ export const content: Record<Locale, ContentShape> = {
         "Now focused on AI-assisted engineering: shipping LLM-powered features and autonomous agents in production.",
       ctaEmail: "Get in touch",
       ctaResume: "View LinkedIn",
+      ctaPdf: "Download PDF",
     },
     terminal: {
       prompt: "gustavo@portfolio ~ %",
@@ -318,6 +320,7 @@ export const content: Record<Locale, ContentShape> = {
         "Hoje focado em engenharia assistida por IA: entregando features com LLMs e agentes autônomos em produção.",
       ctaEmail: "Fale comigo",
       ctaResume: "Ver LinkedIn",
+      ctaPdf: "Baixar PDF",
     },
     terminal: {
       prompt: "gustavo@portfolio ~ %",

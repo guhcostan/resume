@@ -44,3 +44,59 @@ body {
 ::selection {
   @apply bg-indigo-500/30;
 }
+
+/* ---------------------------------------------------------------------------
+   Print / "Download PDF" layout
+   Hides chrome (nav, toggles, terminal, animations) and forces a clean,
+   light, single-column resume that prints nicely to PDF in any language.
+--------------------------------------------------------------------------- */
+@media print {
+  /* Force a light, ink-friendly theme regardless of the on-screen mode. */
+  html.dark,
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  /* Hide interactive / decorative chrome that doesn't belong in a CV. */
+  header,
+  [data-print-hide],
+  button {
+    display: none !important;
+  }
+
+  /* Never leave reveal-animated content hidden when printing. */
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Collapse the hero's two-column grid into a single column. */
+  main,
+  section {
+    display: block !important;
+    max-width: 100% !important;
+    padding: 0 0 1rem !important;
+    margin: 0 !important;
+  }
+
+  /* Tighten section spacing for paper. */
+  section {
+    page-break-inside: avoid;
+    padding-top: 0.75rem !important;
+  }
+
+  a {
+    color: #111 !important;
+    text-decoration: none !important;
+  }
+
+  /* Avoid awkward breaks inside experience entries. */
+  li {
+    page-break-inside: avoid;
+  }
+}
