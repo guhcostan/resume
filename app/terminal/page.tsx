@@ -31,8 +31,13 @@ export default function TerminalPage() {
         >
           {t.back}
         </Link>
-        <h1 className="mt-4 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
-          <span className="text-indigo-500">$</span> {t.heading}
+        <h1 className="mt-4 flex flex-wrap items-center gap-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+          <span>
+            <span className="text-indigo-500">$</span> {t.heading}
+          </span>
+          <span className="rounded-full bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-amber-600 dark:text-amber-400">
+            beta
+          </span>
         </h1>
         <p className="mb-8 mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-300">
           {t.sub}

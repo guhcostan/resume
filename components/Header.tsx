@@ -61,6 +61,9 @@ export function Header() {
             >
               <span className="text-xs">✦</span>
               {locale === "pt" ? "Pergunte à IA" : "Ask AI"}
+              <span className="rounded bg-amber-500/15 px-1 py-0.5 text-[9px] font-semibold uppercase text-amber-600 dark:text-amber-400">
+                beta
+              </span>
             </Link>
           </li>
         </ul>
