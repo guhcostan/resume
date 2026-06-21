@@ -4,6 +4,7 @@ import { useLocale } from "@/components/LanguageProvider";
 import { profile } from "@/lib/content";
 import { Terminal } from "@/components/Terminal";
 import {
+  DownloadIcon,
   GitHubIcon,
   GlobeIcon,
   LinkedInIcon,
@@ -64,6 +65,14 @@ export function Hero() {
             <LinkedInIcon className="h-4 w-4" />
             {t.hero.ctaResume}
           </a>
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-indigo-400 hover:text-indigo-500 dark:border-slate-700 dark:text-slate-200 dark:hover:border-indigo-500"
+          >
+            <DownloadIcon className="h-4 w-4" />
+            {t.hero.ctaPdf}
+          </button>
         </div>
 
         <div className="mt-6 flex animate-fade-up items-center gap-4 text-slate-500 dark:text-slate-400">
@@ -97,7 +106,7 @@ export function Hero() {
         </div>
         </div>
 
-        <div className="animate-fade-up lg:pt-2">
+        <div className="animate-fade-up lg:pt-2" data-print-hide>
           <Terminal />
         </div>
       </div>
