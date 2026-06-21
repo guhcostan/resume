@@ -28,9 +28,12 @@ jobs:
 
       - name: Build static site
         # Sets basePath to "/<repo>" so project-page asset URLs resolve.
+        # AI_PROXY_URL (repo variable) points the terminal at the Worker; when
+        # unset the terminal falls back to the in-browser model (WebLLM).
         run: npm run build
         env:
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+          NEXT_PUBLIC_AI_PROXY_URL: ${{ vars.AI_PROXY_URL }}
 
       # Publishes ./out to the gh-pages branch via git. This avoids the
       # Actions artifact storage quota used by the official Pages workflow.

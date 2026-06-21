@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useLocale } from "@/components/LanguageProvider";
 import { useTheme } from "@/components/ThemeProvider";
 import { MoonIcon, SunIcon } from "@/components/icons";
@@ -53,6 +54,15 @@ export function Header() {
               </a>
             </li>
           ))}
+          <li>
+            <Link
+              href="/terminal"
+              className="inline-flex items-center gap-1.5 rounded-md bg-indigo-50 px-2.5 py-1 text-sm font-medium text-indigo-600 transition-colors hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/20"
+            >
+              <span className="text-xs">✦</span>
+              {locale === "pt" ? "Pergunte à IA" : "Ask AI"}
+            </Link>
+          </li>
         </ul>
 
         <div className="flex items-center gap-2">
