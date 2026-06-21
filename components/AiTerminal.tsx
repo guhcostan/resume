@@ -332,6 +332,9 @@ export function AiTerminal() {
         <span className="ml-2 font-mono text-xs text-slate-400">
           ask-gustavo — agent
         </span>
+        <span className="rounded bg-amber-500/15 px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide text-amber-400">
+          beta
+        </span>
         <span className="ml-auto rounded bg-slate-700/50 px-2 py-0.5 font-mono text-[10px] text-slate-300">
           {backendLabel}
         </span>
