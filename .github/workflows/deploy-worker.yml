@@ -1,12 +1,14 @@
 name: Deploy AI Worker
 
+# Disabled for now: runs only when triggered manually (Actions → Run workflow).
+# To re-enable automatic deploys, restore the `push` trigger below.
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "worker/**"
-      - ".github/workflows/deploy-worker.yml"
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - "worker/**"
+  #     - ".github/workflows/deploy-worker.yml"
 
 jobs:
   deploy:
