@@ -68,7 +68,7 @@ export function OpenSource() {
               href={`https://github.com/${GH_USER}/${item.repo}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="reveal group flex flex-col rounded-xl border border-slate-200 bg-slate-50/50 p-5 transition-colors hover:border-indigo-300 dark:border-slate-800 dark:bg-slate-900/40 dark:hover:border-indigo-700"
+              className="reveal group flex flex-col rounded-xl border border-slate-200 bg-slate-50/50 p-5 transition-all duration-200 hover:-translate-y-1 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-500/10 dark:border-slate-800 dark:bg-slate-900/40 dark:hover:border-indigo-700"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">

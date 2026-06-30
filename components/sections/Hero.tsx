@@ -23,13 +23,16 @@ export function Hero() {
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(99,102,241,0.15),transparent_55%)]"
       />
+      <div aria-hidden className="hero-grid pointer-events-none absolute inset-0 -z-10" />
       <div className="mx-auto grid max-w-5xl items-center gap-12 px-5 py-20 sm:py-24 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
         <p className="animate-fade-up text-sm font-medium text-indigo-500">
           {t.hero.greeting}
         </p>
-        <h1 className="mt-2 animate-fade-up text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl dark:text-white">
-          {t.hero.name}
+        <h1 className="mt-2 animate-fade-up text-4xl font-extrabold tracking-tight sm:text-6xl">
+          <span className="inline-block bg-gradient-to-r from-indigo-600 via-violet-500 to-fuchsia-500 bg-clip-text pb-1 text-transparent dark:from-indigo-400 dark:via-violet-400 dark:to-fuchsia-400">
+            {t.hero.name}
+          </span>
         </h1>
         <p className="mt-4 max-w-3xl animate-fade-up text-lg font-medium text-slate-700 sm:text-xl dark:text-slate-200">
           {t.hero.title}
