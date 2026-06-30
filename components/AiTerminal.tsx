@@ -75,7 +75,13 @@ const STRINGS: Record<
   },
 };
 
-export function AiTerminal() {
+export function AiTerminal({
+  autoPreload = true,
+  autoFocusInput = true,
+}: {
+  autoPreload?: boolean;
+  autoFocusInput?: boolean;
+} = {}) {
   const { locale, setLocale } = useLocale();
   const s = STRINGS[locale];
 
@@ -105,7 +111,7 @@ export function AiTerminal() {
   // Preload the model as soon as the page opens (when WebGPU is available), so
   // it's ready — or well on its way — by the time the visitor asks something.
   useEffect(() => {
-    if (!webgpu) return;
+    if (!webgpu || !autoPreload) return;
     let cancelled = false;
     setModelPct(0);
     setModelError(false);
@@ -122,7 +128,7 @@ export function AiTerminal() {
     return () => {
       cancelled = true;
     };
-  }, [webgpu]);
+  }, [webgpu, autoPreload]);
 
   const conversation = useCallback((): ChatMessage[] => {
     // Rebuild the chat history from the transcript (user/assistant turns only).
@@ -331,7 +337,7 @@ export function AiTerminal() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={onKeyDown}
             disabled={inputDisabled}
-            autoFocus
+            autoFocus={autoFocusInput}
             spellCheck={false}
             autoComplete="off"
             placeholder={modelLoading ? s.loadingPlaceholder : s.placeholder}
