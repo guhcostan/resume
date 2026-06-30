@@ -66,10 +66,11 @@ export interface ContentShape {
     heading: string;
     subtitle: string;
     items: {
+      repo: string;
       name: string;
       description: string;
-      meta: string;
-      href: string;
+      tag: string;
+      fallbackStars: number;
     }[];
   };
   education: {
@@ -256,14 +257,47 @@ export const content: Record<Locale, ContentShape> = {
     },
     projects: {
       heading: "Open Source",
-      subtitle: "I ship developer tools for fun on the side.",
+      subtitle: "I ship developer tools for fun on the side (live ⭐ from GitHub).",
       items: [
         {
+          repo: "mac-cleaner-cli",
           name: "mac-cleaner-cli",
           description:
-            "A fast command-line tool to free up disk space on macOS by cleaning caches, logs, and junk files.",
-          meta: "1.5k+ ⭐ on GitHub",
-          href: "https://github.com/guhcostan",
+            "Fast macOS CLI to free disk space — caches, logs, Homebrew, Xcode. Open-source alternative to CleanMyMac.",
+          tag: "TypeScript · CLI",
+          fallbackStars: 1830,
+        },
+        {
+          repo: "b3analysis",
+          name: "b3analysis",
+          description:
+            "AI agent for analyzing Brazilian stocks (B3) with Claude Code — no API keys required.",
+          tag: "Python · AI",
+          fallbackStars: 115,
+        },
+        {
+          repo: "brasilapi-sdk",
+          name: "brasilapi-sdk",
+          description:
+            "TypeScript SDK for Brasil API — CEP, CNPJ, banks, FIPE prices, IBGE data and more.",
+          tag: "TypeScript · SDK",
+          fallbackStars: 69,
+        },
+        {
+          repo: "windows-cleaner-cli",
+          name: "windows-cleaner-cli",
+          description:
+            "Free & open-source Windows cleaner CLI — remove caches, temp files and junk from your terminal.",
+          tag: "CLI",
+          fallbackStars: 69,
+        },
+        {
+          repo: "claude-mega-brain",
+          name: "claude-mega-brain",
+          description:
+            "OKF-powered knowledge context for Claude Code — injects your project's knowledge base into every session.",
+          tag: "Python · Claude Code",
+          fallbackStars: 40,
         },
       ],
     },
@@ -447,14 +481,47 @@ export const content: Record<Locale, ContentShape> = {
     },
     projects: {
       heading: "Open Source",
-      subtitle: "Nas horas vagas, lanço ferramentas para desenvolvedores.",
+      subtitle: "Nas horas vagas, lanço ferramentas pra devs (⭐ ao vivo do GitHub).",
       items: [
         {
+          repo: "mac-cleaner-cli",
           name: "mac-cleaner-cli",
           description:
-            "Uma ferramenta de linha de comando rápida para liberar espaço em disco no macOS, limpando caches, logs e arquivos inúteis.",
-          meta: "1.5k+ ⭐ no GitHub",
-          href: "https://github.com/guhcostan",
+            "CLI rápida pra liberar espaço no macOS — caches, logs, Homebrew, Xcode. Alternativa open source ao CleanMyMac.",
+          tag: "TypeScript · CLI",
+          fallbackStars: 1830,
+        },
+        {
+          repo: "b3analysis",
+          name: "b3analysis",
+          description:
+            "Agente de IA pra análise de ações brasileiras (B3) com Claude Code — sem API keys.",
+          tag: "Python · IA",
+          fallbackStars: 115,
+        },
+        {
+          repo: "brasilapi-sdk",
+          name: "brasilapi-sdk",
+          description:
+            "SDK TypeScript pra Brasil API — CEP, CNPJ, bancos, tabela FIPE, dados do IBGE e mais.",
+          tag: "TypeScript · SDK",
+          fallbackStars: 69,
+        },
+        {
+          repo: "windows-cleaner-cli",
+          name: "windows-cleaner-cli",
+          description:
+            "Limpador de Windows open source via terminal — remove caches, temporários e lixo do sistema.",
+          tag: "CLI",
+          fallbackStars: 69,
+        },
+        {
+          repo: "claude-mega-brain",
+          name: "claude-mega-brain",
+          description:
+            "Contexto de conhecimento (OKF) pro Claude Code — injeta a base de conhecimento do projeto em cada sessão.",
+          tag: "Python · Claude Code",
+          fallbackStars: 40,
         },
       ],
     },

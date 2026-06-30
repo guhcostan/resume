@@ -5,8 +5,6 @@ export interface ChatMessage {
   content: string;
 }
 
-export type Backend = "groq" | "webllm";
-
 export interface StreamHandlers {
   onToken: (delta: string) => void;
   signal?: AbortSignal;

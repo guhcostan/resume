@@ -2,14 +2,21 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useLocale } from "@/components/LanguageProvider";
 import { useTheme } from "@/components/ThemeProvider";
 import { MoonIcon, SunIcon } from "@/components/icons";
+
+const NAV_LINK_CLASS =
+  "text-sm text-slate-600 transition-colors hover:text-indigo-500 dark:text-slate-300 dark:hover:text-indigo-400";
 
 export function Header() {
   const { t, locale, toggleLocale } = useLocale();
   const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
+  // On the home page the nav uses same-page anchors (#about). On other routes
+  // (e.g. /terminal) they must point back to the home sections (/#about).
+  const onHome = usePathname() === "/";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -36,22 +43,34 @@ export function Header() {
       }`}
     >
       <nav className="mx-auto flex max-w-5xl items-center justify-between px-5 py-3">
-        <a
-          href="#top"
-          className="text-sm font-semibold tracking-tight text-slate-900 dark:text-white"
-        >
-          GC<span className="text-indigo-500">.</span>
-        </a>
+        {onHome ? (
+          <a
+            href="#top"
+            className="text-sm font-semibold tracking-tight text-slate-900 dark:text-white"
+          >
+            GC<span className="text-indigo-500">.</span>
+          </a>
+        ) : (
+          <Link
+            href="/"
+            className="text-sm font-semibold tracking-tight text-slate-900 dark:text-white"
+          >
+            GC<span className="text-indigo-500">.</span>
+          </Link>
+        )}
 
         <ul className="hidden items-center gap-6 md:flex">
           {navItems.map((item) => (
             <li key={item.href}>
-              <a
-                href={item.href}
-                className="text-sm text-slate-600 transition-colors hover:text-indigo-500 dark:text-slate-300 dark:hover:text-indigo-400"
-              >
-                {item.label}
-              </a>
+              {onHome ? (
+                <a href={item.href} className={NAV_LINK_CLASS}>
+                  {item.label}
+                </a>
+              ) : (
+                <Link href={`/${item.href}`} className={NAV_LINK_CLASS}>
+                  {item.label}
+                </Link>
+              )}
             </li>
           ))}
           <li>
