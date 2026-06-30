@@ -15,6 +15,8 @@ Vercel or GitHub Pages.
 - 🌗 Dark / light theme (respects system preference, no flash on load)
 - 📱 Fully responsive, accessible, with subtle scroll animations
 - ✏️ All content lives in a single typed file: [`lib/content.ts`](lib/content.ts)
+- 🤖 In-browser AI terminal (WebLLM/WebGPU) at `/terminal`
+- 🧪 Experimental LiteRT-LM lab at `/lab`
 
 ## Getting started / Como rodar
 
@@ -43,10 +45,8 @@ Import the repo at [vercel.com/new](https://vercel.com/new). No config needed.
 ### GitHub Pages
 A workflow at [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) builds
 the static site on every push to `main` and publishes it to the **`gh-pages`**
-branch (via `peaceiris/actions-gh-pages`, which avoids the Actions artifact storage
-quota). One-time setup: **Settings → Pages → Source: Deploy from a branch →
-Branch: `gh-pages` / `(root)`**. The workflow sets `NEXT_PUBLIC_BASE_PATH` to the
-repo name automatically; for a custom domain or user/org page, leave it empty.
+branch. One-time setup: **Settings → Pages → Source: Deploy from a branch →
+Branch: `gh-pages` / `(root)`**.
 
 ---
 
