@@ -1,40 +1,17 @@
 import type { MLCEngineInterface } from "@mlc-ai/web-llm";
 import type { ChatMessage, StreamHandlers } from "@/lib/ai/types";
 
-export interface ModelOption {
-  key: "fast" | "balanced" | "pro";
-  id: string;
-  label: string;
-  sizeMB: number;
-}
-
 /**
- * Curated in-browser models (all q4f16_1, confirmed in @mlc-ai/web-llm 0.2.84).
- * `balanced` is a proven non-thinking multilingual instruct model; `pro` is the
- * newest Qwen3.5 generation. Thinking tags are stripped from output regardless.
+ * Single in-browser model (confirmed in @mlc-ai/web-llm 0.2.84). Gemma 3 1B is
+ * the lightest modern multilingual instruct model (~0.7 GB), so it can be
+ * preloaded on page open without a heavy download. Thinking tags are stripped
+ * from output regardless, in case a model emits them.
  */
-export const MODELS: Record<ModelOption["key"], ModelOption> = {
-  fast: {
-    key: "fast",
-    id: "Llama-3.2-1B-Instruct-q4f16_1-MLC",
-    label: "Llama 3.2 1B",
-    sizeMB: 879,
-  },
-  balanced: {
-    key: "balanced",
-    id: "Qwen2.5-3B-Instruct-q4f16_1-MLC",
-    label: "Qwen2.5 3B",
-    sizeMB: 2505,
-  },
-  pro: {
-    key: "pro",
-    id: "Qwen3.5-4B-q4f16_1-MLC",
-    label: "Qwen3.5 4B",
-    sizeMB: 3868,
-  },
+export const WEBLLM_MODEL = {
+  id: "gemma3-1b-it-q4f16_1-MLC",
+  label: "Gemma 3 1B",
+  sizeMB: 711,
 };
-
-export const DEFAULT_MODEL: ModelOption["key"] = "balanced";
 
 export interface InitProgress {
   text: string;
@@ -42,37 +19,33 @@ export interface InitProgress {
 }
 
 let enginePromise: Promise<MLCEngineInterface> | null = null;
-let loadedModelId: string | null = null;
 
 export function hasWebGPU(): boolean {
   return typeof navigator !== "undefined" && "gpu" in navigator;
 }
 
 /**
- * Lazily creates (and caches) the WebLLM engine for a given model, reporting
- * load progress. Reloads if a different model is requested.
+ * Lazily creates (and caches) the WebLLM engine, reporting load progress.
+ * Safe to call multiple times — the same load promise is reused, so calling it
+ * on mount (to preload) and again on the first question shares one download.
  */
-export async function getEngine(
-  modelId: string,
-  onProgress?: (p: InitProgress) => void
-) {
-  if (enginePromise && loadedModelId === modelId) return enginePromise;
-
-  loadedModelId = modelId;
-  enginePromise = (async () => {
-    const webllm = await import("@mlc-ai/web-llm");
-    return webllm.CreateMLCEngine(modelId, {
-      initProgressCallback: (report) =>
-        onProgress?.({ text: report.text, progress: report.progress }),
-    });
-  })();
+export function getEngine(onProgress?: (p: InitProgress) => void) {
+  if (!enginePromise) {
+    enginePromise = (async () => {
+      const webllm = await import("@mlc-ai/web-llm");
+      return webllm.CreateMLCEngine(WEBLLM_MODEL.id, {
+        initProgressCallback: (report) =>
+          onProgress?.({ text: report.text, progress: report.progress }),
+      });
+    })();
+  }
   return enginePromise;
 }
 
 /**
- * Wraps an emit callback so streamed `<think>…</think>` reasoning blocks
- * (emitted by Qwen3/Qwen3.5) are dropped. Keeps a small tail buffer so tags
- * split across chunks are still detected. Call `flush()` when the stream ends.
+ * Wraps an emit callback so streamed `<think>…</think>` reasoning blocks are
+ * dropped. Keeps a small tail buffer so tags split across chunks are still
+ * detected. Call `flush()` when the stream ends.
  */
 function makeThinkFilter(emit: (s: string) => void) {
   let buf = "";
@@ -81,7 +54,6 @@ function makeThinkFilter(emit: (s: string) => void) {
   const CLOSE = "</think>";
 
   const pump = (final: boolean) => {
-    // Keep a tail so a tag straddling two chunks isn't missed mid-stream.
     const tail = final ? 0 : Math.max(OPEN.length, CLOSE.length);
     while (true) {
       if (!inThink) {
@@ -119,11 +91,10 @@ function makeThinkFilter(emit: (s: string) => void) {
 }
 
 export async function streamWebLLM(
-  modelId: string,
   messages: ChatMessage[],
   { onToken, signal }: StreamHandlers
 ): Promise<void> {
-  const engine = await getEngine(modelId);
+  const engine = await getEngine();
   const filter = makeThinkFilter(onToken);
 
   const chunks = await engine.chat.completions.create({
