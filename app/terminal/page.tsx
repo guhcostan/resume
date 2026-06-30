@@ -13,12 +13,12 @@ export default function TerminalPage() {
       ? {
           back: "← voltar",
           heading: "Pergunte à IA sobre o Gustavo",
-          sub: "Um agente com IA respondendo sobre minha carreira — roda na nuvem (Groq) ou direto no seu navegador (WebLLM/WebGPU). Digite /help para comandos.",
+          sub: "Um agente com IA que roda 100% no seu navegador (WebLLM/WebGPU), respondendo sobre minha carreira — nada sai do seu dispositivo. Digite /help para comandos.",
         }
       : {
           back: "← back",
           heading: "Ask the AI about Gustavo",
-          sub: "An AI agent answering about my career — runs in the cloud (Groq) or right in your browser (WebLLM/WebGPU). Type /help for commands.",
+          sub: "An AI agent that runs entirely in your browser (WebLLM/WebGPU), answering about my career — nothing leaves your device. Type /help for commands.",
         };
 
   return (
