@@ -2,7 +2,7 @@
 
 import { useLocale } from "@/components/LanguageProvider";
 import { profile } from "@/lib/content";
-import { Terminal } from "@/components/Terminal";
+import { AiTerminal } from "@/components/AiTerminal";
 import {
   DownloadIcon,
   GitHubIcon,
@@ -97,7 +97,7 @@ export function Hero() {
         </div>
 
         <div className="animate-fade-up lg:pt-2" data-print-hide>
-          <Terminal />
+          <AiTerminal autoPreload={false} autoFocusInput={false} />
         </div>
       </div>
     </section>
