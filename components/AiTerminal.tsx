@@ -256,7 +256,6 @@ export function AiTerminal() {
   const modelLoading =
     webgpu && !modelError && modelPct !== null && modelPct < 100;
   const inputDisabled = busy || modelLoading;
-  const preloading = modelLoading && !busy;
 
   return (
     <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-slate-700/60 bg-slate-900 shadow-2xl shadow-indigo-500/10">
@@ -276,7 +275,8 @@ export function AiTerminal() {
         </span>
       </div>
 
-      {/* Transcript */}
+      {/* Transcript + loading overlay */}
+      <div className="relative">
       <div
         ref={scrollRef}
         onClick={() => inputRef.current?.focus()}
@@ -313,11 +313,6 @@ export function AiTerminal() {
           <Line key={i} entry={entry} />
         ))}
 
-        {/* Preload progress (before any question) */}
-        {preloading && (
-          <div className="text-fuchsia-400/80">{s.loadingModel(modelPct!)}</div>
-        )}
-
         {/* Loading / thinking indicator */}
         {busy && (
           <div className="text-fuchsia-400">
@@ -344,6 +339,23 @@ export function AiTerminal() {
             aria-label="terminal input"
           />
         </div>
+      </div>
+
+        {/* Blurred loading overlay while the model downloads */}
+        {modelLoading && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-slate-900/50 backdrop-blur-md">
+            <div className="h-9 w-9 animate-spin rounded-full border-2 border-slate-600 border-t-indigo-400" />
+            <div className="max-w-[80%] text-center font-mono text-xs text-slate-200">
+              {s.loadingModel(modelPct ?? 0)}
+            </div>
+            <div className="h-1.5 w-56 max-w-[70%] overflow-hidden rounded-full bg-slate-700">
+              <div
+                className="h-full rounded-full bg-indigo-500 transition-[width] duration-300"
+                style={{ width: `${modelPct ?? 0}%` }}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
