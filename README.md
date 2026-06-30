@@ -15,7 +15,8 @@ Vercel or GitHub Pages.
 - 🌗 Dark / light theme (respects system preference, no flash on load)
 - 📱 Fully responsive, accessible, with subtle scroll animations
 - ✏️ All content lives in a single typed file: [`lib/content.ts`](lib/content.ts)
-- 🤖 In-browser AI terminal (WebLLM/WebGPU) at `/terminal`
+- 🎨 Editorial visual design — Instrument Serif + DM Sans, warm canvas palette
+- 🤖 In-browser AI chat (WebLLM/WebGPU) at `/terminal`
 - 🧪 Experimental LiteRT-LM lab at `/lab`
 
 ## Getting started / Como rodar

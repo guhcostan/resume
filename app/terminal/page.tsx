@@ -1,50 +1,49 @@
 "use client";
 
 import Link from "next/link";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/sections/Footer";
-import { AiTerminal } from "@/components/AiTerminal";
-import { useLocale } from "@/components/LanguageProvider";
+import { AiChatPanel } from "@/components/ai/AiChatPanel";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { useLocale } from "@/components/providers/LanguageProvider";
 
 export default function TerminalPage() {
   const { locale } = useLocale();
-  const t =
+  const copy =
     locale === "pt"
       ? {
-          back: "← voltar",
-          heading: "Pergunte à IA sobre o Gustavo",
-          sub: "Um agente com IA que roda 100% no seu navegador (WebLLM/WebGPU), respondendo sobre minha carreira — nada sai do seu dispositivo. Digite /help para comandos.",
+          back: "← Início",
+          title: "Assistente sobre o Gustavo",
+          subtitle:
+            "IA local no navegador (WebLLM + WebGPU). Pergunte sobre experiência, stack e projetos — nada sai do seu dispositivo.",
         }
       : {
-          back: "← back",
-          heading: "Ask the AI about Gustavo",
-          sub: "An AI agent that runs entirely in your browser (WebLLM/WebGPU), answering about my career — nothing leaves your device. Type /help for commands.",
+          back: "← Home",
+          title: "Assistant about Gustavo",
+          subtitle:
+            "Local in-browser AI (WebLLM + WebGPU). Ask about experience, stack, and projects — nothing leaves your device.",
         };
 
   return (
-    <div>
-      <Header />
-      <main className="mx-auto max-w-3xl px-5 py-12 sm:py-16">
+    <>
+      <SiteHeader />
+      <main className="mx-auto max-w-3xl px-5 pb-20 pt-28 md:px-8">
         <Link
           href="/"
-          className="text-sm text-slate-500 transition-colors hover:text-indigo-500 dark:text-slate-400"
+          className="font-mono text-xs uppercase tracking-widest text-ink-faint transition hover:text-accent dark:text-ink-muted-dark"
         >
-          {t.back}
+          {copy.back}
         </Link>
-        <h1 className="mt-4 flex flex-wrap items-center gap-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
-          <span>
-            <span className="text-indigo-500">$</span> {t.heading}
-          </span>
-          <span className="rounded-full bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-amber-600 dark:text-amber-400">
-            beta
-          </span>
+        <h1 className="mt-6 font-display text-4xl text-ink dark:text-ink-dark md:text-5xl">
+          {copy.title}
         </h1>
-        <p className="mb-8 mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-          {t.sub}
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-muted dark:text-ink-muted-dark">
+          {copy.subtitle}
         </p>
-        <AiTerminal />
+        <div className="mt-10">
+          <AiChatPanel />
+        </div>
       </main>
-      <Footer />
-    </div>
+      <SiteFooter />
+    </>
   );
 }

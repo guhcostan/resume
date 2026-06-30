@@ -1,32 +1,32 @@
 "use client";
 
-import { Header } from "@/components/Header";
-import { Hero } from "@/components/sections/Hero";
-import { About } from "@/components/sections/About";
-import { Experience } from "@/components/sections/Experience";
-import { Skills } from "@/components/sections/Skills";
-import { OpenSource } from "@/components/sections/OpenSource";
-import { Education } from "@/components/sections/Education";
-import { Contact } from "@/components/sections/Contact";
-import { Footer } from "@/components/sections/Footer";
-import { useReveal } from "@/components/useReveal";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { AboutSection } from "@/components/home/AboutSection";
+import { ContactSection } from "@/components/home/ContactSection";
+import { EducationSection } from "@/components/home/EducationSection";
+import { ExperienceSection } from "@/components/home/ExperienceSection";
+import { HeroSection } from "@/components/home/HeroSection";
+import { ProjectsSection } from "@/components/home/ProjectsSection";
+import { SkillsSection } from "@/components/home/SkillsSection";
+import { useReveal } from "@/components/hooks/useReveal";
 
-export default function Home() {
+export default function HomePage() {
   useReveal();
 
   return (
-    <div>
-      <Header />
+    <>
+      <SiteHeader />
       <main>
-        <Hero />
-        <About />
-        <Experience />
-        <Skills />
-        <OpenSource />
-        <Education />
-        <Contact />
+        <HeroSection />
+        <AboutSection />
+        <ExperienceSection />
+        <SkillsSection />
+        <ProjectsSection />
+        <EducationSection />
+        <ContactSection />
       </main>
-      <Footer />
-    </div>
+      <SiteFooter />
+    </>
   );
 }
