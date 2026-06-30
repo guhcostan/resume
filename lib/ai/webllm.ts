@@ -2,15 +2,15 @@ import type { MLCEngineInterface } from "@mlc-ai/web-llm";
 import type { ChatMessage, StreamHandlers } from "@/lib/ai/types";
 
 /**
- * Single in-browser model (confirmed in @mlc-ai/web-llm 0.2.84). Gemma 3 1B is
- * the lightest modern multilingual instruct model (~0.7 GB), so it can be
- * preloaded on page open without a heavy download. Thinking tags are stripped
- * from output regardless, in case a model emits them.
+ * Single in-browser model (confirmed in @mlc-ai/web-llm 0.2.84). Qwen2.5-1.5B
+ * is a small but robust multilingual instruct model (great Portuguese) that
+ * follows the grounded-QA system prompt reliably — gemma3-1b was too small and
+ * degenerated into loops. Thinking tags are stripped regardless.
  */
 export const WEBLLM_MODEL = {
-  id: "gemma3-1b-it-q4f16_1-MLC",
-  label: "Gemma 3 1B",
-  sizeMB: 711,
+  id: "Qwen2.5-1.5B-Instruct-q4f16_1-MLC",
+  label: "Qwen2.5 1.5B",
+  sizeMB: 1630,
 };
 
 export interface InitProgress {
@@ -33,27 +33,7 @@ export function getEngine(onProgress?: (p: InitProgress) => void) {
   if (!enginePromise) {
     enginePromise = (async () => {
       const webllm = await import("@mlc-ai/web-llm");
-      // gemma3-1b ships with both context_window_size and sliding_window_size
-      // positive, which the engine rejects. Override to use a full 4096-token
-      // context window (disable sliding window) so our bio + answer fit.
-      const base = webllm.prebuiltAppConfig;
-      const appConfig = {
-        ...base,
-        model_list: base.model_list.map((m) =>
-          m.model_id === WEBLLM_MODEL.id
-            ? {
-                ...m,
-                overrides: {
-                  ...(m.overrides ?? {}),
-                  context_window_size: 4096,
-                  sliding_window_size: -1,
-                },
-              }
-            : m
-        ),
-      };
       return webllm.CreateMLCEngine(WEBLLM_MODEL.id, {
-        appConfig,
         initProgressCallback: (report) =>
           onProgress?.({ text: report.text, progress: report.progress }),
       });
@@ -124,8 +104,12 @@ export async function streamWebLLM(
   const chunks = await engine.chat.completions.create({
     messages,
     stream: true,
-    temperature: 0.4,
-    max_tokens: 600,
+    temperature: 0.5,
+    top_p: 0.9,
+    // Discourage the small model from looping/repeating itself.
+    frequency_penalty: 0.5,
+    presence_penalty: 0.3,
+    max_tokens: 512,
   });
 
   for await (const chunk of chunks) {
