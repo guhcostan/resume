@@ -13,13 +13,13 @@ import type { Backend, ChatMessage } from "@/lib/ai/types";
 import { buildSystemPrompt, SUGGESTED_QUESTIONS } from "@/lib/ai/profile";
 import { isGroqConfigured, streamGroq } from "@/lib/ai/groq";
 import {
-  DEFAULT_MODEL,
   getEngine,
   hasWebGPU,
-  MODELS,
   streamWebLLM,
-  type ModelOption,
+  WEBLLM_MODEL,
 } from "@/lib/ai/webllm";
+
+const MODEL_GB = (WEBLLM_MODEL.sizeMB / 1024).toFixed(1);
 
 type EntryKind = "user" | "assistant" | "system" | "error";
 interface Entry {
@@ -35,8 +35,8 @@ const STRINGS: Record<
     intro: string[];
     placeholder: string;
     thinking: string;
-    loadingModel: (label: string, sizeGB: string, pct: number) => string;
-    modelSet: (label: string, sizeGB: string) => string;
+    loadingModel: (pct: number) => string;
+    modelReady: string;
     noBackend: string;
     switchedLocal: string;
     switchedCloud: string;
@@ -44,7 +44,7 @@ const STRINGS: Record<
     needProxy: string;
     suggestionsLabel: string;
     backendCloud: string;
-    backendLocal: (label: string) => string;
+    backendLocal: string;
     help: string[];
   }
 > = {
@@ -55,29 +55,24 @@ const STRINGS: Record<
     ],
     placeholder: "Ask about Gustavo…",
     thinking: "thinking…",
-    loadingModel: (label, sizeGB, pct) =>
-      `downloading ${label} (~${sizeGB} GB, one-time)… ${pct}%`,
-    modelSet: (label, sizeGB) =>
-      `Local model set to ${label} (~${sizeGB} GB). It downloads on your next question.`,
+    loadingModel: (pct) =>
+      `loading ${WEBLLM_MODEL.label} (~${MODEL_GB} GB, one-time)… ${pct}%`,
+    modelReady: `local model ready (${WEBLLM_MODEL.label})`,
     noBackend:
-      "No AI backend is available yet. Set up the proxy or use a WebGPU browser.",
+      "No AI backend available — this browser has no WebGPU and no cloud proxy is set.",
     switchedLocal: "Switched to local model (WebLLM, in-browser).",
     switchedCloud: "Switched to cloud model (Groq).",
     needWebGPU: "This browser has no WebGPU — local model unavailable.",
     needProxy: "Cloud model not configured (no proxy URL).",
     suggestionsLabel: "try asking:",
     backendCloud: "cloud · groq",
-    backendLocal: (label) => `local · ${label}`,
+    backendLocal: `local · ${WEBLLM_MODEL.label}`,
     help: [
-      "/help            show this help",
-      "/clear           clear the screen",
-      "/local           run the model in your browser (WebGPU)",
-      "/cloud           use the hosted model (Groq)",
-      "/model           list local models",
-      "/model fast      Llama 3.2 1B (~0.9 GB)",
-      "/model balanced  Qwen2.5 3B (~2.5 GB, default)",
-      "/model pro       Qwen3.5 4B (~3.9 GB, newest)",
-      "/en /pt          switch language",
+      "/help     show this help",
+      "/clear    clear the screen",
+      "/local    run the model in your browser (WebGPU)",
+      "/cloud    use the hosted model (Groq)",
+      "/en /pt   switch language",
     ],
   },
   pt: {
@@ -87,29 +82,24 @@ const STRINGS: Record<
     ],
     placeholder: "Pergunte sobre o Gustavo…",
     thinking: "pensando…",
-    loadingModel: (label, sizeGB, pct) =>
-      `baixando ${label} (~${sizeGB} GB, uma vez)… ${pct}%`,
-    modelSet: (label, sizeGB) =>
-      `Modelo local definido: ${label} (~${sizeGB} GB). Ele baixa na próxima pergunta.`,
+    loadingModel: (pct) =>
+      `carregando ${WEBLLM_MODEL.label} (~${MODEL_GB} GB, uma vez)… ${pct}%`,
+    modelReady: `modelo local pronto (${WEBLLM_MODEL.label})`,
     noBackend:
-      "Nenhum backend de IA disponível ainda. Configure o proxy ou use um navegador com WebGPU.",
+      "Nenhum backend de IA disponível — este navegador não tem WebGPU e não há proxy na nuvem.",
     switchedLocal: "Mudou para o modelo local (WebLLM, no navegador).",
     switchedCloud: "Mudou para o modelo na nuvem (Groq).",
     needWebGPU: "Este navegador não tem WebGPU — modelo local indisponível.",
     needProxy: "Modelo na nuvem não configurado (sem URL do proxy).",
     suggestionsLabel: "experimente perguntar:",
     backendCloud: "nuvem · groq",
-    backendLocal: (label) => `local · ${label}`,
+    backendLocal: `local · ${WEBLLM_MODEL.label}`,
     help: [
-      "/help            mostra esta ajuda",
-      "/clear           limpa a tela",
-      "/local           roda o modelo no seu navegador (WebGPU)",
-      "/cloud           usa o modelo hospedado (Groq)",
-      "/model           lista os modelos locais",
-      "/model fast      Llama 3.2 1B (~0.9 GB)",
-      "/model balanced  Qwen2.5 3B (~2.5 GB, padrão)",
-      "/model pro       Qwen3.5 4B (~3.9 GB, mais novo)",
-      "/en /pt          troca o idioma",
+      "/help     mostra esta ajuda",
+      "/clear    limpa a tela",
+      "/local    roda o modelo no seu navegador (WebGPU)",
+      "/cloud    usa o modelo hospedado (Groq)",
+      "/en /pt   troca o idioma",
     ],
   },
 };
@@ -125,7 +115,6 @@ export function AiTerminal() {
     isGroqConfigured() ? "groq" : "webllm"
   );
   const [modelPct, setModelPct] = useState<number | null>(null);
-  const [modelKey, setModelKey] = useState<ModelOption["key"]>(DEFAULT_MODEL);
 
   const history = useRef<string[]>([]);
   const historyIdx = useRef<number>(-1);
@@ -144,6 +133,27 @@ export function AiTerminal() {
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
   }, [entries, modelPct]);
+
+  // Preload the local model as soon as the page opens (when the cloud backend
+  // isn't configured and the browser supports WebGPU), so it's ready — or well
+  // on its way — by the time the visitor asks something.
+  useEffect(() => {
+    if (groqOn || !webgpu) return;
+    let cancelled = false;
+    setModelPct(0);
+    getEngine((p) => {
+      if (!cancelled) setModelPct(Math.round(p.progress * 100));
+    })
+      .then(() => {
+        if (!cancelled) setModelPct(100);
+      })
+      .catch(() => {
+        /* errors surface when the user actually asks */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [groqOn, webgpu]);
 
   const conversation = useCallback((): ChatMessage[] => {
     // Rebuild the chat history from the transcript (user/assistant turns only).
@@ -198,13 +208,10 @@ export function AiTerminal() {
         if (usingGroq) {
           await streamGroq(messages, { onToken, signal });
         } else {
-          const model = MODELS[modelKey];
-          setModelPct(0);
-          await getEngine(model.id, (p) =>
-            setModelPct(Math.round(p.progress * 100))
-          );
+          // Engine is usually already preloaded; getEngine reuses that promise.
+          await getEngine((p) => setModelPct(Math.round(p.progress * 100)));
           setModelPct(100);
-          await streamWebLLM(model.id, messages, { onToken, signal });
+          await streamWebLLM(messages, { onToken, signal });
         }
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
@@ -221,17 +228,13 @@ export function AiTerminal() {
         abortRef.current = null;
       }
     },
-    [backend, groqOn, webgpu, locale, conversation, push, s, modelKey]
+    [backend, groqOn, webgpu, locale, conversation, push, s]
   );
 
   const runCommand = useCallback(
     (raw: string): boolean => {
-      const parts = raw.trim().toLowerCase().split(/\s+/);
-      const cmd = parts[0];
-      const arg = parts[1];
+      const cmd = raw.trim().toLowerCase();
       if (!cmd.startsWith("/")) return false;
-
-      const gb = (mb: number) => (mb / 1024).toFixed(1);
 
       switch (cmd) {
         case "/help":
@@ -254,25 +257,6 @@ export function AiTerminal() {
             push({ kind: "system", text: s.switchedCloud });
           }
           return true;
-        case "/model": {
-          if (arg && arg in MODELS) {
-            const m = MODELS[arg as ModelOption["key"]];
-            setModelKey(m.key);
-            setBackend("webllm");
-            push({ kind: "system", text: s.modelSet(m.label, gb(m.sizeMB)) });
-          } else {
-            // list available models
-            const list = (Object.keys(MODELS) as ModelOption["key"][]).map(
-              (k) => {
-                const m = MODELS[k];
-                const mark = k === modelKey ? "›" : " ";
-                return `${mark} ${k.padEnd(9)} ${m.label} (~${gb(m.sizeMB)} GB)`;
-              }
-            );
-            push({ kind: "system", text: list.join("\n") });
-          }
-          return true;
-        }
         case "/en":
           setLocale("en");
           return true;
@@ -284,7 +268,7 @@ export function AiTerminal() {
           return true;
       }
     },
-    [push, s, webgpu, groqOn, setLocale, modelKey]
+    [push, s, webgpu, groqOn, setLocale]
   );
 
   const submit = useCallback(
@@ -317,10 +301,13 @@ export function AiTerminal() {
     }
   };
 
-  const backendLabel =
-    backend === "groq"
-      ? s.backendCloud
-      : s.backendLocal(MODELS[modelKey].label);
+  const backendLabel = backend === "groq" ? s.backendCloud : s.backendLocal;
+  const preloading =
+    backend === "webllm" &&
+    webgpu &&
+    modelPct !== null &&
+    modelPct < 100 &&
+    !busy;
 
   return (
     <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-slate-700/60 bg-slate-900 shadow-2xl shadow-indigo-500/10">
@@ -376,15 +363,16 @@ export function AiTerminal() {
           <Line key={i} entry={entry} />
         ))}
 
+        {/* Preload progress (before any question) */}
+        {preloading && (
+          <div className="text-fuchsia-400/80">{s.loadingModel(modelPct!)}</div>
+        )}
+
         {/* Loading / thinking indicator */}
         {busy && (
           <div className="text-fuchsia-400">
             {modelPct !== null && modelPct < 100 && backend === "webllm"
-              ? s.loadingModel(
-                  MODELS[modelKey].label,
-                  (MODELS[modelKey].sizeMB / 1024).toFixed(1),
-                  modelPct
-                )
+              ? s.loadingModel(modelPct)
               : s.thinking}
           </div>
         )}
