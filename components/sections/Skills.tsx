@@ -12,7 +12,7 @@ export function Skills() {
         {t.skills.groups.map((group) => (
           <div
             key={group.title}
-            className="reveal rounded-xl border border-slate-200 bg-slate-50/50 p-5 transition-colors hover:border-indigo-300 dark:border-slate-800 dark:bg-slate-900/40 dark:hover:border-indigo-700"
+            className="reveal rounded-xl border border-slate-200 bg-slate-50/50 p-5 transition-all duration-200 hover:-translate-y-1 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-500/10 dark:border-slate-800 dark:bg-slate-900/40 dark:hover:border-indigo-700"
           >
             <h3 className="mb-3 text-sm font-semibold text-slate-900 dark:text-white">
               {group.title}
