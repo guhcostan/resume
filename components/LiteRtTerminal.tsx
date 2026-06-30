@@ -6,9 +6,11 @@ import type { Locale } from "@/lib/content";
 import { buildSystemPrompt, SUGGESTED_QUESTIONS } from "@/lib/ai/profile";
 import {
   getLiteRtEngine,
+  hasJSPI,
   hasWebGPU,
   LITERT_MODEL,
   streamLiteRt,
+  type DownloadProgress,
 } from "@/lib/ai/litertlm";
 
 type EntryKind = "user" | "assistant" | "system" | "error";
@@ -19,6 +21,12 @@ interface Entry {
 
 const PROMPT = "guest@guhcostan ~ %";
 
+function fmtMB(bytes: number): string {
+  const gb = bytes / 1024 ** 3;
+  if (gb >= 1) return `${gb.toFixed(2)} GB`;
+  return `${(bytes / 1024 ** 2).toFixed(0)} MB`;
+}
+
 const STRINGS: Record<
   Locale,
   {
@@ -26,8 +34,9 @@ const STRINGS: Record<
     placeholder: string;
     loadingPlaceholder: string;
     thinking: string;
-    loading: string;
+    downloading: string;
     noWebGPU: string;
+    noJSPI: string;
     suggestionsLabel: string;
     help: string[];
   }
@@ -40,9 +49,11 @@ const STRINGS: Record<
     placeholder: "Ask about Gustavo…",
     loadingPlaceholder: "loading model… please wait",
     thinking: "thinking…",
-    loading: `downloading ${LITERT_MODEL.label} — first load can take a few minutes…`,
+    downloading: "downloading model",
     noWebGPU:
-      "This browser doesn't support WebGPU. Try the latest Chrome/Edge desktop or Safari (iOS/macOS 26+).",
+      "This browser doesn't support WebGPU. Try the latest Chrome/Edge desktop.",
+    noJSPI:
+      "LiteRT-LM needs WebAssembly JSPI, which Safari (iOS/macOS) doesn't support yet. Open this on desktop Chrome or Edge to try Gemma 4. (The main /terminal works everywhere.)",
     suggestionsLabel: "try asking:",
     help: [
       "/help     show this help",
@@ -58,9 +69,11 @@ const STRINGS: Record<
     placeholder: "Pergunte sobre o Gustavo…",
     loadingPlaceholder: "carregando modelo… aguarde",
     thinking: "pensando…",
-    loading: `baixando ${LITERT_MODEL.label} — a 1ª carga pode levar alguns minutos…`,
+    downloading: "baixando modelo",
     noWebGPU:
-      "Este navegador não suporta WebGPU. Use Chrome/Edge desktop recente ou Safari (iOS/macOS 26+).",
+      "Este navegador não suporta WebGPU. Use Chrome/Edge desktop recente.",
+    noJSPI:
+      "O LiteRT-LM precisa do WebAssembly JSPI, que o Safari (iOS/macOS) ainda não suporta. Abra no Chrome ou Edge desktop pra testar o Gemma 4. (O /terminal principal funciona em qualquer navegador.)",
     suggestionsLabel: "experimente perguntar:",
     help: [
       "/help     mostra esta ajuda",
@@ -80,6 +93,7 @@ export function LiteRtTerminal() {
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
   const [errored, setErrored] = useState(false);
+  const [progress, setProgress] = useState<DownloadProgress | null>(null);
 
   const history = useRef<string[]>([]);
   const historyIdx = useRef<number>(-1);
@@ -87,7 +101,14 @@ export function LiteRtTerminal() {
   const inputRef = useRef<HTMLInputElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
+  // Capability checks are client-only; gate on `mounted` so the first client
+  // render matches the statically prerendered HTML (avoids hydration mismatch).
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const webgpu = useMemo(() => hasWebGPU(), []);
+  const jspi = useMemo(() => hasJSPI(), []);
+  const supported = mounted && webgpu && jspi;
+  const unsupported = mounted && !(webgpu && jspi);
 
   const push = useCallback((entry: Entry) => {
     setEntries((prev) => [...prev, entry]);
@@ -95,14 +116,16 @@ export function LiteRtTerminal() {
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
-  }, [entries, loading]);
+  }, [entries, loading, progress]);
 
-  // Preload the model on open.
+  // Preload the model on open (only when the runtime is supported).
   useEffect(() => {
-    if (!webgpu) return;
+    if (!supported) return;
     let cancelled = false;
     setLoading(true);
-    getLiteRtEngine()
+    getLiteRtEngine((p) => {
+      if (!cancelled) setProgress(p);
+    })
       .then(() => {
         if (!cancelled) {
           setReady(true);
@@ -121,20 +144,17 @@ export function LiteRtTerminal() {
     return () => {
       cancelled = true;
     };
-  }, [webgpu, push]);
+  }, [supported, push]);
 
   const ask = useCallback(
     async (question: string) => {
-      if (!webgpu) {
-        push({ kind: "error", text: s.noWebGPU });
+      if (!webgpu || !jspi) {
+        push({ kind: "error", text: jspi ? s.noWebGPU : s.noJSPI });
         return;
       }
       setBusy(true);
       abortRef.current = new AbortController();
       const signal = abortRef.current.signal;
-
-      // LiteRT-LM takes a single message; ground it with the profile each turn.
-      const prompt = `${buildSystemPrompt(locale)}\n\n${question}`;
 
       let assistantIndex = -1;
       setEntries((prev) => {
@@ -156,7 +176,10 @@ export function LiteRtTerminal() {
       };
 
       try {
-        await streamLiteRt(prompt, { onToken, signal });
+        await streamLiteRt(buildSystemPrompt(locale), question, {
+          onToken,
+          signal,
+        });
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         setEntries((prev) => {
@@ -171,7 +194,7 @@ export function LiteRtTerminal() {
         abortRef.current = null;
       }
     },
-    [webgpu, locale, push, s]
+    [webgpu, jspi, locale, push, s]
   );
 
   const runCommand = useCallback(
@@ -230,7 +253,12 @@ export function LiteRtTerminal() {
     }
   };
 
-  const inputDisabled = busy || (loading && !errored);
+  const showLoading = loading && !errored;
+  const inputDisabled = busy || showLoading || !supported;
+  const pct =
+    progress && progress.total > 0
+      ? Math.round((progress.loaded / progress.total) * 100)
+      : null;
 
   return (
     <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-slate-700/60 bg-slate-900 shadow-2xl shadow-fuchsia-500/10">
@@ -261,7 +289,11 @@ export function LiteRtTerminal() {
             ))}
           </div>
 
-          {entries.length === 0 && (
+          {unsupported && (
+            <div className="mt-2 text-amber-400">⚠ {jspi ? s.noWebGPU : s.noJSPI}</div>
+          )}
+
+          {entries.length === 0 && supported && (
             <div className="pt-2">
               <div className="mb-1 text-slate-500">{s.suggestionsLabel}</div>
               <div className="flex flex-wrap gap-2">
@@ -297,20 +329,32 @@ export function LiteRtTerminal() {
               autoFocus
               spellCheck={false}
               autoComplete="off"
-              placeholder={
-                loading && !errored ? s.loadingPlaceholder : s.placeholder
-              }
+              placeholder={showLoading ? s.loadingPlaceholder : s.placeholder}
               className="flex-1 bg-transparent text-slate-100 placeholder:text-slate-600 focus:outline-none disabled:opacity-50"
               aria-label="terminal input"
             />
           </div>
         </div>
 
-        {loading && !errored && (
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-slate-900/50 backdrop-blur-md">
+        {/* Download overlay with progress bar */}
+        {showLoading && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-slate-900/60 backdrop-blur-md px-6">
             <div className="h-9 w-9 animate-spin rounded-full border-2 border-slate-600 border-t-fuchsia-400" />
-            <div className="max-w-[80%] text-center font-mono text-xs text-slate-200">
-              {s.loading}
+            <div className="text-center font-mono text-xs text-slate-200">
+              {s.downloading}
+              {progress
+                ? ` — ${fmtMB(progress.loaded)}${
+                    progress.total > 0 ? ` / ${fmtMB(progress.total)}` : ""
+                  }${pct !== null ? ` (${pct}%)` : ""}`
+                : "…"}
+            </div>
+            <div className="h-1.5 w-64 max-w-[75%] overflow-hidden rounded-full bg-slate-700">
+              <div
+                className={`h-full rounded-full bg-fuchsia-500 transition-[width] duration-200 ${
+                  pct === null ? "animate-pulse w-1/3" : ""
+                }`}
+                style={pct !== null ? { width: `${pct}%` } : undefined}
+              />
             </div>
           </div>
         )}
