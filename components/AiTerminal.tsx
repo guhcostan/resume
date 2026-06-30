@@ -22,6 +22,7 @@ const STRINGS: Record<
   {
     intro: string[];
     placeholder: string;
+    loadingPlaceholder: string;
     thinking: string;
     loadingModel: (pct: number) => string;
     noWebGPU: string;
@@ -37,6 +38,7 @@ const STRINGS: Record<
       "Type a question and hit enter — or try /help for commands.",
     ],
     placeholder: "Ask about Gustavo…",
+    loadingPlaceholder: "loading model… please wait",
     thinking: "thinking…",
     loadingModel: (pct) =>
       `loading ${WEBLLM_MODEL.label} (~${MODEL_GB} GB, one-time)… ${pct}%`,
@@ -57,6 +59,7 @@ const STRINGS: Record<
       "Escreva uma pergunta e aperte enter — ou tente /help para comandos.",
     ],
     placeholder: "Pergunte sobre o Gustavo…",
+    loadingPlaceholder: "carregando modelo… aguarde",
     thinking: "pensando…",
     loadingModel: (pct) =>
       `carregando ${WEBLLM_MODEL.label} (~${MODEL_GB} GB, uma vez)… ${pct}%`,
@@ -80,6 +83,7 @@ export function AiTerminal() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [modelPct, setModelPct] = useState<number | null>(null);
+  const [modelError, setModelError] = useState(false);
 
   const history = useRef<string[]>([]);
   const historyIdx = useRef<number>(-1);
@@ -104,6 +108,7 @@ export function AiTerminal() {
     if (!webgpu) return;
     let cancelled = false;
     setModelPct(0);
+    setModelError(false);
     getEngine((p) => {
       if (!cancelled) setModelPct(Math.round(p.progress * 100));
     })
@@ -111,7 +116,8 @@ export function AiTerminal() {
         if (!cancelled) setModelPct(100);
       })
       .catch(() => {
-        /* errors surface when the user actually asks */
+        // Unblock the input so the user can retry / see the error on ask.
+        if (!cancelled) setModelError(true);
       });
     return () => {
       cancelled = true;
@@ -246,8 +252,11 @@ export function AiTerminal() {
     }
   };
 
-  const preloading =
-    webgpu && modelPct !== null && modelPct < 100 && !busy;
+  // The model is downloading/initializing — block input until it's ready.
+  const modelLoading =
+    webgpu && !modelError && modelPct !== null && modelPct < 100;
+  const inputDisabled = busy || modelLoading;
+  const preloading = modelLoading && !busy;
 
   return (
     <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-slate-700/60 bg-slate-900 shadow-2xl shadow-indigo-500/10">
@@ -290,7 +299,8 @@ export function AiTerminal() {
                   key={q}
                   type="button"
                   onClick={() => submit(q)}
-                  className="rounded border border-slate-700 px-2 py-1 text-xs text-indigo-300 transition-colors hover:border-indigo-500 hover:bg-slate-800"
+                  disabled={inputDisabled}
+                  className="rounded border border-slate-700 px-2 py-1 text-xs text-indigo-300 transition-colors hover:border-indigo-500 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {q}
                 </button>
@@ -325,11 +335,11 @@ export function AiTerminal() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={onKeyDown}
-            disabled={busy}
+            disabled={inputDisabled}
             autoFocus
             spellCheck={false}
             autoComplete="off"
-            placeholder={s.placeholder}
+            placeholder={modelLoading ? s.loadingPlaceholder : s.placeholder}
             className="flex-1 bg-transparent text-slate-100 placeholder:text-slate-600 focus:outline-none disabled:opacity-50"
             aria-label="terminal input"
           />

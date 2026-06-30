@@ -33,11 +33,35 @@ export function getEngine(onProgress?: (p: InitProgress) => void) {
   if (!enginePromise) {
     enginePromise = (async () => {
       const webllm = await import("@mlc-ai/web-llm");
+      // gemma3-1b ships with both context_window_size and sliding_window_size
+      // positive, which the engine rejects. Override to use a full 4096-token
+      // context window (disable sliding window) so our bio + answer fit.
+      const base = webllm.prebuiltAppConfig;
+      const appConfig = {
+        ...base,
+        model_list: base.model_list.map((m) =>
+          m.model_id === WEBLLM_MODEL.id
+            ? {
+                ...m,
+                overrides: {
+                  ...(m.overrides ?? {}),
+                  context_window_size: 4096,
+                  sliding_window_size: -1,
+                },
+              }
+            : m
+        ),
+      };
       return webllm.CreateMLCEngine(WEBLLM_MODEL.id, {
+        appConfig,
         initProgressCallback: (report) =>
           onProgress?.({ text: report.text, progress: report.progress }),
       });
-    })();
+    })().catch((err) => {
+      // Allow a later retry by clearing the cached (rejected) promise.
+      enginePromise = null;
+      throw err;
+    });
   }
   return enginePromise;
 }
