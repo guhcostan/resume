@@ -5,17 +5,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "@/components/LanguageProvider";
 import { useTheme } from "@/components/ThemeProvider";
-import { MoonIcon, SunIcon } from "@/components/icons";
+import { MoonIcon, SparklesIcon, SunIcon } from "@/components/icons";
 
-const NAV_LINK_CLASS =
-  "text-sm text-slate-600 transition-colors hover:text-indigo-500 dark:text-slate-300 dark:hover:text-indigo-400";
+const TOGGLE_CLASS =
+  "rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-600 transition-colors hover:border-brand/60 hover:text-brand-fg dark:border-ink-border dark:text-slate-300 dark:hover:border-brand/60 dark:hover:text-violet-300";
 
+/**
+ * Minimal top bar: identity on the left, "Ask AI" + language/theme toggles on
+ * the right. Section navigation lives in the bottom Dock (mobile-app style).
+ */
 export function Header() {
-  const { t, locale, toggleLocale } = useLocale();
+  const { locale, toggleLocale } = useLocale();
   const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
-  // On the home page the nav uses same-page anchors (#about). On other routes
-  // (e.g. /terminal) they must point back to the home sections (/#about).
   const onHome = usePathname() === "/";
 
   useEffect(() => {
@@ -25,74 +27,37 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const navItems = [
-    { href: "#about", label: t.nav.about },
-    { href: "#experience", label: t.nav.experience },
-    { href: "#skills", label: t.nav.skills },
-    { href: "#projects", label: t.nav.projects },
-    { href: "#education", label: t.nav.education },
-    { href: "#contact", label: t.nav.contact },
-  ];
+  const logo = (
+    <span className="font-mono text-sm font-semibold tracking-tight text-slate-900 dark:text-white">
+      <span className="text-brand">~/</span>guhcostan
+      <span className="text-brand">_</span>
+    </span>
+  );
 
   return (
     <header
       className={`sticky top-0 z-50 transition-colors ${
         scrolled
-          ? "border-b border-slate-200/70 bg-white/80 backdrop-blur dark:border-slate-800/70 dark:bg-slate-950/80"
+          ? "border-b border-slate-200/70 bg-slate-50/85 backdrop-blur dark:border-ink-border/80 dark:bg-ink/80"
           : "border-b border-transparent"
       }`}
     >
-      <nav className="mx-auto flex max-w-5xl items-center justify-between px-5 py-3">
-        {onHome ? (
-          <a
-            href="#top"
-            className="text-sm font-semibold tracking-tight text-slate-900 dark:text-white"
-          >
-            GC<span className="text-indigo-500">.</span>
-          </a>
-        ) : (
-          <Link
-            href="/"
-            className="text-sm font-semibold tracking-tight text-slate-900 dark:text-white"
-          >
-            GC<span className="text-indigo-500">.</span>
-          </Link>
-        )}
-
-        <ul className="hidden items-center gap-6 md:flex">
-          {navItems.map((item) => (
-            <li key={item.href}>
-              {onHome ? (
-                <a href={item.href} className={NAV_LINK_CLASS}>
-                  {item.label}
-                </a>
-              ) : (
-                <Link href={`/${item.href}`} className={NAV_LINK_CLASS}>
-                  {item.label}
-                </Link>
-              )}
-            </li>
-          ))}
-          <li>
-            <Link
-              href="/terminal"
-              className="inline-flex items-center gap-1.5 rounded-md bg-indigo-50 px-2.5 py-1 text-sm font-medium text-indigo-600 transition-colors hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/20"
-            >
-              <span className="text-xs">✦</span>
-              {locale === "pt" ? "Pergunte à IA" : "Ask AI"}
-              <span className="rounded bg-amber-500/15 px-1 py-0.5 text-[9px] font-semibold uppercase text-amber-600 dark:text-amber-400">
-                beta
-              </span>
-            </Link>
-          </li>
-        </ul>
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
+        {onHome ? <a href="#top">{logo}</a> : <Link href="/">{logo}</Link>}
 
         <div className="flex items-center gap-2">
+          <Link
+            href="/terminal"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-brand/30 bg-brand/10 px-2.5 py-1.5 text-xs font-semibold text-brand-fg transition-colors hover:bg-brand/20 dark:text-violet-300"
+          >
+            <SparklesIcon className="h-3.5 w-3.5" />
+            {locale === "pt" ? "Terminal IA" : "AI Terminal"}
+          </Link>
           <button
             type="button"
             onClick={toggleLocale}
             aria-label="Toggle language"
-            className="rounded-md border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:border-indigo-400 hover:text-indigo-500 dark:border-slate-700 dark:text-slate-200 dark:hover:border-indigo-500"
+            className={TOGGLE_CLASS}
           >
             {locale === "pt" ? "EN" : "PT"}
           </button>
@@ -100,7 +65,7 @@ export function Header() {
             type="button"
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="rounded-md border border-slate-200 p-2 text-slate-700 transition-colors hover:border-indigo-400 hover:text-indigo-500 dark:border-slate-700 dark:text-slate-200 dark:hover:border-indigo-500"
+            className={`${TOGGLE_CLASS} p-2`}
           >
             {theme === "dark" ? (
               <SunIcon className="h-4 w-4" />

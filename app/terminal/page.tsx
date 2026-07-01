@@ -27,13 +27,13 @@ export default function TerminalPage() {
       <main className="mx-auto max-w-3xl px-5 py-12 sm:py-16">
         <Link
           href="/"
-          className="text-sm text-slate-500 transition-colors hover:text-indigo-500 dark:text-slate-400"
+          className="text-sm text-slate-500 transition-colors hover:text-brand dark:text-slate-400"
         >
           {t.back}
         </Link>
         <h1 className="mt-4 flex flex-wrap items-center gap-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
           <span>
-            <span className="text-indigo-500">$</span> {t.heading}
+            <span className="text-brand">$</span> {t.heading}
           </span>
           <span className="rounded-full bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-amber-600 dark:text-amber-400">
             beta

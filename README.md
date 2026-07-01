@@ -10,10 +10,14 @@ Vercel or GitHub Pages.
 
 ## Features / Recursos
 
+- 📱 **Phone-shaped AI chat in the hero** — a CSS-drawn phone running a real
+  LLM (WebLLM/WebGPU, fully in-browser) that answers questions about me
+- 🧭 Floating bottom dock navigation, styled like a mobile app tab bar
+- 🌳 Experience timeline rendered as a `git log` of the career
 - ⚡️ Static export (no server required) — deploy anywhere
 - 🌐 Bilingual EN/PT with one-click toggle (persists in `localStorage`)
 - 🌗 Dark / light theme (respects system preference, no flash on load)
-- 📱 Fully responsive, accessible, with subtle scroll animations
+- 📐 Fully responsive, accessible, with subtle scroll animations
 - ✏️ All content lives in a single typed file: [`lib/content.ts`](lib/content.ts)
 
 ## Getting started / Como rodar

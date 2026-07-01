@@ -3,9 +3,18 @@
 import { useEffect, useState } from "react";
 import { useLocale } from "@/components/LanguageProvider";
 import { Section } from "@/components/sections/Section";
-import { ArrowUpRightIcon, GitHubIcon, StarIcon } from "@/components/icons";
+import { ArrowUpRightIcon, StarIcon } from "@/components/icons";
 
 const GH_USER = "guhcostan";
+
+/** App-icon-style gradient tiles, one per project. */
+const TILE_GRADIENTS = [
+  "from-violet-500 to-fuchsia-500",
+  "from-sky-500 to-cyan-400",
+  "from-emerald-500 to-teal-400",
+  "from-amber-500 to-orange-500",
+  "from-pink-500 to-rose-500",
+];
 
 function formatStars(n: number): string {
   return n >= 1000 ? `${(n / 1000).toFixed(1)}k` : `${n}`;
@@ -49,18 +58,19 @@ function useGitHubStars(repos: string[]) {
   return stars;
 }
 
+/** Open source projects presented like an app-store listing. */
 export function OpenSource() {
   const { t } = useLocale();
   const items = t.projects.items;
   const liveStars = useGitHubStars(items.map((i) => i.repo));
 
   return (
-    <Section id="projects" heading={t.projects.heading}>
-      <p className="reveal mb-6 text-sm text-slate-500 dark:text-slate-400">
+    <Section id="projects" index="04" heading={t.projects.heading}>
+      <p className="reveal -mt-4 mb-8 text-sm text-slate-500 dark:text-slate-400">
         {t.projects.subtitle}
       </p>
-      <div className="grid gap-5 sm:grid-cols-2">
-        {items.map((item) => {
+      <div className="grid gap-4 sm:grid-cols-2">
+        {items.map((item, i) => {
           const stars = liveStars[item.repo] ?? item.fallbackStars;
           return (
             <a
@@ -68,28 +78,35 @@ export function OpenSource() {
               href={`https://github.com/${GH_USER}/${item.repo}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="reveal group flex flex-col rounded-xl border border-slate-200 bg-slate-50/50 p-5 transition-all duration-200 hover:-translate-y-1 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-500/10 dark:border-slate-800 dark:bg-slate-900/40 dark:hover:border-indigo-700"
+              className="reveal group flex gap-4 rounded-2xl border border-slate-200 bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:border-brand/40 hover:shadow-lg hover:shadow-brand/10 dark:border-ink-border dark:bg-ink-raised"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <GitHubIcon className="h-5 w-5 text-slate-700 dark:text-slate-200" />
-                  <h3 className="font-mono text-sm font-semibold text-slate-900 dark:text-white">
+              {/* App icon tile */}
+              <div
+                aria-hidden
+                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br font-mono text-lg font-bold text-white ${TILE_GRADIENTS[i % TILE_GRADIENTS.length]}`}
+              >
+                {item.name.charAt(0)}
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="truncate font-mono text-sm font-semibold text-slate-900 dark:text-white">
                     {item.name}
                   </h3>
+                  <ArrowUpRightIcon className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand" />
                 </div>
-                <ArrowUpRightIcon className="h-4 w-4 text-slate-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-indigo-500" />
-              </div>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                {item.description}
-              </p>
-              <div className="mt-4 flex items-center justify-between text-xs">
-                <span className="font-medium text-slate-400 dark:text-slate-500">
-                  {item.tag}
-                </span>
-                <span className="inline-flex items-center gap-1 font-semibold text-amber-600 dark:text-amber-400">
-                  <StarIcon className="h-3.5 w-3.5" />
-                  {formatStars(stars)}
-                </span>
+                <p className="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                  {item.description}
+                </p>
+                <div className="mt-3 flex items-center justify-between text-xs">
+                  <span className="font-mono text-slate-400 dark:text-slate-500">
+                    {item.tag}
+                  </span>
+                  <span className="inline-flex items-center gap-1 font-semibold text-amber-600 dark:text-amber-400">
+                    <StarIcon className="h-3.5 w-3.5" />
+                    {formatStars(stars)}
+                  </span>
+                </div>
               </div>
             </a>
           );
