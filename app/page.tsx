@@ -1,7 +1,9 @@
 "use client";
 
 import { Header } from "@/components/Header";
+import { Dock } from "@/components/Dock";
 import { Hero } from "@/components/sections/Hero";
+import { Stats } from "@/components/sections/Stats";
 import { About } from "@/components/sections/About";
 import { Experience } from "@/components/sections/Experience";
 import { Skills } from "@/components/sections/Skills";
@@ -19,6 +21,7 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
+        <Stats />
         <About />
         <Experience />
         <Skills />
@@ -27,6 +30,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <Dock />
     </div>
   );
 }

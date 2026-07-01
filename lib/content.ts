@@ -34,6 +34,7 @@ export interface ContentShape {
     contact: string;
   };
   hero: {
+    badge: string;
     greeting: string;
     name: string;
     title: string;
@@ -44,6 +45,7 @@ export interface ContentShape {
     ctaResume: string;
     ctaPdf: string;
   };
+  stats: { value: string; label: string }[];
   terminal: {
     prompt: string;
     replay: string;
@@ -52,6 +54,8 @@ export interface ContentShape {
   about: {
     heading: string;
     paragraphs: string[];
+    nowHeading: string;
+    now: string[];
   };
   experience: {
     heading: string;
@@ -117,19 +121,25 @@ export const content: Record<Locale, ContentShape> = {
       contact: "Contact",
     },
     hero: {
-      greeting: "Hi, I'm",
+      badge: "Tech Anchor @ Thoughtworks",
+      greeting: "Hi, I'm Gustavo —",
       name: shared.name,
-      title:
-        "Lead Mobile & Frontend Engineer · React Native · TypeScript · AI-Powered Features & Agents",
+      title: "I build mobile apps used by millions. Now with AI in the loop.",
       location: shared.location,
       tagline:
-        "8+ years building apps used by millions — from airline loyalty to EdTech and fintech. Tech Anchor @ Thoughtworks.",
+        "Lead Mobile & Frontend Engineer — 8+ years shipping React Native and TypeScript at scale, from airline loyalty to EdTech and fintech.",
       aiHighlight:
-        "Now focused on AI-assisted engineering: shipping LLM-powered features and autonomous agents in production.",
+        "These days I ship LLM-powered features and autonomous agents in production — and this page proves it: the phone here runs a real AI model inside your browser. Ask it anything about me.",
       ctaEmail: "Get in touch",
-      ctaResume: "View LinkedIn",
+      ctaResume: "LinkedIn",
       ctaPdf: "Download PDF",
     },
+    stats: [
+      { value: "8+", label: "years shipping software" },
+      { value: "1M+", label: "users on apps I've built" },
+      { value: "1.8k+", label: "GitHub stars on my tools" },
+      { value: "80%+", label: "test coverage on my teams" },
+    ],
     terminal: {
       prompt: "gustavo@portfolio ~ %",
       replay: "replay",
@@ -150,6 +160,13 @@ export const content: Record<Locale, ContentShape> = {
         "Mobile & Frontend Engineer with 8+ years building apps used by millions, across airline loyalty, EdTech, and fintech. As Tech Anchor at Thoughtworks, I steer the technical direction of a global-scale React Native product, working across Brazil and Chile.",
         "One of the founding engineers on the LatamPass mobile app — I helped define the architecture, tech standards, and CI/CD from day one, led a cross-functional team of 8+ engineers, and grew a strong TDD and code-review culture.",
         "Since late 2024, my focus has expanded into AI-assisted engineering — building AI-powered features, integrating LLMs into production, and developing autonomous agents to accelerate development workflows, working hands-on with tools like Claude and Cursor. On the side, I ship open source developer tools for fun.",
+      ],
+      nowHeading: "currently",
+      now: [
+        "Steering the LatamPass app as Tech Anchor",
+        "Shipping LLM features & agents to production",
+        "Daily drivers: Claude Code, Cursor, React Native",
+        "Maintaining open source CLIs (1.8k+ ⭐)",
       ],
     },
     experience: {
@@ -341,19 +358,25 @@ export const content: Record<Locale, ContentShape> = {
       contact: "Contato",
     },
     hero: {
-      greeting: "Olá, eu sou",
+      badge: "Tech Anchor @ Thoughtworks",
+      greeting: "Oi, eu sou o Gustavo —",
       name: shared.name,
-      title:
-        "Lead Mobile & Frontend Engineer · React Native · TypeScript · Features & Agentes com IA",
+      title: "Eu construo apps mobile usados por milhões. Agora com IA no loop.",
       location: shared.location,
       tagline:
-        "8+ anos construindo apps usados por milhões — de fidelidade aérea a EdTech e fintech. Tech Anchor @ Thoughtworks.",
+        "Lead Mobile & Frontend Engineer — 8+ anos entregando React Native e TypeScript em escala, de fidelidade aérea a EdTech e fintech.",
       aiHighlight:
-        "Hoje focado em engenharia assistida por IA: entregando features com LLMs e agentes autônomos em produção.",
+        "Hoje eu entrego features com LLMs e agentes autônomos em produção — e esta página prova: o celular aqui roda um modelo de IA de verdade dentro do seu navegador. Pergunte qualquer coisa sobre mim.",
       ctaEmail: "Fale comigo",
-      ctaResume: "Ver LinkedIn",
+      ctaResume: "LinkedIn",
       ctaPdf: "Baixar PDF",
     },
+    stats: [
+      { value: "8+", label: "anos entregando software" },
+      { value: "1M+", label: "usuários nos apps que construí" },
+      { value: "1.8k+", label: "estrelas no GitHub" },
+      { value: "80%+", label: "cobertura de testes nos meus times" },
+    ],
     terminal: {
       prompt: "gustavo@portfolio ~ %",
       replay: "repetir",
@@ -374,6 +397,13 @@ export const content: Record<Locale, ContentShape> = {
         "Engenheiro Mobile & Frontend com mais de 8 anos construindo apps usados por milhões de pessoas, em fidelidade aérea, EdTech e fintech. Como Tech Anchor na Thoughtworks, conduzo a direção técnica de um produto React Native de escala global, atuando entre Brasil e Chile.",
         "Um dos engenheiros fundadores do app LatamPass — ajudei a definir a arquitetura, os padrões técnicos e o CI/CD desde o primeiro dia, liderei um time multifuncional de mais de 8 engenheiros e construí uma forte cultura de TDD e code review.",
         "Desde o fim de 2024, meu foco se expandiu para engenharia assistida por IA — criando features com IA, integrando LLMs em produção e desenvolvendo agentes autônomos para acelerar o desenvolvimento, trabalhando com ferramentas como Claude e Cursor. Nas horas vagas, lanço ferramentas open source para devs.",
+      ],
+      nowHeading: "agora",
+      now: [
+        "Conduzindo o app LatamPass como Tech Anchor",
+        "Entregando features com LLMs e agentes em produção",
+        "No dia a dia: Claude Code, Cursor, React Native",
+        "Mantendo CLIs open source (1.8k+ ⭐)",
       ],
     },
     experience: {
