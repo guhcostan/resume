@@ -26,6 +26,16 @@ export const metadata: Metadata = {
     "Next.js",
   ],
   authors: [{ name: "Gustavo Costa", url: siteUrl }],
+  alternates: {
+    canonical: `${siteUrl}/`,
+  },
+  verification: {
+    google: "50jkrIuVHWs0TbxOT3t6V28olPFWAbUHqzknTrOnCuo",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
     title: "Gustavo Costa — Lead Mobile & Frontend Engineer",
     description:
@@ -56,6 +66,47 @@ export const viewport: Viewport = {
     { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
     { media: "(prefers-color-scheme: dark)", color: "#07080c" },
   ],
+};
+
+// Structured data so search engines understand this is a personal
+// portfolio/resume (rich results, knowledge panel signals).
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Gustavo Costa",
+  url: `${siteUrl}/`,
+  image: ogImage,
+  jobTitle: "Lead Mobile & Frontend Engineer",
+  worksFor: {
+    "@type": "Organization",
+    name: "Thoughtworks",
+    url: "https://www.thoughtworks.com",
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "São Sebastião",
+    addressRegion: "São Paulo",
+    addressCountry: "BR",
+  },
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "Federal University of Lavras (UFLA)",
+  },
+  email: "mailto:guhcostan@gmail.com",
+  sameAs: [
+    "https://github.com/guhcostan",
+    "https://www.linkedin.com/in/guhcostan",
+  ],
+  knowsAbout: [
+    "React Native",
+    "TypeScript",
+    "Mobile Engineering",
+    "Frontend Engineering",
+    "AI Engineering",
+    "LLM Integration",
+    "AI Agents",
+  ],
+  knowsLanguage: ["pt-BR", "en", "es"],
 };
 
 // Avoid theme flash on first paint by setting the class before hydration.
@@ -92,6 +143,10 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         <ThemeProvider>
           <LanguageProvider>{children}</LanguageProvider>
         </ThemeProvider>
