@@ -1,13 +1,30 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocale } from "@/components/LanguageProvider";
 import type { Locale } from "@/lib/content";
 import type { ChatMessage } from "@/lib/ai/types";
 import { buildSystemPrompt, SUGGESTED_QUESTIONS } from "@/lib/ai/profile";
-import { getEngine, hasWebGPU, streamWebLLM, WEBLLM_MODEL } from "@/lib/ai/webllm";
+import {
+  getEngine,
+  hasWebGPU,
+  streamWebLLM,
+  WEBLLM_MODELS,
+  type WebLLMModelKey,
+} from "@/lib/ai/webllm";
+import { answerLite, isMobileDevice, streamLite } from "@/lib/ai/lite";
 
-const MODEL_GB = (WEBLLM_MODEL.sizeMB / 1024).toFixed(1);
+/** Same device policy as the hero phone chat. */
+type TerminalMode = "full" | "mobile" | "lite";
+
+function detectMode(): TerminalMode {
+  if (!hasWebGPU()) return "lite";
+  return isMobileDevice() ? "mobile" : "full";
+}
+
+function formatSize(mb: number): string {
+  return mb >= 1000 ? `${(mb / 1024).toFixed(1)} GB` : `${mb} MB`;
+}
 
 type EntryKind = "user" | "assistant" | "system" | "error";
 interface Entry {
@@ -21,13 +38,15 @@ const STRINGS: Record<
   Locale,
   {
     intro: string[];
+    mobileIntro: (label: string, size: string) => string;
+    liteIntro: string;
     placeholder: string;
     loadingPlaceholder: string;
     thinking: string;
-    loadingModel: (pct: number) => string;
-    noWebGPU: string;
+    loadingModel: (pct: number, label: string, size: string) => string;
     suggestionsLabel: string;
-    backendLabel: string;
+    backendLabel: (label: string) => string;
+    liteBackendLabel: string;
     help: string[];
   }
 > = {
@@ -37,15 +56,18 @@ const STRINGS: Record<
       "Runs fully in your browser (WebLLM/WebGPU) — nothing leaves your device.",
       "Type a question and hit enter — or try /help for commands.",
     ],
+    mobileIntro: (label, size) =>
+      `On mobile I use a compact model (${label}, ~${size} one-time download) — a bit dumber, still fully on-device.`,
+    liteIntro:
+      "No WebGPU in this browser, so I answer instantly from Gustavo's profile instead of running the local model.",
     placeholder: "Ask about Gustavo…",
     loadingPlaceholder: "loading model… please wait",
     thinking: "thinking…",
-    loadingModel: (pct) =>
-      `loading ${WEBLLM_MODEL.label} (~${MODEL_GB} GB, one-time)… ${pct}%`,
-    noWebGPU:
-      "This browser doesn't support WebGPU, so the in-browser model can't run. Try the latest Chrome, Edge, or Safari (iOS/macOS 26+).",
+    loadingModel: (pct, label, size) =>
+      `loading ${label} (~${size}, one-time)… ${pct}%`,
     suggestionsLabel: "try asking:",
-    backendLabel: `local · ${WEBLLM_MODEL.label}`,
+    backendLabel: (label) => `local · ${label}`,
+    liteBackendLabel: "lite · instant answers",
     help: [
       "/help     show this help",
       "/clear    clear the screen",
@@ -58,15 +80,18 @@ const STRINGS: Record<
       "Roda 100% no seu navegador (WebLLM/WebGPU) — nada sai do seu dispositivo.",
       "Escreva uma pergunta e aperte enter — ou tente /help para comandos.",
     ],
+    mobileIntro: (label, size) =>
+      `No celular eu uso um modelo compacto (${label}, download único de ~${size}) — um pouco mais bobo, mas 100% no aparelho.`,
+    liteIntro:
+      "Sem WebGPU neste navegador, então respondo na hora a partir do perfil do Gustavo em vez de rodar o modelo local.",
     placeholder: "Pergunte sobre o Gustavo…",
     loadingPlaceholder: "carregando modelo… aguarde",
     thinking: "pensando…",
-    loadingModel: (pct) =>
-      `carregando ${WEBLLM_MODEL.label} (~${MODEL_GB} GB, uma vez)… ${pct}%`,
-    noWebGPU:
-      "Este navegador não suporta WebGPU, então o modelo no navegador não roda. Use o Chrome/Edge mais recente ou Safari (iOS/macOS 26+).",
+    loadingModel: (pct, label, size) =>
+      `carregando ${label} (~${size}, uma vez)… ${pct}%`,
     suggestionsLabel: "experimente perguntar:",
-    backendLabel: `local · ${WEBLLM_MODEL.label}`,
+    backendLabel: (label) => `local · ${label}`,
+    liteBackendLabel: "leve · respostas instantâneas",
     help: [
       "/help     mostra esta ajuda",
       "/clear    limpa a tela",
@@ -97,7 +122,14 @@ export function AiTerminal({
   const inputRef = useRef<HTMLInputElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-  const webgpu = useMemo(() => hasWebGPU(), []);
+  // Decided after mount so server and first client render stay identical.
+  const [mode, setMode] = useState<TerminalMode>("full");
+  useEffect(() => {
+    setMode(detectMode());
+  }, []);
+
+  const model =
+    WEBLLM_MODELS[(mode === "mobile" ? "mobile" : "full") as WebLLMModelKey];
 
   const push = useCallback((entry: Entry) => {
     setEntries((prev) => [...prev, entry]);
@@ -108,14 +140,16 @@ export function AiTerminal({
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
   }, [entries, modelPct]);
 
-  // Preload the model as soon as the page opens (when WebGPU is available), so
-  // it's ready — or well on its way — by the time the visitor asks something.
+  // Preload the model as soon as the page opens, so it's ready — or well on
+  // its way — by the time the visitor asks something. Desktop only: on mobile
+  // the (smaller) model still shouldn't auto-eat ~350 MB of data on page open,
+  // so there it loads on the first question instead.
   useEffect(() => {
-    if (!webgpu || !autoPreload) return;
+    if (!autoPreload || detectMode() !== "full") return;
     let cancelled = false;
     setModelPct(0);
     setModelError(false);
-    getEngine((p) => {
+    getEngine("full", (p) => {
       if (!cancelled) setModelPct(Math.round(p.progress * 100));
     })
       .then(() => {
@@ -128,7 +162,7 @@ export function AiTerminal({
     return () => {
       cancelled = true;
     };
-  }, [webgpu, autoPreload]);
+  }, [autoPreload]);
 
   const conversation = useCallback((): ChatMessage[] => {
     // Rebuild the chat history from the transcript (user/assistant turns only).
@@ -143,20 +177,9 @@ export function AiTerminal({
 
   const ask = useCallback(
     async (question: string) => {
-      if (!webgpu) {
-        push({ kind: "error", text: s.noWebGPU });
-        return;
-      }
-
       setBusy(true);
       abortRef.current = new AbortController();
       const signal = abortRef.current.signal;
-
-      const messages: ChatMessage[] = [
-        { role: "system", content: buildSystemPrompt(locale) },
-        ...conversation(),
-        { role: "user", content: question },
-      ];
 
       // Placeholder assistant entry we stream into.
       let assistantIndex = -1;
@@ -178,11 +201,27 @@ export function AiTerminal({
         });
       };
 
+      // Re-detect at ask time so the guard can't race the mount effect.
+      const modeNow = detectMode();
+
       try {
+        if (modeNow === "lite") {
+          await new Promise((r) => setTimeout(r, 400));
+          await streamLite(answerLite(question, locale), onToken);
+          return;
+        }
+
+        const key: WebLLMModelKey = modeNow === "mobile" ? "mobile" : "full";
+        const messages: ChatMessage[] = [
+          { role: "system", content: buildSystemPrompt(locale) },
+          ...conversation(),
+          { role: "user", content: question },
+        ];
+
         // Engine is usually already preloaded; getEngine reuses that promise.
-        await getEngine((p) => setModelPct(Math.round(p.progress * 100)));
+        await getEngine(key, (p) => setModelPct(Math.round(p.progress * 100)));
         setModelPct(100);
-        await streamWebLLM(messages, { onToken, signal });
+        await streamWebLLM(messages, { onToken, signal }, key);
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         setEntries((prev) => {
@@ -197,7 +236,7 @@ export function AiTerminal({
         abortRef.current = null;
       }
     },
-    [webgpu, locale, conversation, push, s]
+    [locale, conversation]
   );
 
   const runCommand = useCallback(
@@ -258,9 +297,11 @@ export function AiTerminal({
     }
   };
 
+  const size = formatSize(model.sizeMB);
+
   // The model is downloading/initializing — block input until it's ready.
   const modelLoading =
-    webgpu && !modelError && modelPct !== null && modelPct < 100;
+    mode !== "lite" && !modelError && modelPct !== null && modelPct < 100;
   const inputDisabled = busy || modelLoading;
 
   return (
@@ -277,7 +318,7 @@ export function AiTerminal({
           beta
         </span>
         <span className="ml-auto rounded bg-slate-700/50 px-2 py-0.5 font-mono text-[10px] text-slate-300">
-          {s.backendLabel}
+          {mode === "lite" ? s.liteBackendLabel : s.backendLabel(model.label)}
         </span>
       </div>
 
@@ -293,6 +334,14 @@ export function AiTerminal({
           {s.intro.map((line, i) => (
             <div key={i}>{line}</div>
           ))}
+          {mode === "mobile" && (
+            <div className="text-amber-400/90">
+              {s.mobileIntro(model.label, size)}
+            </div>
+          )}
+          {mode === "lite" && (
+            <div className="text-amber-400/90">{s.liteIntro}</div>
+          )}
         </div>
 
         {/* Suggestions when empty */}
@@ -323,7 +372,7 @@ export function AiTerminal({
         {busy && (
           <div className="text-fuchsia-400">
             {modelPct !== null && modelPct < 100
-              ? s.loadingModel(modelPct)
+              ? s.loadingModel(modelPct, model.label, size)
               : s.thinking}
           </div>
         )}
@@ -352,7 +401,7 @@ export function AiTerminal({
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-slate-900/50 backdrop-blur-md">
             <div className="h-9 w-9 animate-spin rounded-full border-2 border-slate-600 border-t-indigo-400" />
             <div className="max-w-[80%] text-center font-mono text-xs text-slate-200">
-              {s.loadingModel(modelPct ?? 0)}
+              {s.loadingModel(modelPct ?? 0, model.label, size)}
             </div>
             <div className="h-1.5 w-56 max-w-[70%] overflow-hidden rounded-full bg-slate-700">
               <div

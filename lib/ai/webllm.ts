@@ -2,48 +2,68 @@ import type { MLCEngineInterface } from "@mlc-ai/web-llm";
 import type { ChatMessage, StreamHandlers } from "@/lib/ai/types";
 
 /**
- * Single in-browser model (confirmed in @mlc-ai/web-llm 0.2.84). Qwen2.5-1.5B
- * is a small but robust multilingual instruct model (great Portuguese) that
- * follows the grounded-QA system prompt reliably — gemma3-1b was too small and
- * degenerated into loops. Thinking tags are stripped regardless.
+ * In-browser models (confirmed in @mlc-ai/web-llm 0.2.84), both Qwen2.5
+ * instruct variants — small but robust multilingual models (good Portuguese)
+ * that follow the grounded-QA system prompt reliably; gemma3-1b was too small
+ * and degenerated into loops. Thinking tags are stripped regardless.
+ *
+ * - full:   1.5B (~1.6 GB VRAM) for desktops.
+ * - mobile: 0.5B (~0.9 GB VRAM, ~350 MB download) for phones/tablets, where
+ *   the 1.5B model OOM-kills the tab and causes reload loops.
  */
-export const WEBLLM_MODEL = {
-  id: "Qwen2.5-1.5B-Instruct-q4f16_1-MLC",
-  label: "Qwen2.5 1.5B",
-  sizeMB: 1630,
-};
+export const WEBLLM_MODELS = {
+  full: {
+    id: "Qwen2.5-1.5B-Instruct-q4f16_1-MLC",
+    label: "Qwen2.5 1.5B",
+    sizeMB: 1630,
+  },
+  mobile: {
+    id: "Qwen2.5-0.5B-Instruct-q4f16_1-MLC",
+    label: "Qwen2.5 0.5B",
+    sizeMB: 350,
+  },
+} as const;
+
+export type WebLLMModelKey = keyof typeof WEBLLM_MODELS;
 
 export interface InitProgress {
   text: string;
   progress: number; // 0..1
 }
 
-let enginePromise: Promise<MLCEngineInterface> | null = null;
+const enginePromises = new Map<string, Promise<MLCEngineInterface>>();
 
 export function hasWebGPU(): boolean {
   return typeof navigator !== "undefined" && "gpu" in navigator;
 }
 
 /**
- * Lazily creates (and caches) the WebLLM engine, reporting load progress.
- * Safe to call multiple times — the same load promise is reused, so calling it
- * on mount (to preload) and again on the first question shares one download.
+ * Lazily creates (and caches) the WebLLM engine for a model, reporting load
+ * progress. Safe to call multiple times — the same load promise is reused per
+ * model, so calling it on mount (to preload) and again on the first question
+ * shares one download.
  */
-export function getEngine(onProgress?: (p: InitProgress) => void) {
-  if (!enginePromise) {
-    enginePromise = (async () => {
+export function getEngine(
+  key: WebLLMModelKey = "full",
+  onProgress?: (p: InitProgress) => void
+) {
+  const model = WEBLLM_MODELS[key];
+  let promise = enginePromises.get(model.id);
+  if (!promise) {
+    promise = (async () => {
       const webllm = await import("@mlc-ai/web-llm");
-      return webllm.CreateMLCEngine(WEBLLM_MODEL.id, {
+      return webllm.CreateMLCEngine(model.id, {
         initProgressCallback: (report) =>
           onProgress?.({ text: report.text, progress: report.progress }),
       });
     })().catch((err) => {
       // Allow a later retry by clearing the cached (rejected) promise.
-      enginePromise = null;
+      enginePromises.delete(model.id);
       throw err;
     });
+    enginePromises.set(model.id, promise);
   }
-  return enginePromise;
+  return promise;
 }
 
 /**
@@ -96,9 +116,10 @@ function makeThinkFilter(emit: (s: string) => void) {
 
 export async function streamWebLLM(
   messages: ChatMessage[],
-  { onToken, signal }: StreamHandlers
+  { onToken, signal }: StreamHandlers,
+  model: WebLLMModelKey = "full"
 ): Promise<void> {
-  const engine = await getEngine();
+  const engine = await getEngine(model);
   const filter = makeThinkFilter(onToken);
 
   const chunks = await engine.chat.completions.create({

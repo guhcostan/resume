@@ -3,7 +3,6 @@
 import {
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -11,10 +10,15 @@ import { useLocale } from "@/components/LanguageProvider";
 import type { Locale } from "@/lib/content";
 import type { ChatMessage } from "@/lib/ai/types";
 import { buildSystemPrompt, SUGGESTED_QUESTIONS } from "@/lib/ai/profile";
-import { getEngine, hasWebGPU, streamWebLLM, WEBLLM_MODEL } from "@/lib/ai/webllm";
+import {
+  getEngine,
+  hasWebGPU,
+  streamWebLLM,
+  WEBLLM_MODELS,
+  type WebLLMModelKey,
+} from "@/lib/ai/webllm";
+import { answerLite, isMobileDevice, streamLite } from "@/lib/ai/lite";
 import { SendIcon } from "@/components/icons";
-
-const MODEL_GB = (WEBLLM_MODEL.sizeMB / 1024).toFixed(1);
 
 type Kind = "user" | "assistant" | "error";
 interface Msg {
@@ -22,44 +26,68 @@ interface Msg {
   text: string;
 }
 
+/**
+ * Which brain powers the chat on this device:
+ * - "full":   Qwen2.5 1.5B on desktops with WebGPU.
+ * - "mobile": Qwen2.5 0.5B on phones/tablets — a real LLM, just smaller, so
+ *   the tab isn't OOM-killed into a reload loop by the 1.5B model.
+ * - "lite":   curated instant answers when WebGPU isn't available at all.
+ */
+type ChatMode = "full" | "mobile" | "lite";
+
+function detectMode(): ChatMode {
+  if (!hasWebGPU()) return "lite";
+  return isMobileDevice() ? "mobile" : "full";
+}
+
 const STRINGS: Record<
   Locale,
   {
     appName: string;
-    onDevice: string;
+    onDevice: (label: string) => string;
+    liteLabel: string;
     greeting: string;
+    mobileNote: (label: string, mb: number) => string;
+    liteNote: string;
     placeholder: string;
     loadingPlaceholder: string;
-    downloadTitle: string;
+    downloadTitle: (label: string, mb: number) => string;
     downloadNote: string;
-    noWebGPU: string;
     online: string;
   }
 > = {
   en: {
     appName: "Gustavo · AI",
-    onDevice: `on-device · ${WEBLLM_MODEL.label}`,
+    onDevice: (label) => `on-device · ${label}`,
+    liteLabel: "lite · instant answers",
     greeting:
       "Hey! 👋 I'm Gustavo's AI agent, running entirely inside your browser — nothing leaves your device. Ask me anything about his career.",
+    mobileNote: (label, mb) =>
+      `📱 On mobile I use a compact model (${label}, ~${mb} MB one-time download) so everything still runs on your device. For sharper answers, try me on a desktop.`,
+    liteNote:
+      "⚡ This browser doesn't support WebGPU, so I answer instantly from Gustavo's profile instead of running the local model. For the full LLM in your browser, try the latest Chrome or Edge on desktop.",
     placeholder: "Ask about Gustavo…",
     loadingPlaceholder: "downloading model…",
-    downloadTitle: `Downloading ${WEBLLM_MODEL.label} (~${MODEL_GB} GB, one-time)`,
+    downloadTitle: (label, mb) =>
+      `Downloading ${label} (~${mb >= 1000 ? `${(mb / 1024).toFixed(1)} GB` : `${mb} MB`}, one-time)`,
     downloadNote: "The model is cached — next visit is instant.",
-    noWebGPU:
-      "This browser doesn't support WebGPU, so the on-device model can't run here. Try the latest Chrome or Edge on desktop. 📱💨",
     online: "online",
   },
   pt: {
     appName: "Gustavo · IA",
-    onDevice: `on-device · ${WEBLLM_MODEL.label}`,
+    onDevice: (label) => `on-device · ${label}`,
+    liteLabel: "leve · respostas instantâneas",
     greeting:
       "Oi! 👋 Eu sou o agente de IA do Gustavo, rodando inteiro dentro do seu navegador — nada sai do seu dispositivo. Pergunte qualquer coisa sobre a carreira dele.",
+    mobileNote: (label, mb) =>
+      `📱 No celular eu uso um modelo compacto (${label}, download único de ~${mb} MB) pra continuar rodando tudo no seu aparelho. Pra respostas mais afiadas, me teste num desktop.`,
+    liteNote:
+      "⚡ Este navegador não suporta WebGPU, então respondo na hora a partir do perfil do Gustavo em vez de rodar o modelo local. Pro LLM completo no navegador, use o Chrome ou Edge mais recente no desktop.",
     placeholder: "Pergunte sobre o Gustavo…",
     loadingPlaceholder: "baixando o modelo…",
-    downloadTitle: `Baixando ${WEBLLM_MODEL.label} (~${MODEL_GB} GB, só uma vez)`,
+    downloadTitle: (label, mb) =>
+      `Baixando ${label} (~${mb >= 1000 ? `${(mb / 1024).toFixed(1)} GB` : `${mb} MB`}, só uma vez)`,
     downloadNote: "O modelo fica em cache — na próxima visita é instantâneo.",
-    noWebGPU:
-      "Este navegador não suporta WebGPU, então o modelo on-device não roda aqui. Tente o Chrome ou Edge mais recente no desktop. 📱💨",
     online: "online",
   },
 };
@@ -84,8 +112,9 @@ function useClock() {
 
 /**
  * A CSS-drawn phone running "Gustavo · AI" as a messaging app. The chat is a
- * real LLM (WebLLM/WebGPU) grounded on Gustavo's profile, downloaded lazily on
- * the first message so visitors don't pay ~1.6 GB just for opening the page.
+ * real LLM (WebLLM/WebGPU) grounded on Gustavo's profile — the 1.5B model on
+ * desktop, a 0.5B model on mobile — downloaded lazily on the first message so
+ * visitors don't pay for it just by opening the page.
  */
 export function PhoneChat() {
   const { locale } = useLocale();
@@ -97,8 +126,16 @@ export function PhoneChat() {
   const [busy, setBusy] = useState(false);
   const [modelPct, setModelPct] = useState<number | null>(null);
 
+  // Decided after mount so server and first client render stay identical.
+  const [mode, setMode] = useState<ChatMode>("full");
+  useEffect(() => {
+    setMode(detectMode());
+  }, []);
+
+  const model =
+    WEBLLM_MODELS[(mode === "mobile" ? "mobile" : "full") as WebLLMModelKey];
+
   const scrollRef = useRef<HTMLDivElement>(null);
-  const webgpu = useMemo(() => hasWebGPU(), []);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
@@ -110,26 +147,7 @@ export function PhoneChat() {
       if (!text || busy) return;
       setInput("");
       setMessages((prev) => [...prev, { kind: "user", text }]);
-
-      if (!webgpu) {
-        setMessages((prev) => [...prev, { kind: "error", text: s.noWebGPU }]);
-        return;
-      }
-
       setBusy(true);
-
-      // Rebuild history from the transcript (user/assistant turns only).
-      const history: ChatMessage[] = [];
-      for (const m of messages) {
-        if (m.kind === "user") history.push({ role: "user", content: m.text });
-        else if (m.kind === "assistant")
-          history.push({ role: "assistant", content: m.text });
-      }
-      const turns: ChatMessage[] = [
-        { role: "system", content: buildSystemPrompt(locale) },
-        ...history,
-        { role: "user", content: text },
-      ];
 
       let assistantIndex = -1;
       const onToken = (delta: string) => {
@@ -148,12 +166,36 @@ export function PhoneChat() {
         });
       };
 
+      // Re-detect at ask time so the guard can't race the mount effect.
+      const modeNow = detectMode();
+
       try {
+        if (modeNow === "lite") {
+          await new Promise((r) => setTimeout(r, 500));
+          await streamLite(answerLite(text, locale), onToken);
+          return;
+        }
+
+        const key: WebLLMModelKey = modeNow === "mobile" ? "mobile" : "full";
+
+        // Rebuild history from the transcript (user/assistant turns only).
+        const history: ChatMessage[] = [];
+        for (const m of messages) {
+          if (m.kind === "user") history.push({ role: "user", content: m.text });
+          else if (m.kind === "assistant")
+            history.push({ role: "assistant", content: m.text });
+        }
+        const turns: ChatMessage[] = [
+          { role: "system", content: buildSystemPrompt(locale) },
+          ...history,
+          { role: "user", content: text },
+        ];
+
         // First call kicks off the (cached) download; the progress callback
         // only fires while the engine is still initializing.
-        await getEngine((p) => setModelPct(Math.round(p.progress * 100)));
+        await getEngine(key, (p) => setModelPct(Math.round(p.progress * 100)));
         setModelPct(null);
-        await streamWebLLM(turns, { onToken });
+        await streamWebLLM(turns, { onToken }, key);
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         setModelPct(null);
@@ -162,7 +204,7 @@ export function PhoneChat() {
         setBusy(false);
       }
     },
-    [busy, webgpu, messages, locale, s]
+    [busy, messages, locale]
   );
 
   const downloading = modelPct !== null;
@@ -227,7 +269,7 @@ export function PhoneChat() {
               </span>
             </div>
             <div className="truncate font-mono text-[10px] text-slate-400">
-              {s.onDevice}
+              {mode === "lite" ? s.liteLabel : s.onDevice(model.label)}
             </div>
           </div>
           <span className="ml-auto rounded-full bg-emerald-400/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-emerald-400">
@@ -242,6 +284,13 @@ export function PhoneChat() {
         >
           <Bubble kind="assistant">{s.greeting}</Bubble>
 
+          {mode === "mobile" && (
+            <Bubble kind="assistant">
+              {s.mobileNote(model.label, model.sizeMB)}
+            </Bubble>
+          )}
+          {mode === "lite" && <Bubble kind="assistant">{s.liteNote}</Bubble>}
+
           {messages.map((m, i) => (
             <Bubble key={i} kind={m.kind}>
               {m.text}
@@ -252,7 +301,7 @@ export function PhoneChat() {
           {downloading && (
             <div className="mr-8 rounded-2xl rounded-bl-md bg-white/5 px-3.5 py-3">
               <div className="font-mono text-[11px] text-slate-300">
-                {s.downloadTitle} — {modelPct}%
+                {s.downloadTitle(model.label, model.sizeMB)} — {modelPct}%
               </div>
               <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/10">
                 <div
