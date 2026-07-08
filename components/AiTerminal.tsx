@@ -140,16 +140,21 @@ export function AiTerminal({
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
   }, [entries, modelPct]);
 
-  // Preload the model as soon as the page opens, so it's ready — or well on
-  // its way — by the time the visitor asks something. Desktop only: on mobile
-  // the (smaller) model still shouldn't auto-eat ~350 MB of data on page open,
-  // so there it loads on the first question instead.
+  // Preload the device-appropriate model as soon as the page opens, so it's
+  // ready — or well on its way — by the time the visitor asks something.
+  // Skipped when the browser asks to save data (Save-Data header/setting).
   useEffect(() => {
-    if (!autoPreload || detectMode() !== "full") return;
+    if (!autoPreload) return;
+    const m = detectMode();
+    const conn = (
+      navigator as { connection?: { saveData?: boolean } }
+    ).connection;
+    if (m === "lite" || conn?.saveData === true) return;
+
     let cancelled = false;
     setModelPct(0);
     setModelError(false);
-    getEngine("full", (p) => {
+    getEngine(m === "mobile" ? "mobile" : "full", (p) => {
       if (!cancelled) setModelPct(Math.round(p.progress * 100));
     })
       .then(() => {

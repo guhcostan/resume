@@ -110,11 +110,19 @@ function useClock() {
   return time;
 }
 
+/** Skip the automatic download when the visitor asked to save data. */
+function saveDataEnabled(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const conn = (navigator as { connection?: { saveData?: boolean } }).connection;
+  return conn?.saveData === true;
+}
+
 /**
  * A CSS-drawn phone running "Gustavo · AI" as a messaging app. The chat is a
  * real LLM (WebLLM/WebGPU) grounded on Gustavo's profile — the 1.5B model on
- * desktop, a 0.5B model on mobile — downloaded lazily on the first message so
- * visitors don't pay for it just by opening the page.
+ * desktop, a 0.5B model on mobile. The download starts as soon as the page
+ * opens (progress shown in-chat), so the model is ready — or well on its way —
+ * by the time the visitor asks something.
  */
 export function PhoneChat() {
   const { locale } = useLocale();
@@ -127,9 +135,29 @@ export function PhoneChat() {
   const [modelPct, setModelPct] = useState<number | null>(null);
 
   // Decided after mount so server and first client render stay identical.
+  // Then immediately start preloading the device-appropriate model, so the
+  // download runs while the visitor is still reading the page. Preload errors
+  // stay silent — asking later retries and surfaces the error in the chat.
   const [mode, setMode] = useState<ChatMode>("full");
   useEffect(() => {
-    setMode(detectMode());
+    const m = detectMode();
+    setMode(m);
+    if (m === "lite" || saveDataEnabled()) return;
+
+    let cancelled = false;
+    const key: WebLLMModelKey = m === "mobile" ? "mobile" : "full";
+    getEngine(key, (p) => {
+      if (!cancelled) setModelPct(Math.round(p.progress * 100));
+    })
+      .then(() => {
+        if (!cancelled) setModelPct(null);
+      })
+      .catch(() => {
+        if (!cancelled) setModelPct(null);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const model =
