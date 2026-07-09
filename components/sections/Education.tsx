@@ -9,65 +9,70 @@ export function Education() {
 
   return (
     <Section id="education" index="05" heading={t.education.heading}>
-      <div className="grid gap-5 md:grid-cols-3">
-        {/* Degree */}
-        <div className="reveal rounded-2xl border border-slate-200 bg-white p-5 dark:border-ink-border dark:bg-ink-raised">
-          <div className="mb-3 flex items-center gap-2 text-slate-400 dark:text-slate-500">
-            <GraduationIcon className="h-4 w-4" />
-            <h3 className="text-xs font-semibold uppercase tracking-wide">
+      <div className="grid gap-4 lg:grid-cols-12">
+        <div className="reveal relative overflow-hidden rounded-3xl bg-brand p-7 text-white lg:col-span-5 sm:p-8">
+          <span
+            aria-hidden
+            className="absolute -bottom-8 -right-3 font-display text-[9rem] font-black leading-none text-white/10"
+          >
+            01
+          </span>
+          <div className="relative flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-white/70">
+            <GraduationIcon className="h-4 w-4 text-white" />
+            <h3>
               {t.education.heading}
             </h3>
           </div>
-          <p className="font-display font-semibold text-slate-900 dark:text-white">
+          <p className="relative mt-12 max-w-sm font-display text-3xl font-bold leading-tight tracking-[-0.04em] text-white sm:text-4xl">
             {t.education.degree}
           </p>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+          <p className="relative mt-4 text-sm font-semibold text-white/85">
             {t.education.school}
           </p>
-          <p className="mt-2 font-mono text-xs text-slate-400">
+          <p className="relative mt-7 font-mono text-[10px] uppercase tracking-[0.16em] text-white/65">
             {t.education.period}
           </p>
         </div>
 
-        {/* Certifications */}
-        <div className="reveal rounded-2xl border border-slate-200 bg-white p-5 dark:border-ink-border dark:bg-ink-raised">
-          <div className="mb-3 flex items-center gap-2 text-slate-400 dark:text-slate-500">
+        <div className="surface-card reveal p-7 lg:col-span-4 sm:p-8">
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-stone-400">
             <StarIcon className="h-4 w-4" />
-            <h3 className="text-xs font-semibold uppercase tracking-wide">
+            <h3>
               {t.education.certsHeading}
             </h3>
           </div>
-          <ul className="space-y-2">
-            {t.education.certs.map((cert) => (
+          <ul className="mt-7">
+            {t.education.certs.map((cert, index) => (
               <li
                 key={cert}
-                className="flex gap-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300"
+                className="grid grid-cols-[1.75rem_1fr] gap-2 border-t border-stone-900/10 py-3 text-sm leading-relaxed text-stone-600 first:border-t-0 dark:border-white/10 dark:text-stone-300"
               >
-                <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-brand/70" />
+                <span className="font-mono text-[9px] text-brand">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
                 <span>{cert}</span>
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Languages */}
-        <div className="reveal h-fit rounded-2xl border border-slate-200 bg-white p-5 dark:border-ink-border dark:bg-ink-raised">
-          <div className="mb-3 flex items-center gap-2 text-slate-400 dark:text-slate-500">
+        <div className="surface-card reveal h-fit p-7 lg:col-span-3 sm:p-8">
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-stone-400">
             <GlobeIcon className="h-4 w-4" />
-            <h3 className="text-xs font-semibold uppercase tracking-wide">
+            <h3>
               {t.education.languagesHeading}
             </h3>
           </div>
-          <ul className="space-y-2.5">
+          <ul className="mt-7">
             {t.education.languages.map((lang) => (
               <li
                 key={lang.name}
-                className="flex items-baseline justify-between gap-3 text-sm"
+                className="border-t border-stone-900/10 py-4 first:border-t-0 dark:border-white/10"
               >
-                <span className="font-medium text-slate-800 dark:text-slate-200">
+                <span className="block font-display text-lg font-bold text-stone-900 dark:text-white">
                   {lang.name}
                 </span>
-                <span className="font-mono text-xs text-slate-400">
+                <span className="mt-1 block font-mono text-[9px] uppercase tracking-[0.12em] text-stone-400">
                   {lang.level}
                 </span>
               </li>

@@ -11,17 +11,25 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          DEFAULT: "#8b5cf6",
-          fg: "#7c3aed",
+          DEFAULT: "#ff4f1f",
+          fg: "#cf360d",
         },
         accent: {
-          DEFAULT: "#22d3ee",
+          DEFAULT: "#7c3aed",
+        },
+        signal: {
+          DEFAULT: "#b9f34a",
+        },
+        canvas: {
+          DEFAULT: "#f2f0e9",
+        },
+        paper: {
+          DEFAULT: "#fbfaf6",
         },
         ink: {
-          // Near-black canvas used for the dark theme and the phone screen.
-          DEFAULT: "#07080c",
-          raised: "#0d0f16",
-          border: "#1c1f2b",
+          DEFAULT: "#11110f",
+          raised: "#191916",
+          border: "#302f2a",
         },
       },
       fontFamily: {
@@ -31,13 +39,22 @@ const config: Config = {
       },
       boxShadow: {
         phone:
-          "0 0 0 1px rgba(255,255,255,0.08), 0 24px 60px -12px rgba(0,0,0,0.65), 0 0 80px -20px rgba(139,92,246,0.35)",
-        glow: "0 0 40px -8px rgba(139,92,246,0.45)",
+          "0 0 0 1px rgba(255,255,255,0.1), 0 30px 80px -22px rgba(0,0,0,0.8), 0 0 80px -28px rgba(255,79,31,0.5)",
+        glow: "0 18px 45px -18px rgba(255,79,31,0.7)",
+        editorial: "0 28px 80px -42px rgba(33,29,24,0.35)",
       },
       keyframes: {
         "fade-up": {
-          "0%": { opacity: "0", transform: "translateY(16px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
+          "0%": {
+            opacity: "0",
+            transform: "translateY(22px)",
+            filter: "blur(6px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+            filter: "blur(0)",
+          },
         },
         float: {
           "0%, 100%": { transform: "translateY(0)" },
@@ -49,7 +66,7 @@ const config: Config = {
         },
       },
       animation: {
-        "fade-up": "fade-up 0.6s ease-out both",
+        "fade-up": "fade-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) both",
         float: "float 5s ease-in-out infinite",
         "float-slow": "float 7s ease-in-out infinite",
       },

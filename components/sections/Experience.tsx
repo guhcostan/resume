@@ -3,84 +3,105 @@
 import { useLocale } from "@/components/LanguageProvider";
 import { Section } from "@/components/sections/Section";
 
-/**
- * Deterministic short "commit hash" for a career entry, so the git-log-styled
- * timeline is stable across renders and locales.
- */
-function commitHash(seed: string): string {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < seed.length; i++) {
-    h ^= seed.charCodeAt(i);
-    h = Math.imul(h, 0x01000193) >>> 0;
-  }
-  return h.toString(16).padStart(8, "0").slice(0, 7);
-}
-
-/** Experience rendered as a `git log` of the career — newest commit on top. */
 export function Experience() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
 
   return (
     <Section id="experience" index="02" heading={t.experience.heading}>
-      <p
-        className="reveal -mt-6 mb-10 font-mono text-xs text-slate-400 dark:text-slate-500"
-        data-print-hide
-      >
-        $ git log --career
-      </p>
+      <div className="reveal mb-6 flex items-center justify-between">
+        <p className="eyebrow">
+          {locale === "pt" ? "Linha do tempo / 2017—hoje" : "Timeline / 2017—now"}
+        </p>
+        <span className="hidden font-mono text-[10px] text-stone-400 sm:block dark:text-stone-500">
+          {t.experience.items.length} {locale === "pt" ? "cargos" : "roles"}
+        </span>
+      </div>
 
-      <ol className="relative space-y-10 border-l border-slate-200 pl-8 dark:border-ink-border">
-        {t.experience.items.map((item, i) => {
-          const hash = commitHash(`${item.company}-${item.period}`);
-          const isHead = i === 0;
+      <ol className="surface-card overflow-hidden">
+        {t.experience.items.map((item, index) => {
+          const current = index === 0;
           return (
-            <li key={`${item.company}-${i}`} className="reveal relative">
-              {/* Commit dot */}
-              <span
-                className={`absolute -left-[2.55rem] top-1 flex h-4 w-4 items-center justify-center rounded-full border-2 ${
-                  isHead
-                    ? "border-brand bg-brand/20"
-                    : "border-slate-300 bg-slate-50 dark:border-slate-600 dark:bg-ink"
-                }`}
-              >
-                {isHead && <span className="h-1.5 w-1.5 rounded-full bg-brand" />}
-              </span>
-
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                <span className="font-mono text-xs text-amber-600 dark:text-amber-400">
-                  {hash}
+            <li
+              key={`${item.company}-${item.role}`}
+              className={`reveal group grid gap-5 border-b border-stone-900/10 p-5 transition-colors last:border-b-0 sm:p-7 md:grid-cols-[11rem_1fr] lg:grid-cols-[13rem_1fr] dark:border-white/10 ${
+                current
+                  ? "bg-ink text-white dark:bg-brand"
+                  : "hover:bg-white/55 dark:hover:bg-white/[0.03]"
+              }`}
+            >
+              <div className="flex items-start justify-between gap-4 md:block">
+                <span
+                  className={`font-mono text-[10px] uppercase tracking-[0.16em] ${
+                    current ? "text-brand dark:text-white" : "text-stone-400"
+                  }`}
+                >
+                  {locale === "pt" ? "Cargo" : "Role"} /{" "}
+                  {String(index + 1).padStart(2, "0")}
                 </span>
-                {isHead && (
-                  <span className="rounded-full border border-brand/40 bg-brand/10 px-2 py-0.5 font-mono text-[10px] font-semibold text-brand-fg dark:text-violet-300">
-                    HEAD → main
-                  </span>
-                )}
-                <span className="ml-auto shrink-0 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-500 dark:bg-white/5 dark:text-slate-400">
+                <p
+                  className={`mt-0 font-mono text-xs md:mt-4 ${
+                    current ? "text-stone-400 dark:text-white/70" : "text-stone-500"
+                  }`}
+                >
                   {item.period}
-                </span>
+                </p>
               </div>
 
-              <h3 className="mt-2 font-display text-lg font-semibold text-slate-900 dark:text-white">
-                {item.role}
-                <span className="text-brand-fg dark:text-violet-400"> @ {item.company}</span>
-              </h3>
-              {item.location && (
-                <p className="mt-0.5 text-xs text-slate-400 dark:text-slate-500">
-                  {item.location}
-                </p>
-              )}
+              <div>
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <h3
+                      className={`font-display text-2xl font-bold tracking-[-0.03em] sm:text-3xl ${
+                        current ? "text-white" : "text-stone-950 dark:text-white"
+                      }`}
+                    >
+                      {item.role}
+                    </h3>
+                    <p
+                      className={`mt-1 text-sm font-bold ${
+                        current ? "text-brand dark:text-white" : "text-brand"
+                      }`}
+                    >
+                      {item.company}
+                    </p>
+                  </div>
+                  {current && (
+                    <span className="rounded-full bg-signal px-3 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-ink">
+                      {t.experience.present}
+                    </span>
+                  )}
+                </div>
 
-              <ul className="mt-3 space-y-1.5">
-                {item.bullets.map((bullet, j) => (
-                  <li
-                    key={j}
-                    className="flex gap-2.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300"
+                {item.location && (
+                  <p
+                    className={`mt-2 text-xs ${
+                      current ? "text-stone-500 dark:text-white/60" : "text-stone-400"
+                    }`}
                   >
-                    <span className="mt-[0.6rem] h-1 w-1 shrink-0 rounded-full bg-brand/70" />
-                    <span>{bullet}</span>
-                  </li>
-                ))}
-              </ul>
+                    {item.location}
+                  </p>
+                )}
+
+                <ul className="mt-5 grid gap-2.5 lg:grid-cols-2 lg:gap-x-8">
+                  {item.bullets.map((bullet) => (
+                    <li
+                      key={bullet}
+                      className={`flex gap-3 text-sm leading-relaxed ${
+                        current
+                          ? "text-stone-300 dark:text-white/85"
+                          : "text-stone-600 dark:text-stone-300"
+                      }`}
+                    >
+                      <span
+                        className={`mt-[0.6rem] h-1.5 w-1.5 shrink-0 rounded-full ${
+                          current ? "bg-brand dark:bg-signal" : "bg-brand"
+                        }`}
+                      />
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </li>
           );
         })}

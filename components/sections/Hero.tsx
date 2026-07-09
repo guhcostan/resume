@@ -12,41 +12,44 @@ import {
   SparklesIcon,
 } from "@/components/icons";
 
-const FLOATING_TAGS = ["React Native", "TypeScript", "Claude", "Next.js"];
+const FLOATING_TAGS = ["React Native", "TypeScript", "AI agents", "Next.js"];
 
 export function Hero() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+  const titleParts = t.hero.title.split(". ");
 
   return (
-    <section id="top" className="relative overflow-hidden">
-      <div aria-hidden className="bg-blueprint pointer-events-none absolute inset-0 -z-10" />
+    <section id="top" className="relative overflow-hidden pb-10 pt-6 sm:pt-10">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-96 bg-[radial-gradient(ellipse_at_top,rgba(139,92,246,0.16),transparent_60%)]"
+        className="editorial-grid pointer-events-none absolute inset-x-0 top-0 -z-10 h-[78%] opacity-35 [mask-image:linear-gradient(to_bottom,black,transparent)]"
       />
+      <div className="pointer-events-none absolute -left-24 top-32 -z-10 h-72 w-72 rounded-full bg-brand/10 blur-3xl" />
 
-      <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.1fr_0.9fr] lg:pb-24">
-        {/* ------------------------------------------------ intro column */}
-        <div>
-          <span className="inline-flex animate-fade-up items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+      <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 sm:px-8 lg:grid-cols-[minmax(0,1.12fr)_minmax(380px,0.88fr)] lg:gap-10 lg:px-10">
+        <div className="pb-4 pt-8 lg:py-14">
+          <div className="flex animate-fade-up flex-wrap items-center gap-x-5 gap-y-3">
+            <span className="inline-flex items-center gap-2 rounded-full border border-stone-900/15 bg-paper/60 px-3 py-1.5 text-[11px] font-bold text-stone-700 dark:border-white/15 dark:bg-white/5 dark:text-stone-200">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal opacity-70" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-signal" />
+              </span>
+              {t.hero.badge}
             </span>
-            {t.hero.badge}
-          </span>
+            <span className="eyebrow">
+              {locale === "pt" ? "Brasil · Remoto" : "Brazil · Remote"}
+            </span>
+          </div>
 
-          <p className="mt-6 animate-fade-up font-mono text-sm text-brand-fg dark:text-violet-300">
+          <p className="mt-9 animate-fade-up font-mono text-xs uppercase tracking-[0.16em] text-brand">
             {t.hero.greeting}
           </p>
 
-          <h1 className="mt-3 max-w-xl animate-fade-up font-display text-4xl font-bold leading-[1.08] tracking-tight text-slate-900 sm:text-[3.4rem] dark:text-white">
-            {t.hero.title.split(". ").map((part, i, arr) => (
-              <span key={i} className="block">
-                {i === arr.length - 1 ? (
-                  <span className="bg-gradient-to-r from-brand via-violet-400 to-accent bg-clip-text text-transparent">
-                    {part}
-                  </span>
+          <h1 className="mt-4 max-w-4xl animate-fade-up font-display text-[clamp(3.25rem,7.6vw,7rem)] font-bold leading-[0.92] tracking-[-0.065em] text-stone-950 dark:text-white">
+            {titleParts.map((part, index) => (
+              <span key={part} className="block">
+                {index === titleParts.length - 1 ? (
+                  <span className="text-brand">{part}</span>
                 ) : (
                   `${part}.`
                 )}
@@ -54,20 +57,12 @@ export function Hero() {
             ))}
           </h1>
 
-          <p className="mt-6 max-w-xl animate-fade-up text-base leading-relaxed text-slate-600 dark:text-slate-300">
+          <p className="mt-8 max-w-2xl animate-fade-up text-base font-medium leading-relaxed text-stone-600 sm:text-lg dark:text-stone-300">
             {t.hero.tagline}
           </p>
 
-          <p className="mt-4 flex max-w-xl animate-fade-up gap-2.5 rounded-xl border border-brand/25 bg-brand/5 p-3.5 text-sm leading-relaxed text-slate-700 dark:bg-brand/10 dark:text-slate-200">
-            <SparklesIcon className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
-            <span>{t.hero.aiHighlight}</span>
-          </p>
-
           <div className="mt-8 flex animate-fade-up flex-wrap items-center gap-3">
-            <a
-              href={`mailto:${profile.email}`}
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand to-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition-transform hover:scale-[1.03]"
-            >
+            <a href={`mailto:${profile.email}`} className="button-primary">
               <MailIcon className="h-4 w-4" />
               {t.hero.ctaEmail}
             </a>
@@ -75,7 +70,7 @@ export function Hero() {
               href={profile.links.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-brand/60 hover:text-brand-fg dark:border-ink-border dark:text-slate-200 dark:hover:border-brand/60 dark:hover:text-violet-300"
+              className="button-secondary"
             >
               <LinkedInIcon className="h-4 w-4" />
               {t.hero.ctaResume}
@@ -84,7 +79,7 @@ export function Hero() {
               href={profile.links.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-brand/60 hover:text-brand-fg dark:border-ink-border dark:text-slate-200 dark:hover:border-brand/60 dark:hover:text-violet-300"
+              className="button-secondary"
             >
               <GitHubIcon className="h-4 w-4" />
               GitHub
@@ -92,35 +87,68 @@ export function Hero() {
             <button
               type="button"
               onClick={() => window.print()}
-              className="inline-flex items-center gap-2 px-2 py-2.5 text-sm font-semibold text-slate-500 transition-colors hover:text-brand-fg dark:text-slate-400 dark:hover:text-violet-300"
+              className="inline-flex items-center gap-2 px-2 py-3 text-sm font-bold text-stone-500 transition-colors hover:text-brand dark:text-stone-400"
             >
               <DownloadIcon className="h-4 w-4" />
               {t.hero.ctaPdf}
             </button>
           </div>
 
-          <div className="mt-6 flex animate-fade-up items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
-            <MapPinIcon className="h-4 w-4" />
-            <span>{t.hero.location}</span>
+          <div className="mt-10 grid animate-fade-up gap-5 border-t border-stone-900/15 pt-5 sm:grid-cols-[1fr_auto] dark:border-white/15">
+            <p className="flex max-w-xl gap-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+              <SparklesIcon className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
+              <span>{t.hero.aiHighlight}</span>
+            </p>
+            <div className="flex items-start gap-2 text-xs font-semibold text-stone-500 sm:justify-end dark:text-stone-400">
+              <MapPinIcon className="h-4 w-4 shrink-0 text-brand" />
+              <span className="max-w-48">{t.hero.location}</span>
+            </div>
           </div>
         </div>
 
-        {/* ------------------------------------------------ phone column */}
         <div className="relative animate-fade-up" data-print-hide>
+          <div className="relative mx-auto max-w-[470px] overflow-hidden rounded-[2.5rem] border border-white/10 bg-ink px-4 pb-7 pt-5 shadow-editorial sm:px-8 sm:pb-9">
+            <div className="relative z-10 mb-6 flex items-center justify-between">
+              <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-stone-400">
+                <span className="h-2 w-2 rounded-full bg-signal" />
+                {locale === "pt" ? "Ao vivo / no dispositivo" : "Live / on-device"}
+              </div>
+              <span className="rounded-full border border-white/15 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-stone-400">
+                WebGPU
+              </span>
+            </div>
+
+            <div
+              aria-hidden
+              className="hero-halo pointer-events-none absolute inset-0"
+            />
+            <span
+              aria-hidden
+              className="text-outline pointer-events-none absolute -right-3 top-12 font-display text-[10rem] font-black leading-none"
+            >
+              AI
+            </span>
+
+            <div className="relative z-10">
+              <PhoneChat />
+            </div>
+
+            <div className="relative z-10 mt-6 flex items-center justify-between border-t border-white/10 pt-4 font-mono text-[9px] uppercase tracking-[0.14em] text-stone-500">
+              <span>{locale === "pt" ? "Privado por design" : "Private by design"}</span>
+              <span>01 / 01</span>
+            </div>
+          </div>
+
           <div
             aria-hidden
-            className="glow-violet pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2"
-          />
-          <PhoneChat />
-
-          {/* Floating tech tags orbiting the phone */}
-          <div aria-hidden className="pointer-events-none absolute inset-0 hidden xl:block">
-            {FLOATING_TAGS.map((tag, i) => (
+            className="pointer-events-none absolute inset-0 hidden xl:block"
+          >
+            {FLOATING_TAGS.map((tag, index) => (
               <span
                 key={tag}
-                className={`absolute rounded-full border border-slate-200/80 bg-white/80 px-3 py-1 font-mono text-[11px] text-slate-600 shadow-sm backdrop-blur dark:border-white/10 dark:bg-ink-raised/80 dark:text-slate-300 ${
-                  i % 2 ? "animate-float-slow" : "animate-float"
-                } ${TAG_POSITIONS[i]}`}
+                className={`absolute rounded-full border border-stone-900/10 bg-paper/90 px-3 py-1.5 font-mono text-[10px] font-medium uppercase tracking-wide text-stone-600 shadow-sm backdrop-blur dark:border-white/15 dark:bg-ink-raised/90 dark:text-stone-300 ${
+                  index % 2 ? "animate-float-slow" : "animate-float"
+                } ${TAG_POSITIONS[index]}`}
               >
                 {tag}
               </span>
@@ -133,8 +161,8 @@ export function Hero() {
 }
 
 const TAG_POSITIONS = [
-  "-left-4 top-16",
-  "-right-2 top-32",
-  "-left-8 bottom-36",
-  "-right-6 bottom-16",
+  "-left-9 top-24",
+  "-right-8 top-44",
+  "-left-12 bottom-48",
+  "-right-10 bottom-24",
 ];

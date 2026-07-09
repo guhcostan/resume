@@ -3,56 +3,106 @@
 @tailwind utilities;
 
 :root {
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
-  --font-display: "Space Grotesk", var(--font-sans);
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+  --font-display: "Bricolage Grotesque", var(--font-sans);
+  --font-mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
     monospace;
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+  scroll-padding-top: 6rem;
 }
 
 body {
-  @apply bg-slate-50 text-slate-700 antialiased dark:bg-ink dark:text-slate-300;
+  @apply min-h-screen overflow-x-hidden bg-canvas text-stone-700 antialiased dark:bg-ink dark:text-stone-300;
+  background-image:
+    radial-gradient(circle at 15% 0%, rgba(255, 79, 31, 0.1), transparent 26rem),
+    radial-gradient(circle at 95% 12%, rgba(124, 58, 237, 0.07), transparent 30rem);
+}
+
+.dark body {
+  background-image:
+    radial-gradient(circle at 15% 0%, rgba(255, 79, 31, 0.13), transparent 28rem),
+    radial-gradient(circle at 95% 12%, rgba(124, 58, 237, 0.12), transparent 32rem);
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  content: "";
+  opacity: 0.18;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
+}
+
+a,
+button,
+input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid #ff4f1f;
+  outline-offset: 3px;
 }
 
 ::selection {
-  @apply bg-brand/30;
+  @apply bg-brand text-white;
 }
 
 /* ---------------------------------------------------------------------------
-   Backdrops
+   Shared visual primitives
 --------------------------------------------------------------------------- */
 
-/* Fine blueprint grid, faded toward the bottom — sits behind the hero. */
-.bg-blueprint {
+.editorial-grid {
   background-image:
-    linear-gradient(to right, rgba(139, 92, 246, 0.07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(139, 92, 246, 0.07) 1px, transparent 1px);
-  background-size: 44px 44px;
-  -webkit-mask-image: radial-gradient(
-    ellipse 90% 70% at 50% 0%,
-    #000 30%,
-    transparent 75%
-  );
-  mask-image: radial-gradient(
-    ellipse 90% 70% at 50% 0%,
-    #000 30%,
-    transparent 75%
-  );
+    linear-gradient(to right, rgba(28, 25, 23, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(28, 25, 23, 0.08) 1px, transparent 1px);
+  background-size: 52px 52px;
 }
 
-/* Soft color glow behind the hero phone. */
-.glow-violet {
-  background: radial-gradient(
-    closest-side,
-    rgba(139, 92, 246, 0.28),
-    rgba(34, 211, 238, 0.12) 55%,
-    transparent 100%
-  );
+.dark .editorial-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+}
+
+.hero-halo {
+  background:
+    radial-gradient(circle at 45% 44%, rgba(255, 79, 31, 0.45), transparent 31%),
+    radial-gradient(circle at 65% 65%, rgba(124, 58, 237, 0.35), transparent 38%);
+  filter: blur(22px);
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+}
+
+@layer components {
+  .surface-card {
+    @apply rounded-3xl border border-stone-900/10 bg-paper/80 shadow-editorial backdrop-blur-sm dark:border-white/10 dark:bg-ink-raised/80;
+  }
+
+  .button-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-5 py-3 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-brand hover:shadow-glow dark:bg-brand dark:hover:bg-white dark:hover:text-ink;
+  }
+
+  .button-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-stone-900/20 bg-white/40 px-5 py-3 text-sm font-bold text-stone-800 transition duration-300 hover:-translate-y-0.5 hover:border-brand hover:text-brand-fg dark:border-white/15 dark:bg-white/5 dark:text-stone-100 dark:hover:border-brand dark:hover:text-brand;
+  }
+
+  .eyebrow {
+    @apply font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-stone-500 dark:text-stone-400;
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -60,15 +110,18 @@ body {
 --------------------------------------------------------------------------- */
 .reveal {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(24px);
+  filter: blur(5px);
   transition:
-    opacity 0.6s ease-out,
-    transform 0.6s ease-out;
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.75s ease-out;
 }
 
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
+  filter: blur(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -78,6 +131,7 @@ body {
   .reveal {
     opacity: 1;
     transform: none;
+    filter: none;
     transition: none;
   }
   .animate-float,
@@ -130,6 +184,10 @@ body {
     color: #111 !important;
   }
 
+  body::before {
+    display: none !important;
+  }
+
   header,
   nav,
   [data-print-hide],
@@ -137,9 +195,12 @@ body {
     display: none !important;
   }
 
-  .reveal {
+  .reveal,
+  .animate-fade-up {
     opacity: 1 !important;
     transform: none !important;
+    filter: none !important;
+    animation: none !important;
   }
 
   main,
@@ -153,6 +214,33 @@ body {
   section {
     page-break-inside: avoid;
     padding-top: 0.75rem !important;
+  }
+
+  main :where(h1, h2, h3, p, span, li, a) {
+    color: #111 !important;
+  }
+
+  main :where(div, section, article, aside, ol, ul) {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  #top > div:last-child {
+    display: block !important;
+  }
+
+  #top h1 {
+    max-width: 100% !important;
+    font-size: 2.25rem !important;
+    line-height: 1.05 !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  .surface-card {
+    border: 1px solid #ddd !important;
   }
 
   a {

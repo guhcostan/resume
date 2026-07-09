@@ -22,24 +22,22 @@ export function LabView() {
         };
 
   return (
-    <div>
+    <div className="min-h-screen">
       <Header />
-      <main className="mx-auto max-w-3xl px-5 py-12 sm:py-16">
+      <main className="mx-auto max-w-5xl px-5 pb-24 pt-10 sm:px-8 sm:pt-16 lg:px-10">
         <Link
           href="/"
-          className="text-sm text-slate-500 transition-colors hover:text-fuchsia-500 dark:text-slate-400"
+          className="eyebrow transition-colors hover:text-brand"
         >
           {t.back}
         </Link>
-        <h1 className="mt-4 flex flex-wrap items-center gap-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
-          <span>
-            <span className="text-fuchsia-500">$</span> {t.heading}
-          </span>
-          <span className="rounded-full bg-fuchsia-500/15 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-fuchsia-600 dark:text-fuchsia-400">
+        <h1 className="mt-8 flex flex-wrap items-center gap-4 font-display text-4xl font-bold tracking-[-0.04em] text-stone-950 sm:text-6xl dark:text-white">
+          <span>{t.heading}</span>
+          <span className="rounded-full bg-signal px-3 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.15em] text-ink">
             experimental
           </span>
         </h1>
-        <p className="mb-8 mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+        <p className="mb-10 mt-5 max-w-2xl text-sm font-medium leading-relaxed text-stone-600 dark:text-stone-300">
           {t.sub}
         </p>
         <LiteRtTerminal />
