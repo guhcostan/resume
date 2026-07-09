@@ -5,17 +5,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "@/components/LanguageProvider";
 import { useTheme } from "@/components/ThemeProvider";
-import { MoonIcon, SparklesIcon, SunIcon } from "@/components/icons";
+import {
+  ArrowUpRightIcon,
+  MoonIcon,
+  SparklesIcon,
+  SunIcon,
+} from "@/components/icons";
 
 const TOGGLE_CLASS =
-  "rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-600 transition-colors hover:border-brand/60 hover:text-brand-fg dark:border-ink-border dark:text-slate-300 dark:hover:border-brand/60 dark:hover:text-violet-300";
+  "inline-flex h-10 items-center justify-center rounded-full border border-stone-900/15 bg-paper/70 text-xs font-bold text-stone-700 transition-all hover:border-brand hover:text-brand-fg dark:border-white/15 dark:bg-ink-raised/70 dark:text-stone-200 dark:hover:border-brand dark:hover:text-brand";
 
-/**
- * Minimal top bar: identity on the left, "Ask AI" + language/theme toggles on
- * the right. Section navigation lives in the bottom Dock (mobile-app style).
- */
 export function Header() {
-  const { locale, toggleLocale } = useLocale();
+  const { locale, t, toggleLocale } = useLocale();
   const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const onHome = usePathname() === "/";
@@ -27,37 +28,80 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const navItems = [
+    { id: "about", label: t.nav.about },
+    { id: "experience", label: t.nav.experience },
+    { id: "skills", label: t.nav.skills },
+    { id: "projects", label: t.nav.projects },
+    { id: "contact", label: t.nav.contact },
+  ];
+
   const logo = (
-    <span className="font-mono text-sm font-semibold tracking-tight text-slate-900 dark:text-white">
-      <span className="text-brand">~/</span>guhcostan
-      <span className="text-brand">_</span>
+    <span className="flex items-center gap-3">
+      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand font-display text-sm font-extrabold text-white">
+        GC
+      </span>
+      <span className="hidden leading-tight sm:block">
+        <span className="block font-display text-sm font-bold text-stone-950 dark:text-white">
+          Gustavo Costa
+        </span>
+        <span className="block font-mono text-[9px] uppercase tracking-[0.15em] text-stone-500 dark:text-stone-400">
+          Mobile · Frontend · AI
+        </span>
+      </span>
     </span>
   );
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-colors ${
+      className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "border-b border-slate-200/70 bg-slate-50/85 backdrop-blur dark:border-ink-border/80 dark:bg-ink/80"
-          : "border-b border-transparent"
+          ? "border-b border-stone-900/10 bg-canvas/85 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-ink/85"
+          : "border-b border-transparent bg-transparent"
       }`}
     >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
-        {onHome ? <a href="#top">{logo}</a> : <Link href="/">{logo}</Link>}
+      <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 sm:px-8 lg:px-10">
+        {onHome ? (
+          <a href="#top" aria-label="Gustavo Costa — home">
+            {logo}
+          </a>
+        ) : (
+          <Link href="/" aria-label="Gustavo Costa — home">
+            {logo}
+          </Link>
+        )}
 
-        <div className="flex items-center gap-2">
+        <div className="hidden items-center gap-1 rounded-full border border-stone-900/10 bg-paper/55 p-1 lg:flex dark:border-white/10 dark:bg-white/5">
+          {navItems.map((item, index) => (
+            <Link
+              key={item.id}
+              href={onHome ? `#${item.id}` : `/#${item.id}`}
+              className="rounded-full px-3 py-2 text-[11px] font-bold text-stone-600 transition-colors hover:bg-white hover:text-stone-950 dark:text-stone-300 dark:hover:bg-white/10 dark:hover:text-white"
+            >
+              <span className="mr-1 font-mono text-[9px] text-brand">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              {item.label}
+            </Link>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <Link
             href="/terminal"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-brand/30 bg-brand/10 px-2.5 py-1.5 text-xs font-semibold text-brand-fg transition-colors hover:bg-brand/20 dark:text-violet-300"
+            className="group inline-flex h-10 items-center gap-2 rounded-full bg-ink px-3 text-xs font-bold text-white transition-all hover:bg-brand sm:px-4 dark:bg-brand dark:hover:bg-white dark:hover:text-ink"
           >
             <SparklesIcon className="h-3.5 w-3.5" />
-            {locale === "pt" ? "Terminal IA" : "AI Terminal"}
+            <span className="hidden sm:inline">
+              {locale === "pt" ? "Pergunte à IA" : "Ask the AI"}
+            </span>
+            <ArrowUpRightIcon className="hidden h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 sm:block" />
           </Link>
           <button
             type="button"
             onClick={toggleLocale}
             aria-label="Toggle language"
-            className={TOGGLE_CLASS}
+            className={`${TOGGLE_CLASS} w-10 sm:w-12`}
           >
             {locale === "pt" ? "EN" : "PT"}
           </button>
@@ -65,7 +109,7 @@ export function Header() {
             type="button"
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className={`${TOGGLE_CLASS} p-2`}
+            className={`${TOGGLE_CLASS} w-10`}
           >
             {theme === "dark" ? (
               <SunIcon className="h-4 w-4" />

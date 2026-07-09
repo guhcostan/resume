@@ -17,9 +17,9 @@ export default function Home() {
   useReveal();
 
   return (
-    <div>
+    <div className="relative">
       <Header />
-      <main>
+      <main className="relative">
         <Hero />
         <Stats />
         <About />

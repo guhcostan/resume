@@ -3,41 +3,44 @@
 import { useLocale } from "@/components/LanguageProvider";
 import { Section } from "@/components/sections/Section";
 
-/** Per-group accent so the grid reads like a set of app categories. */
 const GROUP_ACCENTS = [
-  "from-violet-500 to-fuchsia-500",
-  "from-sky-500 to-cyan-400",
-  "from-emerald-500 to-teal-400",
-  "from-amber-500 to-orange-400",
-  "from-fuchsia-500 to-pink-500",
-  "from-cyan-400 to-blue-500",
+  "bg-brand",
+  "bg-accent",
+  "bg-signal",
+  "bg-sky-400",
+  "bg-fuchsia-400",
+  "bg-amber-400",
 ];
 
 export function Skills() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
 
   return (
     <Section id="skills" index="03" heading={t.skills.heading}>
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {t.skills.groups.map((group, i) => (
+      <div className="grid gap-4 md:grid-cols-2">
+        {t.skills.groups.map((group, index) => (
           <div
             key={group.title}
-            className="reveal group rounded-2xl border border-slate-200 bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:border-brand/40 hover:shadow-lg hover:shadow-brand/10 dark:border-ink-border dark:bg-ink-raised"
+            className="surface-card reveal group relative overflow-hidden p-6 transition duration-300 hover:-translate-y-1 hover:border-brand/40 sm:p-7"
           >
-            <div className="mb-4 flex items-center gap-2.5">
+            <div className="flex items-start justify-between gap-4">
+              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-stone-400 dark:text-stone-500">
+                {locale === "pt" ? "Competência" : "Capability"} /{" "}
+                {String(index + 1).padStart(2, "0")}
+              </span>
               <span
                 aria-hidden
-                className={`h-2.5 w-2.5 rounded-sm bg-gradient-to-br ${GROUP_ACCENTS[i % GROUP_ACCENTS.length]}`}
+                className={`h-3 w-3 rounded-full ${GROUP_ACCENTS[index % GROUP_ACCENTS.length]}`}
               />
-              <h3 className="font-mono text-sm font-semibold text-slate-900 dark:text-white">
-                {group.title}
-              </h3>
             </div>
-            <ul className="flex flex-wrap gap-2">
+            <h3 className="mt-7 font-display text-2xl font-bold tracking-[-0.03em] text-stone-950 dark:text-white">
+              {group.title}
+            </h3>
+            <ul className="mt-5 flex flex-wrap gap-2">
               {group.skills.map((skill) => (
                 <li
                   key={skill}
-                  className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-700 dark:border-white/5 dark:bg-white/5 dark:text-slate-300"
+                  className="rounded-full border border-stone-900/10 bg-white/55 px-3 py-1.5 text-xs font-semibold text-stone-600 transition-colors group-hover:border-stone-900/15 dark:border-white/10 dark:bg-white/5 dark:text-stone-300"
                 >
                   {skill}
                 </li>

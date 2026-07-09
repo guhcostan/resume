@@ -7,13 +7,12 @@ import { ArrowUpRightIcon, StarIcon } from "@/components/icons";
 
 const GH_USER = "guhcostan";
 
-/** App-icon-style gradient tiles, one per project. */
-const TILE_GRADIENTS = [
-  "from-violet-500 to-fuchsia-500",
-  "from-sky-500 to-cyan-400",
-  "from-emerald-500 to-teal-400",
-  "from-amber-500 to-orange-500",
-  "from-pink-500 to-rose-500",
+const PROJECT_COLORS = [
+  "bg-brand",
+  "bg-accent",
+  "bg-signal",
+  "bg-sky-400",
+  "bg-fuchsia-400",
 ];
 
 function formatStars(n: number): string {
@@ -58,7 +57,6 @@ function useGitHubStars(repos: string[]) {
   return stars;
 }
 
-/** Open source projects presented like an app-store listing. */
 export function OpenSource() {
   const { t } = useLocale();
   const items = t.projects.items;
@@ -66,45 +64,70 @@ export function OpenSource() {
 
   return (
     <Section id="projects" index="04" heading={t.projects.heading}>
-      <p className="reveal -mt-4 mb-8 text-sm text-slate-500 dark:text-slate-400">
+      <p className="reveal -mt-5 mb-10 max-w-2xl text-sm font-medium leading-relaxed text-stone-500 dark:text-stone-400">
         {t.projects.subtitle}
       </p>
-      <div className="grid gap-4 sm:grid-cols-2">
-        {items.map((item, i) => {
+      <div className="grid gap-4 md:grid-cols-12">
+        {items.map((item, index) => {
           const stars = liveStars[item.repo] ?? item.fallbackStars;
+          const featured = index === 0;
           return (
             <a
               key={item.repo}
               href={`https://github.com/${GH_USER}/${item.repo}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="reveal group flex gap-4 rounded-2xl border border-slate-200 bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:border-brand/40 hover:shadow-lg hover:shadow-brand/10 dark:border-ink-border dark:bg-ink-raised"
+              className={`surface-card reveal group relative flex overflow-hidden p-6 transition duration-300 hover:-translate-y-1 hover:border-brand/50 ${
+                featured
+                  ? "min-h-[390px] flex-col justify-between md:col-span-7 md:row-span-2 sm:p-8"
+                  : "min-h-[185px] flex-col md:col-span-5"
+              }`}
             >
-              {/* App icon tile */}
-              <div
+              <span
                 aria-hidden
-                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br font-mono text-lg font-bold text-white ${TILE_GRADIENTS[i % TILE_GRADIENTS.length]}`}
+                className="pointer-events-none absolute -bottom-10 -right-2 font-display text-[10rem] font-black leading-none text-stone-900/[0.035] transition-transform duration-500 group-hover:-translate-y-2 dark:text-white/[0.035]"
               >
-                {item.name.charAt(0)}
+                {item.name.charAt(0).toUpperCase()}
+              </span>
+
+              <div className="relative flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`h-3 w-3 rounded-full ${
+                      PROJECT_COLORS[index % PROJECT_COLORS.length]
+                    }`}
+                  />
+                  <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-stone-400">
+                    Open source / {String(index + 1).padStart(2, "0")}
+                  </span>
+                </div>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-stone-900/10 bg-white/50 px-2.5 py-1 font-mono text-[10px] font-medium text-stone-600 dark:border-white/10 dark:bg-white/5 dark:text-stone-300">
+                  <StarIcon className="h-3 w-3 text-brand" />
+                  {formatStars(stars)}
+                </span>
               </div>
 
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="truncate font-mono text-sm font-semibold text-slate-900 dark:text-white">
-                    {item.name}
-                  </h3>
-                  <ArrowUpRightIcon className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand" />
-                </div>
-                <p className="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+              <div className={`relative ${featured ? "mt-20" : "mt-8"}`}>
+                <h3
+                  className={`font-display font-bold tracking-[-0.04em] text-stone-950 dark:text-white ${
+                    featured ? "text-4xl sm:text-5xl" : "text-2xl"
+                  }`}
+                >
+                  {item.name}
+                </h3>
+                <p
+                  className={`mt-3 leading-relaxed text-stone-600 dark:text-stone-300 ${
+                    featured ? "max-w-lg text-base" : "text-sm"
+                  }`}
+                >
                   {item.description}
                 </p>
-                <div className="mt-3 flex items-center justify-between text-xs">
-                  <span className="font-mono text-slate-400 dark:text-slate-500">
+                <div className="mt-6 flex items-center justify-between gap-4">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-stone-400">
                     {item.tag}
                   </span>
-                  <span className="inline-flex items-center gap-1 font-semibold text-amber-600 dark:text-amber-400">
-                    <StarIcon className="h-3.5 w-3.5" />
-                    {formatStars(stars)}
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ink text-white transition-transform group-hover:rotate-45 group-hover:bg-brand dark:bg-white dark:text-ink">
+                    <ArrowUpRightIcon className="h-4 w-4" />
                   </span>
                 </div>
               </div>

@@ -15,11 +15,6 @@ import {
 
 const SECTION_IDS = ["top", "about", "experience", "skills", "projects", "contact"];
 
-/**
- * Floating bottom navigation, styled like a mobile app tab bar — a small nod
- * to a career spent building phone apps. Tracks the visible section with an
- * IntersectionObserver to light up the active tab.
- */
 export function Dock() {
   const { t, locale } = useLocale();
   const [active, setActive] = useState("top");
@@ -55,9 +50,9 @@ export function Dock() {
     <nav
       data-print-hide
       aria-label="Sections"
-      className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2"
+      className="fixed bottom-3 left-1/2 z-50 max-w-[calc(100vw-1rem)] -translate-x-1/2 md:hidden"
     >
-      <div className="flex items-center gap-0.5 rounded-2xl border border-slate-200/80 bg-white/85 px-1.5 py-1.5 shadow-lg shadow-slate-900/10 backdrop-blur-md dark:border-white/10 dark:bg-ink-raised/85 dark:shadow-black/50">
+      <div className="flex items-center gap-0.5 rounded-full border border-white/15 bg-ink/95 p-1.5 shadow-2xl shadow-black/25 backdrop-blur-xl">
         {items.map(({ id, label, Icon }) => {
           const isActive = active === id;
           return (
@@ -66,34 +61,29 @@ export function Dock() {
               href={`#${id}`}
               aria-label={label}
               aria-current={isActive ? "true" : undefined}
-              className={`group relative flex h-11 w-11 items-center justify-center rounded-xl transition-colors ${
+              className={`group relative flex h-10 w-10 items-center justify-center rounded-full transition-all ${
                 isActive
-                  ? "bg-brand/15 text-brand-fg dark:text-violet-300"
-                  : "text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-slate-100"
+                  ? "bg-brand text-white"
+                  : "text-stone-400 hover:bg-white/10 hover:text-white"
               }`}
             >
-              <Icon className="h-5 w-5" />
-              {/* Tooltip label */}
-              <span className="pointer-events-none absolute -top-9 whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-[10px] font-semibold text-white opacity-0 transition-opacity group-hover:opacity-100 dark:bg-white dark:text-slate-900">
+              <Icon className="h-[18px] w-[18px]" />
+              <span className="pointer-events-none absolute -top-9 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-[10px] font-bold text-ink opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
                 {label}
               </span>
-              {/* Active dot, tab-bar style */}
-              {isActive && (
-                <span className="absolute bottom-1 h-1 w-1 rounded-full bg-brand" />
-              )}
             </a>
           );
         })}
 
-        <span className="mx-1 h-6 w-px bg-slate-200 dark:bg-white/10" />
+        <span className="mx-0.5 h-6 w-px bg-white/15" />
 
         <Link
           href="/terminal"
           aria-label={locale === "pt" ? "Terminal IA" : "AI Terminal"}
-          className="group relative flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-accent text-white shadow-glow transition-transform hover:scale-105"
+          className="group relative flex h-10 w-10 items-center justify-center rounded-full bg-white text-ink transition-transform hover:scale-105"
         >
-          <SparklesIcon className="h-5 w-5" />
-          <span className="pointer-events-none absolute -top-9 whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-[10px] font-semibold text-white opacity-0 transition-opacity group-hover:opacity-100 dark:bg-white dark:text-slate-900">
+          <SparklesIcon className="h-[18px] w-[18px]" />
+          <span className="pointer-events-none absolute -top-9 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-[10px] font-bold text-ink opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
             {locale === "pt" ? "Terminal IA" : "AI Terminal"}
           </span>
         </Link>

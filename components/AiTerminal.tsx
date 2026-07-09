@@ -310,49 +310,47 @@ export function AiTerminal({
   const inputDisabled = busy || modelLoading;
 
   return (
-    <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-slate-700/60 bg-slate-900 shadow-2xl shadow-indigo-500/10">
-      {/* Title bar */}
-      <div className="flex items-center gap-2 border-b border-slate-700/60 bg-slate-800/80 px-4 py-2.5">
-        <span className="h-3 w-3 rounded-full bg-red-400/90" />
-        <span className="h-3 w-3 rounded-full bg-yellow-400/90" />
-        <span className="h-3 w-3 rounded-full bg-green-400/90" />
-        <span className="ml-2 font-mono text-xs text-slate-400">
+    <div className="mx-auto w-full overflow-hidden rounded-[2rem] border border-white/10 bg-[#10100f] shadow-2xl shadow-black/25">
+      <div className="flex items-center gap-2 border-b border-white/10 bg-[#1a1916] px-5 py-3.5">
+        <span className="h-2.5 w-2.5 rounded-full bg-brand" />
+        <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
+        <span className="h-2.5 w-2.5 rounded-full bg-signal" />
+        <span className="ml-2 hidden font-mono text-[10px] uppercase tracking-[0.12em] text-stone-500 sm:inline">
           ask-gustavo — agent
         </span>
-        <span className="rounded bg-amber-500/15 px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide text-amber-400">
+        <span className="rounded-full border border-brand/30 bg-brand/10 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wide text-brand">
           beta
         </span>
-        <span className="ml-auto rounded bg-slate-700/50 px-2 py-0.5 font-mono text-[10px] text-slate-300">
+        <span className="ml-auto max-w-[48%] truncate rounded-full border border-white/10 bg-white/5 px-2.5 py-1 font-mono text-[9px] text-stone-400">
           {mode === "lite" ? s.liteBackendLabel : s.backendLabel(model.label)}
         </span>
       </div>
 
-      {/* Transcript + loading overlay */}
       <div className="relative">
-      <div
-        ref={scrollRef}
-        onClick={() => inputRef.current?.focus()}
-        className="h-[60vh] min-h-[360px] space-y-2 overflow-y-auto p-4 font-mono text-[13px] leading-relaxed"
-      >
+        <div
+          ref={scrollRef}
+          onClick={() => inputRef.current?.focus()}
+          className="h-[62vh] min-h-[420px] space-y-2 overflow-y-auto p-5 font-mono text-[13px] leading-relaxed sm:p-7"
+        >
         {/* Intro */}
-        <div className="text-slate-400">
+        <div className="text-stone-500">
           {s.intro.map((line, i) => (
             <div key={i}>{line}</div>
           ))}
           {mode === "mobile" && (
-            <div className="text-amber-400/90">
+            <div className="text-amber-300/90">
               {s.mobileIntro(model.label, size)}
             </div>
           )}
           {mode === "lite" && (
-            <div className="text-amber-400/90">{s.liteIntro}</div>
+            <div className="text-amber-300/90">{s.liteIntro}</div>
           )}
         </div>
 
         {/* Suggestions when empty */}
         {entries.length === 0 && (
           <div className="pt-2">
-            <div className="mb-1 text-slate-500">{s.suggestionsLabel}</div>
+            <div className="mb-2 text-stone-600">{s.suggestionsLabel}</div>
             <div className="flex flex-wrap gap-2">
               {SUGGESTED_QUESTIONS[locale].map((q) => (
                 <button
@@ -360,7 +358,7 @@ export function AiTerminal({
                   type="button"
                   onClick={() => submit(q)}
                   disabled={inputDisabled}
-                  className="rounded border border-slate-700 px-2 py-1 text-xs text-indigo-300 transition-colors hover:border-indigo-500 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-stone-300 transition-colors hover:border-brand hover:text-brand disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {q}
                 </button>
@@ -375,7 +373,7 @@ export function AiTerminal({
 
         {/* Loading / thinking indicator */}
         {busy && (
-          <div className="text-fuchsia-400">
+          <div className="text-brand">
             {modelPct !== null && modelPct < 100
               ? s.loadingModel(modelPct, model.label, size)
               : s.thinking}
@@ -384,7 +382,7 @@ export function AiTerminal({
 
         {/* Live input line */}
         <div className="flex items-center gap-2">
-          <span className="shrink-0 text-indigo-400">{PROMPT}</span>
+          <span className="shrink-0 text-brand">{PROMPT}</span>
           <input
             ref={inputRef}
             value={input}
@@ -395,22 +393,21 @@ export function AiTerminal({
             spellCheck={false}
             autoComplete="off"
             placeholder={modelLoading ? s.loadingPlaceholder : s.placeholder}
-            className="flex-1 bg-transparent text-slate-100 placeholder:text-slate-600 focus:outline-none disabled:opacity-50"
+            className="flex-1 bg-transparent text-stone-100 placeholder:text-stone-700 focus:outline-none disabled:opacity-50"
             aria-label="terminal input"
           />
         </div>
-      </div>
+        </div>
 
-        {/* Blurred loading overlay while the model downloads */}
         {modelLoading && (
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-slate-900/50 backdrop-blur-md">
-            <div className="h-9 w-9 animate-spin rounded-full border-2 border-slate-600 border-t-indigo-400" />
-            <div className="max-w-[80%] text-center font-mono text-xs text-slate-200">
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-ink/65 backdrop-blur-md">
+            <div className="h-9 w-9 animate-spin rounded-full border-2 border-white/15 border-t-brand" />
+            <div className="max-w-[80%] text-center font-mono text-xs text-stone-200">
               {s.loadingModel(modelPct ?? 0, model.label, size)}
             </div>
-            <div className="h-1.5 w-56 max-w-[70%] overflow-hidden rounded-full bg-slate-700">
+            <div className="h-1.5 w-56 max-w-[70%] overflow-hidden rounded-full bg-white/10">
               <div
-                className="h-full rounded-full bg-indigo-500 transition-[width] duration-300"
+                className="h-full rounded-full bg-brand transition-[width] duration-300"
                 style={{ width: `${modelPct ?? 0}%` }}
               />
             </div>
@@ -425,19 +422,19 @@ function Line({ entry }: { entry: Entry }) {
   if (entry.kind === "user") {
     return (
       <div className="flex items-baseline gap-2">
-        <span className="shrink-0 text-indigo-400">{PROMPT}</span>
-        <span className="text-slate-100">{entry.text}</span>
+        <span className="shrink-0 text-brand">{PROMPT}</span>
+        <span className="text-stone-100">{entry.text}</span>
       </div>
     );
   }
   if (entry.kind === "system") {
-    return <pre className="whitespace-pre-wrap text-slate-400">{entry.text}</pre>;
+    return <pre className="whitespace-pre-wrap text-stone-400">{entry.text}</pre>;
   }
   if (entry.kind === "error") {
     return <div className="text-red-400">⚠ {entry.text}</div>;
   }
   // assistant
   return (
-    <div className="whitespace-pre-wrap text-emerald-300">{entry.text}</div>
+    <div className="whitespace-pre-wrap text-signal">{entry.text}</div>
   );
 }

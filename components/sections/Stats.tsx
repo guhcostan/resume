@@ -3,19 +3,32 @@
 import { useLocale } from "@/components/LanguageProvider";
 
 export function Stats() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
 
   return (
-    <section className="border-y border-slate-200/70 bg-white/50 dark:border-ink-border dark:bg-ink-raised/40">
-      <div className="mx-auto grid max-w-6xl grid-cols-2 divide-slate-200/70 px-5 py-8 sm:grid-cols-4 sm:divide-x dark:divide-ink-border">
-        {t.stats.map((stat) => (
-          <div key={stat.label} className="reveal px-4 py-3 text-center">
-            <div className="bg-gradient-to-r from-brand to-accent bg-clip-text font-display text-3xl font-bold text-transparent sm:text-4xl">
+    <section className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div className="grid grid-cols-2 overflow-hidden rounded-3xl border border-stone-900/15 bg-ink text-white sm:grid-cols-4 dark:border-white/10">
+        {t.stats.map((stat, index) => (
+          <div
+            key={stat.label}
+            className="reveal relative min-h-40 border-b border-r border-white/10 p-5 last:border-r-0 sm:border-b-0 sm:p-6"
+          >
+            <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-stone-500">
+              {locale === "pt" ? "Sinal" : "Signal"} /{" "}
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <div className="mt-5 font-display text-4xl font-bold tracking-[-0.05em] text-white sm:text-5xl">
               {stat.value}
             </div>
-            <div className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+            <div className="mt-2 max-w-40 text-xs font-medium leading-relaxed text-stone-400">
               {stat.label}
             </div>
+            <span
+              aria-hidden
+              className={`absolute bottom-5 right-5 h-2 w-2 rounded-full ${
+                index === 0 ? "bg-signal" : "bg-brand"
+              }`}
+            />
           </div>
         ))}
       </div>
