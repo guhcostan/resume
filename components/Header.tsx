@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "@/components/LanguageProvider";
 import { SparklesIcon } from "@/components/icons";
+import { useAiTerminalDrawer } from "@/components/AiTerminalDrawer";
 
 const NAV_LINKS = [
   { id: "projects", key: "projects" },
@@ -18,6 +19,7 @@ export function Header() {
   const { t, locale, toggleLocale } = useLocale();
   const [scrolled, setScrolled] = useState(false);
   const onHome = usePathname() === "/";
+  const { open: openAiTerminal } = useAiTerminalDrawer();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -55,13 +57,15 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Link
-            href="/terminal"
+          <button
+            type="button"
+            onClick={openAiTerminal}
+            aria-label={locale === "pt" ? "Abrir Terminal IA" : "Open AI Terminal"}
             className="pill inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold"
           >
             <SparklesIcon className="h-3.5 w-3.5" />
             {locale === "pt" ? "Terminal IA" : "AI Terminal"}
-          </Link>
+          </button>
           <button
             type="button"
             onClick={toggleLocale}

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { AiTerminalDrawerProvider } from "@/components/AiTerminalDrawer";
 
 // Resolve the public URL (including the GitHub Pages base path) so that
 // Open Graph image and canonical URLs are absolute and correct.
@@ -148,7 +149,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
         <ThemeProvider>
-          <LanguageProvider>{children}</LanguageProvider>
+          <LanguageProvider>
+            <AiTerminalDrawerProvider>{children}</AiTerminalDrawerProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

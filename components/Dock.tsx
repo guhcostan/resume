@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useLocale } from "@/components/LanguageProvider";
+import { useAiTerminalDrawer } from "@/components/AiTerminalDrawer";
 import {
   BriefcaseIcon,
   CpuIcon,
@@ -23,6 +23,7 @@ const SECTION_IDS = ["top", "about", "experience", "skills", "projects", "contac
 export function Dock() {
   const { t, locale } = useLocale();
   const [active, setActive] = useState("top");
+  const { open: openAiTerminal } = useAiTerminalDrawer();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -87,8 +88,9 @@ export function Dock() {
 
         <span className="mx-1 h-6 w-px bg-ink-line" />
 
-        <Link
-          href="/terminal"
+        <button
+          type="button"
+          onClick={openAiTerminal}
           aria-label={locale === "pt" ? "Terminal IA" : "AI Terminal"}
           className="group relative flex h-11 w-11 items-center justify-center rounded-xl bg-clay text-white shadow-glow transition-transform hover:scale-105"
         >
@@ -96,7 +98,7 @@ export function Dock() {
           <span className="pointer-events-none absolute -top-9 whitespace-nowrap rounded-md bg-ink px-2 py-1 text-[10px] font-semibold text-paper opacity-0 transition-opacity group-hover:opacity-100">
             {locale === "pt" ? "Terminal IA" : "AI Terminal"}
           </span>
-        </Link>
+        </button>
       </div>
     </nav>
   );

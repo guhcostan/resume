@@ -103,9 +103,11 @@ const STRINGS: Record<
 export function AiTerminal({
   autoPreload = true,
   autoFocusInput = true,
+  className = "",
 }: {
   autoPreload?: boolean;
   autoFocusInput?: boolean;
+  className?: string;
 } = {}) {
   const { locale, setLocale } = useLocale();
   const s = STRINGS[locale];
@@ -310,7 +312,7 @@ export function AiTerminal({
   const inputDisabled = busy || modelLoading;
 
   return (
-    <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-[#3a322a] bg-[#1d1915] shadow-2xl shadow-clay/20">
+    <div className={`${className} mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-[#3a322a] bg-[#1d1915] shadow-2xl shadow-clay/20`}>
       {/* Title bar */}
       <div className="flex items-center gap-2 border-b border-[#3a322a] bg-[#28221c] px-4 py-2.5">
         <span className="h-3 w-3 rounded-full bg-red-400/90" />

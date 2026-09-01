@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useLocale } from "@/components/LanguageProvider";
+import { useAiTerminalDrawer } from "@/components/AiTerminalDrawer";
 import { profile } from "@/lib/content";
 import { ArrowUpRightIcon, DownloadIcon, GitHubIcon, LinkedInIcon, MailIcon, MapPinIcon, SparklesIcon } from "@/components/icons";
 
@@ -12,6 +13,7 @@ const SOCIALS = [
 
 export function Hero() {
   const { t, locale } = useLocale();
+  const { open: openAiTerminal } = useAiTerminalDrawer();
 
   return (
     <section id="top" className="scroll-mt-20">
@@ -36,12 +38,12 @@ export function Hero() {
           <div className="sticker rise overflow-hidden p-6 sm:p-9" style={{ "--rise-delay": "100ms" } as React.CSSProperties}>
             <div className="flex flex-wrap items-center justify-between gap-3"><p className="section-label">{locale === "pt" ? "engenharia mobile + frontend" : "mobile + frontend engineering"}</p><span className="font-mono text-[11px] text-ink-faint">{profile.email}</span></div>
             <h2 className="mt-7 max-w-4xl text-[clamp(2.4rem,4.6vw,4.5rem)] font-semibold leading-[0.94] tracking-[-0.06em] text-ink">{t.hero.title.split(". ").map((part, i) => <span key={i} className="block">{part}{i === 0 ? "." : ""}</span>)}</h2>
-            <div className="mt-8 flex flex-wrap items-center gap-3"><Link href="#projects" className="pill inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold">{locale === "pt" ? "Explorar Open Source" : "Explore Open Source"}<ArrowUpRightIcon className="h-4 w-4" /></Link><Link href="#resume" className="inline-flex items-center gap-2 rounded-full border border-ink-line px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-clay/50 hover:text-clay-deep">{locale === "pt" ? "Ver resumo" : "View resume"}<ArrowUpRightIcon className="h-4 w-4" /></Link><Link href="/terminal" className="inline-flex items-center gap-2 rounded-full border border-ink-line px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-clay/50 hover:text-clay-deep"><SparklesIcon className="h-4 w-4" />{locale === "pt" ? "Pergunte à IA" : "Ask the AI"}</Link><button type="button" onClick={() => window.print()} className="inline-flex items-center gap-1.5 px-2 py-2.5 text-sm font-semibold text-ink-faint transition-colors hover:text-ink"><DownloadIcon className="h-4 w-4" />{t.hero.ctaPdf}</button></div>
+            <div className="mt-8 flex flex-wrap items-center gap-3"><Link href="#projects" className="pill inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold">{locale === "pt" ? "Explorar Open Source" : "Explore Open Source"}<ArrowUpRightIcon className="h-4 w-4" /></Link><Link href="#resume" className="inline-flex items-center gap-2 rounded-full border border-ink-line px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-clay/50 hover:text-clay-deep">{locale === "pt" ? "Ver resumo" : "View resume"}<ArrowUpRightIcon className="h-4 w-4" /></Link><button type="button" onClick={openAiTerminal} className="inline-flex items-center gap-2 rounded-full border border-ink-line px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-clay/50 hover:text-clay-deep"><SparklesIcon className="h-4 w-4" />{locale === "pt" ? "Pergunte à IA" : "Ask the AI"}</button><button type="button" onClick={() => window.print()} className="inline-flex items-center gap-1.5 px-2 py-2.5 text-sm font-semibold text-ink-faint transition-colors hover:text-ink"><DownloadIcon className="h-4 w-4" />{t.hero.ctaPdf}</button></div>
           </div>
 
           <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr]">
             <div className="sticker rise p-6" style={{ "--rise-delay": "160ms" } as React.CSSProperties}><p className="section-label">{locale === "pt" ? "o que estou fazendo agora" : "what I'm doing now"}</p><ul className="mt-5 space-y-3">{t.about.now.map((item) => <li key={item} className="flex items-start gap-3 border-b border-dashed border-ink-line pb-3 text-sm leading-relaxed text-ink-soft last:border-0 last:pb-0"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-clay" />{item}</li>)}</ul></div>
-            <div className="rise rounded-[18px] bg-ink p-6 text-paper" style={{ "--rise-delay": "220ms" } as React.CSSProperties}><div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-paper/50"><SparklesIcon className="h-3.5 w-3.5 text-gold" />AI in the loop</div><p className="mt-5 text-[15px] leading-[1.7] text-paper/80">{t.hero.aiHighlight}</p><Link href="/terminal" className="mt-6 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-gold hover:text-paper">{locale === "pt" ? "abrir terminal" : "open terminal"}<ArrowUpRightIcon className="h-3.5 w-3.5" /></Link></div>
+            <div className="rise rounded-[18px] bg-ink p-6 text-paper" style={{ "--rise-delay": "220ms" } as React.CSSProperties}><div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-paper/50"><SparklesIcon className="h-3.5 w-3.5 text-gold" />AI in the loop</div><p className="mt-5 text-[15px] leading-[1.7] text-paper/80">{t.hero.aiHighlight}</p><button type="button" onClick={openAiTerminal} className="mt-6 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-gold hover:text-paper">{locale === "pt" ? "abrir terminal" : "open terminal"}<ArrowUpRightIcon className="h-3.5 w-3.5" /></button></div>
           </div>
         </div>
       </div>
