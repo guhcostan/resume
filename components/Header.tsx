@@ -7,10 +7,10 @@ import { useLocale } from "@/components/LanguageProvider";
 import { SparklesIcon } from "@/components/icons";
 
 const NAV_LINKS = [
+  { id: "projects", key: "projects" },
   { id: "about", key: "about" },
   { id: "experience", key: "experience" },
   { id: "skills", key: "skills" },
-  { id: "projects", key: "projects" },
   { id: "contact", key: "contact" },
 ] as const;
 
@@ -49,6 +49,9 @@ export function Header() {
               {t.nav[key]}
             </a>
           ))}
+          <a href="#resume" className="font-mono text-[10px] uppercase tracking-[0.12em] text-clay-deep transition-colors hover:text-ink">
+            {locale === "pt" ? "Resumo" : "Resume"}
+          </a>
         </div>
 
         <div className="flex items-center gap-2">

@@ -14,7 +14,7 @@ export function Skills() {
   const { t } = useLocale();
 
   return (
-    <Section id="skills" index="03" kicker="toolkit" heading={t.skills.heading}>
+    <Section id="skills" index="04" kicker="toolkit" heading={t.skills.heading}>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {t.skills.groups.map((group, i) => (
           <div key={group.title} className="sticker reveal p-5">

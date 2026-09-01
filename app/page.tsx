@@ -23,13 +23,15 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <Stats />
-        <About />
-        <Experience />
-        <Skills />
         <OpenSource />
-        <Education />
-        <Contact />
+        <div id="resume">
+          <Stats />
+          <About />
+          <Experience />
+          <Skills />
+          <Education />
+          <Contact />
+        </div>
       </main>
       <Footer />
       <Dock />

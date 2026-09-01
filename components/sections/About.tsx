@@ -7,7 +7,7 @@ export function About() {
   const { t } = useLocale();
 
   return (
-    <Section id="about" index="01" kicker="profile" heading={t.about.heading}>
+    <Section id="about" index="02" kicker="profile" heading={t.about.heading}>
       <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
         <div className="sticker p-6 sm:p-8">
           <div className="space-y-6">

@@ -31,7 +31,7 @@ export function OpenSource() {
   const liveStars = useGitHubStars(items.map((item) => item.repo));
 
   return (
-    <Section id="projects" index="04" kicker={locale === "pt" ? "projetos paralelos" : "side quests"} heading={t.projects.heading}>
+    <Section id="projects" index="01" kicker={locale === "pt" ? "foco principal" : "main focus"} heading={t.projects.heading}>
       <p className="reveal -mt-6 mb-8 max-w-xl text-sm leading-relaxed text-ink-faint">{t.projects.subtitle}</p>
       <div className="flex flex-col gap-4">
         {items.map((item, i) => {

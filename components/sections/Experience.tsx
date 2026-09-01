@@ -12,7 +12,7 @@ export function Experience() {
   const { t } = useLocale();
 
   return (
-    <Section id="experience" index="02" kicker="career" heading={t.experience.heading}>
+    <Section id="experience" index="03" kicker="career" heading={t.experience.heading}>
       <div className="grid gap-6 lg:grid-cols-[230px_1fr]">
         {/* Sticky rail */}
         <aside className="hidden lg:block">
