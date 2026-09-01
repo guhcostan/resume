@@ -35,7 +35,7 @@ export function Section({
             )}
             <span aria-hidden className="h-px flex-1 bg-ink-line" />
           </div>
-          <h2 className="mt-4 text-4xl font-semibold leading-none tracking-[-0.05em] text-ink sm:text-6xl">
+          <h2 className="mt-4 text-[clamp(2.35rem,4vw,3.5rem)] font-semibold leading-none tracking-[-0.05em] text-ink">
             {heading}
           </h2>
         </div>

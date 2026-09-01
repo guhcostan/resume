@@ -16,7 +16,7 @@ export function Contact() {
           <p className="font-mono text-xs uppercase tracking-[0.25em] text-paper/50">
             {profile.email}
           </p>
-          <h2 className="mx-auto mt-6 max-w-xl font-display text-5xl leading-[1.05] tracking-tight text-paper sm:text-6xl">
+          <h2 className="mx-auto mt-6 max-w-xl text-[clamp(2.5rem,5vw,3.5rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-paper">
             {t.contact.heading}
             <span className="text-clay">.</span>
           </h2>
