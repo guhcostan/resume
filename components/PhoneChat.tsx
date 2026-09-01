@@ -241,7 +241,7 @@ export function PhoneChat() {
   const streaming = thinking && lastMsg?.kind === "assistant";
 
   return (
-    <div className="relative mx-auto w-[min(100%,340px)] rounded-[3.2rem] bg-ink p-2 shadow-phone">
+    <div className="relative mx-auto w-[min(100%,340px)] rounded-[3.2rem] bg-[#141210] p-2 shadow-phone">
       {/* Side buttons */}
       <div className="absolute -left-[2px] top-28 h-10 w-[3px] rounded-l bg-slate-700" />
       <div className="absolute -left-[2px] top-40 h-10 w-[3px] rounded-l bg-slate-700" />
@@ -285,7 +285,7 @@ export function PhoneChat() {
 
         {/* App header */}
         <div className="mt-2 flex items-center gap-3 border-b border-white/10 px-4 pb-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand to-accent text-xs font-bold text-white">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-clay text-xs font-bold text-white">
             GC
           </div>
           <div className="min-w-0">
@@ -333,7 +333,7 @@ export function PhoneChat() {
               </div>
               <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/10">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-brand to-accent transition-[width] duration-300"
+                  className="h-full rounded-full bg-clay transition-[width] duration-300"
                   style={{ width: `${modelPct}%` }}
                 />
               </div>
@@ -359,7 +359,7 @@ export function PhoneChat() {
                   type="button"
                   onClick={() => void ask(q)}
                   disabled={busy}
-                  className="rounded-full border border-brand/40 bg-brand/10 px-3 py-1.5 text-[11px] text-violet-300 transition-colors hover:bg-brand/25 disabled:opacity-40"
+                  className="rounded-full border border-clay/50 bg-clay/15 px-3 py-1.5 text-[11px] text-[#f0b8a0] transition-colors hover:bg-clay/30 disabled:opacity-40"
                 >
                   {q}
                 </button>
@@ -384,13 +384,13 @@ export function PhoneChat() {
             spellCheck={false}
             autoComplete="off"
             aria-label="chat input"
-            className="min-w-0 flex-1 rounded-full bg-white/5 px-4 py-2 text-[13px] text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-brand/60 disabled:opacity-50"
+            className="min-w-0 flex-1 rounded-full bg-white/5 px-4 py-2 text-[13px] text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-clay/70 disabled:opacity-50"
           />
           <button
             type="submit"
             disabled={busy || !input.trim()}
             aria-label="send"
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand to-accent text-white transition-opacity disabled:opacity-30"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-clay text-white transition-opacity disabled:opacity-30"
           >
             <SendIcon className="h-4 w-4" />
           </button>
@@ -407,7 +407,7 @@ function Bubble({ kind, children }: { kind: Kind; children: React.ReactNode }) {
   if (kind === "user") {
     return (
       <div className="ml-8 flex justify-end">
-        <div className="whitespace-pre-wrap rounded-2xl rounded-br-md bg-gradient-to-br from-brand to-violet-600 px-3.5 py-2 text-white">
+        <div className="whitespace-pre-wrap rounded-2xl rounded-br-md bg-clay px-3.5 py-2 text-white">
           {children}
         </div>
       </div>

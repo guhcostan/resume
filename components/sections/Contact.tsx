@@ -5,37 +5,38 @@ import { profile } from "@/lib/content";
 import { Section } from "@/components/sections/Section";
 import { GitHubIcon, LinkedInIcon, MailIcon } from "@/components/icons";
 
+/** Contact as a full-bleed ink plate at the back of the magazine. */
 export function Contact() {
   const { t } = useLocale();
 
   return (
-    <Section id="contact" className="pb-28">
-      {/* Gradient-border card */}
-      <div className="reveal mx-auto max-w-2xl rounded-3xl bg-gradient-to-r from-brand/50 via-violet-500/40 to-accent/50 p-px">
-        <div className="rounded-[calc(1.5rem-1px)] bg-white px-6 py-12 text-center sm:px-12 dark:bg-ink-raised">
-          <p className="font-mono text-xs text-slate-400 dark:text-slate-500">
-            $ open mailto:{profile.email}
+    <section id="contact" className="scroll-mt-20">
+      <div className="mx-auto mt-4 max-w-7xl px-5 sm:mt-8 sm:px-8">
+        <div className="reveal overflow-hidden rounded-[18px] bg-ink px-6 py-16 text-center sm:px-12 sm:py-20">
+          <p className="font-mono text-xs uppercase tracking-[0.25em] text-paper/50">
+            {profile.email}
           </p>
-          <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+          <h2 className="mx-auto mt-6 max-w-xl font-display text-5xl leading-[1.05] tracking-tight text-paper sm:text-6xl">
             {t.contact.heading}
+            <span className="text-clay">.</span>
           </h2>
-          <p className="mx-auto mt-4 max-w-md leading-relaxed text-slate-600 dark:text-slate-300">
+          <p className="mx-auto mt-5 max-w-md leading-relaxed text-paper/70">
             {t.contact.subtitle}
           </p>
           <a
             href={`mailto:${profile.email}`}
-            className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand to-violet-600 px-6 py-3 text-sm font-semibold text-white shadow-glow transition-transform hover:scale-[1.03]"
+            className="mt-9 inline-flex items-center gap-2 rounded-full bg-clay px-7 py-3 text-sm font-semibold text-white shadow-glow transition-transform hover:-translate-y-0.5 hover:bg-clay-deep"
           >
             <MailIcon className="h-4 w-4" />
             {t.contact.emailLabel}
           </a>
-          <div className="mt-8 flex items-center justify-center gap-5 text-slate-500 dark:text-slate-400">
+          <div className="mt-10 flex items-center justify-center gap-6 text-paper/60">
             <a
               href={profile.links.github}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
-              className="transition-colors hover:text-brand"
+              className="transition-colors hover:text-clay"
             >
               <GitHubIcon className="h-5 w-5" />
             </a>
@@ -44,13 +45,13 @@ export function Contact() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
-              className="transition-colors hover:text-brand"
+              className="transition-colors hover:text-clay"
             >
               <LinkedInIcon className="h-5 w-5" />
             </a>
           </div>
         </div>
       </div>
-    </Section>
+    </section>
   );
 }

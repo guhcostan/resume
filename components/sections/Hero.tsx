@@ -1,140 +1,52 @@
 "use client";
 
+import Link from "next/link";
 import { useLocale } from "@/components/LanguageProvider";
 import { profile } from "@/lib/content";
-import { PhoneChat } from "@/components/PhoneChat";
-import {
-  DownloadIcon,
-  GitHubIcon,
-  LinkedInIcon,
-  MailIcon,
-  MapPinIcon,
-  SparklesIcon,
-} from "@/components/icons";
+import { ArrowUpRightIcon, DownloadIcon, GitHubIcon, LinkedInIcon, MailIcon, MapPinIcon, SparklesIcon } from "@/components/icons";
 
-const FLOATING_TAGS = ["React Native", "TypeScript", "Claude", "Next.js"];
+const SOCIALS = [
+  { label: "GitHub", href: profile.links.github, Icon: GitHubIcon },
+  { label: "LinkedIn", href: profile.links.linkedin, Icon: LinkedInIcon },
+];
 
 export function Hero() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
 
   return (
-    <section id="top" className="relative overflow-hidden">
-      <div aria-hidden className="bg-blueprint pointer-events-none absolute inset-0 -z-10" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-96 bg-[radial-gradient(ellipse_at_top,rgba(139,92,246,0.16),transparent_60%)]"
-      />
+    <section id="top" className="scroll-mt-20">
+      <div className="mx-auto grid max-w-7xl gap-6 px-5 py-8 sm:px-8 sm:py-12 lg:grid-cols-[310px_minmax(0,1fr)] lg:items-start">
+        <aside className="sticker rise p-6 lg:sticky lg:top-24" style={{ "--rise-delay": "40ms" } as React.CSSProperties}>
+          <div className="flex items-center justify-between">
+            <div className="flex h-16 w-16 items-center justify-center rounded-[28%] bg-ink text-2xl font-semibold tracking-tight text-paper shadow-card">GC</div>
+            <span className="section-label rounded-full border border-ink-line px-2.5 py-1">{locale === "pt" ? "disponível" : "available"}</span>
+          </div>
+          <h1 className="mt-6 text-[30px] font-semibold leading-none tracking-[-0.04em] text-ink">Gustavo Costa</h1>
+          <p className="mt-2 font-mono text-[12px] text-ink-faint">@guhcostan · {locale === "pt" ? "engenheiro de produto" : "product engineer"}</p>
+          <p className="mt-5 text-[14px] leading-[1.7] text-ink-soft">{t.hero.tagline}</p>
+          <div className="mt-5 flex items-center gap-2 text-xs text-ink-faint"><MapPinIcon className="h-3.5 w-3.5" />{profile.location}</div>
+          <div className="mt-6 grid grid-cols-2 gap-2">
+            <a href={`mailto:${profile.email}`} className="pill inline-flex items-center justify-center gap-1.5 rounded-full px-3 py-2 text-[12px] font-semibold"><MailIcon className="h-3.5 w-3.5" />{t.hero.ctaEmail}</a>
+            <a href={profile.links.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-1.5 rounded-full border border-ink-line px-3 py-2 text-[12px] font-semibold text-ink transition-colors hover:border-clay/50 hover:text-clay-deep"><GitHubIcon className="h-3.5 w-3.5" />GitHub</a>
+          </div>
+          <div className="mt-6 flex items-center gap-1 border-t border-ink-line pt-4">{SOCIALS.map(({ label, href, Icon }) => <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="flex h-8 w-8 items-center justify-center rounded-full text-ink-faint transition-colors hover:bg-paper-deep hover:text-ink"><Icon className="h-4 w-4" /></a>)}<a href={`mailto:${profile.email}`} aria-label="Email" className="flex h-8 w-8 items-center justify-center rounded-full text-ink-faint transition-colors hover:bg-paper-deep hover:text-ink"><MailIcon className="h-4 w-4" /></a></div>
+        </aside>
 
-      <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.1fr_0.9fr] lg:pb-24">
-        {/* ------------------------------------------------ intro column */}
-        <div>
-          <span className="inline-flex animate-fade-up items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            </span>
-            {t.hero.badge}
-          </span>
-
-          <p className="mt-6 animate-fade-up font-mono text-sm text-brand-fg dark:text-violet-300">
-            {t.hero.greeting}
-          </p>
-
-          <h1 className="mt-3 max-w-xl animate-fade-up font-display text-4xl font-bold leading-[1.08] tracking-tight text-slate-900 sm:text-[3.4rem] dark:text-white">
-            {t.hero.title.split(". ").map((part, i, arr) => (
-              <span key={i} className="block">
-                {i === arr.length - 1 ? (
-                  <span className="bg-gradient-to-r from-brand via-violet-400 to-accent bg-clip-text text-transparent">
-                    {part}
-                  </span>
-                ) : (
-                  `${part}.`
-                )}
-              </span>
-            ))}
-          </h1>
-
-          <p className="mt-6 max-w-xl animate-fade-up text-base leading-relaxed text-slate-600 dark:text-slate-300">
-            {t.hero.tagline}
-          </p>
-
-          <p className="mt-4 flex max-w-xl animate-fade-up gap-2.5 rounded-xl border border-brand/25 bg-brand/5 p-3.5 text-sm leading-relaxed text-slate-700 dark:bg-brand/10 dark:text-slate-200">
-            <SparklesIcon className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
-            <span>{t.hero.aiHighlight}</span>
-          </p>
-
-          <div className="mt-8 flex animate-fade-up flex-wrap items-center gap-3">
-            <a
-              href={`mailto:${profile.email}`}
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand to-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition-transform hover:scale-[1.03]"
-            >
-              <MailIcon className="h-4 w-4" />
-              {t.hero.ctaEmail}
-            </a>
-            <a
-              href={profile.links.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-brand/60 hover:text-brand-fg dark:border-ink-border dark:text-slate-200 dark:hover:border-brand/60 dark:hover:text-violet-300"
-            >
-              <LinkedInIcon className="h-4 w-4" />
-              {t.hero.ctaResume}
-            </a>
-            <a
-              href={profile.links.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-brand/60 hover:text-brand-fg dark:border-ink-border dark:text-slate-200 dark:hover:border-brand/60 dark:hover:text-violet-300"
-            >
-              <GitHubIcon className="h-4 w-4" />
-              GitHub
-            </a>
-            <button
-              type="button"
-              onClick={() => window.print()}
-              className="inline-flex items-center gap-2 px-2 py-2.5 text-sm font-semibold text-slate-500 transition-colors hover:text-brand-fg dark:text-slate-400 dark:hover:text-violet-300"
-            >
-              <DownloadIcon className="h-4 w-4" />
-              {t.hero.ctaPdf}
-            </button>
+        <div className="min-w-0 space-y-6">
+          <div className="sticker rise overflow-hidden p-6 sm:p-9" style={{ "--rise-delay": "100ms" } as React.CSSProperties}>
+            <div className="flex flex-wrap items-center justify-between gap-3"><p className="section-label">{locale === "pt" ? "engenharia mobile + frontend" : "mobile + frontend engineering"}</p><span className="font-mono text-[11px] text-ink-faint">{profile.email}</span></div>
+            <h2 className="mt-7 max-w-4xl text-[clamp(2.8rem,7vw,6.4rem)] font-semibold leading-[0.92] tracking-[-0.065em] text-ink">{t.hero.title.split(". ").map((part, i) => <span key={i} className="block">{part}{i === 0 ? "." : ""}</span>)}</h2>
+            <div className="mt-8 flex flex-wrap items-center gap-3"><Link href="#projects" className="pill inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold">{locale === "pt" ? "Ver projetos" : "See projects"}<ArrowUpRightIcon className="h-4 w-4" /></Link><Link href="/terminal" className="inline-flex items-center gap-2 rounded-full border border-ink-line px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-clay/50 hover:text-clay-deep"><SparklesIcon className="h-4 w-4" />{locale === "pt" ? "Pergunte à IA" : "Ask the AI"}</Link><button type="button" onClick={() => window.print()} className="inline-flex items-center gap-1.5 px-2 py-2.5 text-sm font-semibold text-ink-faint transition-colors hover:text-ink"><DownloadIcon className="h-4 w-4" />{t.hero.ctaPdf}</button></div>
           </div>
 
-          <div className="mt-6 flex animate-fade-up items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
-            <MapPinIcon className="h-4 w-4" />
-            <span>{t.hero.location}</span>
-          </div>
-        </div>
-
-        {/* ------------------------------------------------ phone column */}
-        <div className="relative animate-fade-up" data-print-hide>
-          <div
-            aria-hidden
-            className="glow-violet pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2"
-          />
-          <PhoneChat />
-
-          {/* Floating tech tags orbiting the phone */}
-          <div aria-hidden className="pointer-events-none absolute inset-0 hidden xl:block">
-            {FLOATING_TAGS.map((tag, i) => (
-              <span
-                key={tag}
-                className={`absolute rounded-full border border-slate-200/80 bg-white/80 px-3 py-1 font-mono text-[11px] text-slate-600 shadow-sm backdrop-blur dark:border-white/10 dark:bg-ink-raised/80 dark:text-slate-300 ${
-                  i % 2 ? "animate-float-slow" : "animate-float"
-                } ${TAG_POSITIONS[i]}`}
-              >
-                {tag}
-              </span>
-            ))}
+          <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr]">
+            <div className="sticker rise p-6" style={{ "--rise-delay": "160ms" } as React.CSSProperties}><p className="section-label">{locale === "pt" ? "o que estou fazendo agora" : "what I'm doing now"}</p><ul className="mt-5 space-y-3">{t.about.now.map((item) => <li key={item} className="flex items-start gap-3 border-b border-dashed border-ink-line pb-3 text-sm leading-relaxed text-ink-soft last:border-0 last:pb-0"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-clay" />{item}</li>)}</ul></div>
+            <div className="rise rounded-[18px] bg-ink p-6 text-paper" style={{ "--rise-delay": "220ms" } as React.CSSProperties}><div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-paper/50"><SparklesIcon className="h-3.5 w-3.5 text-gold" />AI in the loop</div><p className="mt-5 text-[15px] leading-[1.7] text-paper/80">{t.hero.aiHighlight}</p><Link href="/terminal" className="mt-6 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-gold hover:text-paper">{locale === "pt" ? "abrir terminal" : "open terminal"}<ArrowUpRightIcon className="h-3.5 w-3.5" /></Link></div>
           </div>
         </div>
       </div>
+
+      <div aria-hidden data-print-hide className="overflow-hidden border-y border-ink-line bg-paper-deep py-3"><div className="marquee-track gap-8 pr-8">{[0, 1].map((copy) => <div key={copy} className="flex shrink-0 items-center gap-8">{["React Native", "TypeScript", "LLM Agents", "Next.js", "TDD", "Clean Architecture", "Claude Code"].map((item) => <span key={item} className="flex items-center gap-8 whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint">{item}<span className="h-1.5 w-1.5 rounded-full bg-clay" /></span>)}</div>)}</div></div>
     </section>
   );
 }
-
-const TAG_POSITIONS = [
-  "-left-4 top-16",
-  "-right-2 top-32",
-  "-left-8 bottom-36",
-  "-right-6 bottom-16",
-];

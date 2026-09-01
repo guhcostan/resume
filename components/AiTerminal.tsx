@@ -310,9 +310,9 @@ export function AiTerminal({
   const inputDisabled = busy || modelLoading;
 
   return (
-    <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-slate-700/60 bg-slate-900 shadow-2xl shadow-indigo-500/10">
+    <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-[#3a322a] bg-[#1d1915] shadow-2xl shadow-clay/20">
       {/* Title bar */}
-      <div className="flex items-center gap-2 border-b border-slate-700/60 bg-slate-800/80 px-4 py-2.5">
+      <div className="flex items-center gap-2 border-b border-[#3a322a] bg-[#28221c] px-4 py-2.5">
         <span className="h-3 w-3 rounded-full bg-red-400/90" />
         <span className="h-3 w-3 rounded-full bg-yellow-400/90" />
         <span className="h-3 w-3 rounded-full bg-green-400/90" />
@@ -360,7 +360,7 @@ export function AiTerminal({
                   type="button"
                   onClick={() => submit(q)}
                   disabled={inputDisabled}
-                  className="rounded border border-slate-700 px-2 py-1 text-xs text-indigo-300 transition-colors hover:border-indigo-500 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="rounded border border-[#3a322a] px-2 py-1 text-xs text-[#f0b8a0] transition-colors hover:border-clay hover:bg-[#28221c] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {q}
                 </button>
@@ -403,14 +403,14 @@ export function AiTerminal({
 
         {/* Blurred loading overlay while the model downloads */}
         {modelLoading && (
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-slate-900/50 backdrop-blur-md">
-            <div className="h-9 w-9 animate-spin rounded-full border-2 border-slate-600 border-t-indigo-400" />
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-[#1d1915]/50 backdrop-blur-md">
+            <div className="h-9 w-9 animate-spin rounded-full border-2 border-[#3a322a] border-t-clay" />
             <div className="max-w-[80%] text-center font-mono text-xs text-slate-200">
               {s.loadingModel(modelPct ?? 0, model.label, size)}
             </div>
             <div className="h-1.5 w-56 max-w-[70%] overflow-hidden rounded-full bg-slate-700">
               <div
-                className="h-full rounded-full bg-indigo-500 transition-[width] duration-300"
+                className="h-full rounded-full bg-clay transition-[width] duration-300"
                 style={{ width: `${modelPct ?? 0}%` }}
               />
             </div>

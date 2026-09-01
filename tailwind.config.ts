@@ -10,29 +10,39 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        brand: {
-          DEFAULT: "#8b5cf6",
-          fg: "#7c3aed",
+        // Warm paper stock — the page IS the paper.
+        paper: {
+          DEFAULT: "#faf6ee",
+          deep: "#f2ecdf",
+          card: "#fffdf7",
         },
-        accent: {
-          DEFAULT: "#22d3ee",
-        },
+        // Warm near-black ink for type, rules and solid buttons.
         ink: {
-          // Near-black canvas used for the dark theme and the phone screen.
-          DEFAULT: "#07080c",
-          raised: "#0d0f16",
-          border: "#1c1f2b",
+          DEFAULT: "#1d1915",
+          soft: "#4a4238",
+          faint: "#8a7f70",
+          line: "#e5dcc9",
+          raised: "#28221c",
+          border: "#3a322a",
         },
+        // Editorial accents.
+        clay: {
+          DEFAULT: "#c2542a",
+          deep: "#9a3f1d",
+        },
+        sage: "#5f7355",
+        gold: "#c9972f",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-        display: ["var(--font-display)", "var(--font-sans)", "sans-serif"],
+        display: ["var(--font-display)", "Georgia", "serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       boxShadow: {
         phone:
-          "0 0 0 1px rgba(255,255,255,0.08), 0 24px 60px -12px rgba(0,0,0,0.65), 0 0 80px -20px rgba(139,92,246,0.35)",
-        glow: "0 0 40px -8px rgba(139,92,246,0.45)",
+          "0 0 0 1px rgba(255,255,255,0.06), 0 24px 60px -12px rgba(29,25,21,0.55), 0 0 90px -30px rgba(194,84,42,0.5)",
+        glow: "0 10px 44px -14px rgba(194,84,42,0.55)",
+        card: "0 1px 2px rgba(29,25,21,0.05), 0 12px 32px -16px rgba(29,25,21,0.18)",
       },
       keyframes: {
         "fade-up": {

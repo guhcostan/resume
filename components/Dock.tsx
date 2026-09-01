@@ -16,8 +16,8 @@ import {
 const SECTION_IDS = ["top", "about", "experience", "skills", "projects", "contact"];
 
 /**
- * Floating bottom navigation, styled like a mobile app tab bar — a small nod
- * to a career spent building phone apps. Tracks the visible section with an
+ * Floating bottom navigation for small screens (hidden on lg+, where the
+ * masthead links take over). Tracks the visible section with an
  * IntersectionObserver to light up the active tab.
  */
 export function Dock() {
@@ -55,9 +55,9 @@ export function Dock() {
     <nav
       data-print-hide
       aria-label="Sections"
-      className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2"
+      className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 lg:hidden"
     >
-      <div className="flex items-center gap-0.5 rounded-2xl border border-slate-200/80 bg-white/85 px-1.5 py-1.5 shadow-lg shadow-slate-900/10 backdrop-blur-md dark:border-white/10 dark:bg-ink-raised/85 dark:shadow-black/50">
+      <div className="flex items-center gap-0.5 rounded-2xl border border-ink-line bg-paper-card/95 px-1.5 py-1.5 shadow-card backdrop-blur-md">
         {items.map(({ id, label, Icon }) => {
           const isActive = active === id;
           return (
@@ -68,32 +68,32 @@ export function Dock() {
               aria-current={isActive ? "true" : undefined}
               className={`group relative flex h-11 w-11 items-center justify-center rounded-xl transition-colors ${
                 isActive
-                  ? "bg-brand/15 text-brand-fg dark:text-violet-300"
-                  : "text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-slate-100"
+                  ? "bg-clay/15 text-clay-deep"
+                  : "text-ink-faint hover:bg-paper-deep hover:text-ink"
               }`}
             >
               <Icon className="h-5 w-5" />
               {/* Tooltip label */}
-              <span className="pointer-events-none absolute -top-9 whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-[10px] font-semibold text-white opacity-0 transition-opacity group-hover:opacity-100 dark:bg-white dark:text-slate-900">
+              <span className="pointer-events-none absolute -top-9 whitespace-nowrap rounded-md bg-ink px-2 py-1 text-[10px] font-semibold text-paper opacity-0 transition-opacity group-hover:opacity-100">
                 {label}
               </span>
-              {/* Active dot, tab-bar style */}
+              {/* Active dot */}
               {isActive && (
-                <span className="absolute bottom-1 h-1 w-1 rounded-full bg-brand" />
+                <span className="absolute bottom-1 h-1 w-1 rounded-full bg-clay" />
               )}
             </a>
           );
         })}
 
-        <span className="mx-1 h-6 w-px bg-slate-200 dark:bg-white/10" />
+        <span className="mx-1 h-6 w-px bg-ink-line" />
 
         <Link
           href="/terminal"
           aria-label={locale === "pt" ? "Terminal IA" : "AI Terminal"}
-          className="group relative flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-accent text-white shadow-glow transition-transform hover:scale-105"
+          className="group relative flex h-11 w-11 items-center justify-center rounded-xl bg-clay text-white shadow-glow transition-transform hover:scale-105"
         >
           <SparklesIcon className="h-5 w-5" />
-          <span className="pointer-events-none absolute -top-9 whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-[10px] font-semibold text-white opacity-0 transition-opacity group-hover:opacity-100 dark:bg-white dark:text-slate-900">
+          <span className="pointer-events-none absolute -top-9 whitespace-nowrap rounded-md bg-ink px-2 py-1 text-[10px] font-semibold text-paper opacity-0 transition-opacity group-hover:opacity-100">
             {locale === "pt" ? "Terminal IA" : "AI Terminal"}
           </span>
         </Link>

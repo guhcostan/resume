@@ -261,8 +261,8 @@ export function LiteRtTerminal() {
       : null;
 
   return (
-    <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-slate-700/60 bg-slate-900 shadow-2xl shadow-fuchsia-500/10">
-      <div className="flex items-center gap-2 border-b border-slate-700/60 bg-slate-800/80 px-4 py-2.5">
+    <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-[#3a322a] bg-[#1d1915] shadow-2xl shadow-clay/20">
+      <div className="flex items-center gap-2 border-b border-[#3a322a] bg-[#28221c] px-4 py-2.5">
         <span className="h-3 w-3 rounded-full bg-red-400/90" />
         <span className="h-3 w-3 rounded-full bg-yellow-400/90" />
         <span className="h-3 w-3 rounded-full bg-green-400/90" />
@@ -303,7 +303,7 @@ export function LiteRtTerminal() {
                     type="button"
                     onClick={() => submit(q)}
                     disabled={inputDisabled}
-                    className="rounded border border-slate-700 px-2 py-1 text-xs text-fuchsia-300 transition-colors hover:border-fuchsia-500 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
+                    className="rounded border border-[#3a322a] px-2 py-1 text-xs text-[#f0b8a0] transition-colors hover:border-clay hover:bg-[#28221c] disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     {q}
                   </button>
@@ -339,7 +339,7 @@ export function LiteRtTerminal() {
         {/* Download overlay with progress bar */}
         {showLoading && (
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-slate-900/60 backdrop-blur-md px-6">
-            <div className="h-9 w-9 animate-spin rounded-full border-2 border-slate-600 border-t-fuchsia-400" />
+            <div className="h-9 w-9 animate-spin rounded-full border-2 border-[#3a322a] border-t-clay" />
             <div className="text-center font-mono text-xs text-slate-200">
               {s.downloading}
               {progress

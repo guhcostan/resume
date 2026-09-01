@@ -17,7 +17,9 @@ export default function Home() {
   useReveal();
 
   return (
-    <div>
+    <div className="site-shell">
+      <div aria-hidden className="grain" />
+      <div aria-hidden className="dot-grid" />
       <Header />
       <main>
         <Hero />

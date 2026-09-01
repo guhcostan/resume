@@ -2,18 +2,22 @@
 
 import { useLocale } from "@/components/LanguageProvider";
 
+/**
+ * Full-width stat band under the hero marquee — big serif numerals separated
+ * by hairlines, like a magazine fact box.
+ */
 export function Stats() {
   const { t } = useLocale();
 
   return (
-    <section className="border-y border-slate-200/70 bg-white/50 dark:border-ink-border dark:bg-ink-raised/40">
-      <div className="mx-auto grid max-w-6xl grid-cols-2 divide-slate-200/70 px-5 py-8 sm:grid-cols-4 sm:divide-x dark:divide-ink-border">
+    <section className="mx-auto max-w-7xl px-5 pt-2 sm:px-8">
+      <div className="sticker grid grid-cols-2 divide-x divide-y divide-ink-line overflow-hidden sm:grid-cols-4 sm:divide-y-0">
         {t.stats.map((stat) => (
-          <div key={stat.label} className="reveal px-4 py-3 text-center">
-            <div className="bg-gradient-to-r from-brand to-accent bg-clip-text font-display text-3xl font-bold text-transparent sm:text-4xl">
+          <div key={stat.label} className="reveal px-4 py-6 text-center sm:py-7">
+            <div className="text-4xl font-semibold tracking-[-0.05em] text-clay sm:text-5xl">
               {stat.value}
             </div>
-            <div className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+            <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-faint">
               {stat.label}
             </div>
           </div>
