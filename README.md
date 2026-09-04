@@ -1,57 +1,73 @@
-# Gustavo Costa — Portfolio / Resume
+# guh. — Gustavo Costa
 
-Personal portfolio website for **Gustavo Costa**, Lead Mobile & Frontend Engineer
-(React Native · TypeScript · AI). Built with **Next.js + TypeScript + Tailwind CSS**,
-fully bilingual (🇧🇷 PT / 🇺🇸 EN) with light/dark mode and a static export ready for
-Vercel or GitHub Pages.
+Portfólio pessoal focado em engenharia de IA, agentes e open source, com experiência
+em React Native e frontend e disponibilidade para projetos freelance.
+Next.js, React e TypeScript, com exportação estática e fontes locais.
 
-> Site pessoal do **Gustavo Costa**, Lead Mobile & Frontend Engineer. Feito com
-> Next.js, TypeScript e Tailwind CSS, bilíngue (PT/EN), com tema claro/escuro.
+## Desenvolvimento
 
-## Features / Recursos
-
-- 📱 **Phone-shaped AI chat in the hero** — a CSS-drawn phone running a real
-  LLM (WebLLM/WebGPU, fully in-browser) that answers questions about me
-- 🧭 Floating bottom dock navigation, styled like a mobile app tab bar
-- 🌳 Experience timeline rendered as a `git log` of the career
-- ⚡️ Static export (no server required) — deploy anywhere
-- 🌐 Bilingual EN/PT with one-click toggle (persists in `localStorage`)
-- 🌗 Dark / light theme (respects system preference, no flash on load)
-- 📐 Fully responsive, accessible, with subtle scroll animations
-- ✏️ All content lives in a single typed file: [`lib/content.ts`](lib/content.ts)
-
-## Getting started / Como rodar
+Requer Node.js 22 ou superior.
 
 ```bash
-npm install
-npm run dev      # http://localhost:3000
+npm ci
+npm run dev
 ```
 
-Build the static site:
+Abra [localhost:3000](http://localhost:3000).
+
+## Validação e build
 
 ```bash
-npm run build    # outputs to ./out
+npm run lint
+npm run typecheck
+npm run build
+npm start
 ```
 
-## Editing content / Editando o conteúdo
+O build gera `out/`. `npm start` serve esse diretório na porta 3000.
+Os filtros, o tema e os botões de copiar funcionam no navegador. Não há backend.
 
-Every piece of text (experience, skills, certifications, contact, etc.) is stored
-in [`lib/content.ts`](lib/content.ts), keyed by locale (`en` / `pt`). Edit there —
-no need to touch the components.
+## Onde editar
 
-## Deploy
+- `lib/content.ts`: perfil, links e projetos, com IA primeiro.
+- `lib/github.ts`: leitura e validação das estrelas pela API pública do GitHub.
+- `lib/github-stars.json`: contagens verificadas e data da consulta, como reserva offline.
+- `components/ProfileCard.tsx`: identidade, navegação, currículo e contato.
+- `components/ProjectList.tsx`: filtros e apresentação dos projetos.
+- `components/Experience.tsx`: empresas, períodos e detalhes profissionais.
+- `components/AboutMe.tsx`: apresentação e formação.
+- `app/globals.css`: cores, tipografia, composição e responsividade.
+- `public/projects/`: cinco ícones próprios em WebP.
+- `public/companies/`: ícones obtidos dos sites oficiais.
+- `public/files/gustavo-costa-curriculo.pdf`: currículo fornecido pelo autor.
+- `docs/design.md`: direção, referências e verificação visual.
+- `docs/assets.md`: fontes dos logos e prompts dos ícones.
 
-### Vercel (recommended)
-Import the repo at [vercel.com/new](https://vercel.com/new). No config needed.
+## GitHub Pages
 
-### GitHub Pages
-A workflow at [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) builds
-the static site on every push to `main` and publishes it to the **`gh-pages`**
-branch (via `peaceiris/actions-gh-pages`, which avoids the Actions artifact storage
-quota). One-time setup: **Settings → Pages → Source: Deploy from a branch →
-Branch: `gh-pages` / `(root)`**. The workflow sets `NEXT_PUBLIC_BASE_PATH` to the
-repo name automatically; for a custom domain or user/org page, leave it empty.
+O workflow em `.github/workflows/deploy.yml` publica quando há push em `main`.
+O nome do repositório determina `NEXT_PUBLIC_BASE_PATH`, atualmente `/resume`.
+Para reproduzir esse build:
 
----
+```bash
+NEXT_PUBLIC_BASE_PATH=/resume npm run build
+```
 
-Built with Next.js, TypeScript & Tailwind CSS.
+Para domínio próprio, defina `NEXT_PUBLIC_SITE_URL=https://seu-dominio` e deixe
+`NEXT_PUBLIC_BASE_PATH` vazio antes de gerar o build.
+
+Links de currículo, imagens, fontes, sitemap e metadados respeitam o caminho da
+publicação. O tema escolhido fica salvo localmente. HTML semântico, detalhes
+nativos, foco visível, avisos de cópia e movimento reduzido fazem parte da UI.
+
+## Estrelas dos projetos
+
+A página renderiza as contagens verificadas de `lib/github-stars.json` e consulta
+uma vez a API pública de repositórios do GitHub ao montar a lista. Não há token no
+cliente. Os filtros não geram novas requisições. A consulta tem limite de 8 segundos.
+A data abaixo dos cartões identifica quando as contagens foram consultadas.
+
+Falhas de rede, respostas incompletas e limites da API preservam as contagens e a
+data anteriores, sem substituir valores por zero. Isso funciona no GitHub Pages,
+sem depender de um servidor Next.js. Para atualizar a reserva, confira os cinco
+repositórios e atualize os valores e `checkedAt` no JSON.

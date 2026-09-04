@@ -1,36 +1,23 @@
-"use client";
-
-import { Header } from "@/components/Header";
-import { Dock } from "@/components/Dock";
-import { Hero } from "@/components/sections/Hero";
-import { Stats } from "@/components/sections/Stats";
-import { About } from "@/components/sections/About";
-import { Experience } from "@/components/sections/Experience";
-import { Skills } from "@/components/sections/Skills";
-import { OpenSource } from "@/components/sections/OpenSource";
-import { Education } from "@/components/sections/Education";
-import { Contact } from "@/components/sections/Contact";
-import { Footer } from "@/components/sections/Footer";
-import { useReveal } from "@/components/useReveal";
+import { ProfileCard } from "@/components/ProfileCard";
+import { ProjectList } from "@/components/ProjectList";
+import { Experience } from "@/components/Experience";
+import { AboutMe } from "@/components/AboutMe";
+import { Arrow } from "@/components/Arrow";
 
 export default function Home() {
-  useReveal();
-
   return (
-    <div>
-      <Header />
-      <main>
-        <Hero />
-        <Stats />
-        <About />
-        <Experience />
-        <Skills />
-        <OpenSource />
-        <Education />
-        <Contact />
-      </main>
-      <Footer />
-      <Dock />
-    </div>
+    <>
+      <a href="#conteudo" className="skip-link">Pular para o conteúdo</a>
+      <div id="inicio" />
+      <div className="portfolio-layout">
+        <ProfileCard />
+        <main id="conteudo" className="portfolio-content">
+          <ProjectList />
+          <Experience />
+          <AboutMe />
+          <footer className="site-footer"><span>Feito por Guh. Sempre em construção.</span><a href="https://github.com/guhcostan/resume" target="_blank" rel="noreferrer">Código do site <Arrow /></a></footer>
+        </main>
+      </div>
+    </>
   );
 }
