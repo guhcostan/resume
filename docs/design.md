@@ -77,3 +77,14 @@ A atualização pública das contagens foi observada no navegador. Também foram
 verificados dados completos, contagem zero legítima, dados incompletos/inválidos,
 repositório de outro dono, erro de rede e limite da API. Nos erros, a reserva
 permanece com sua data original. Layout e filtros conferidos em desktop e mobile.
+
+## Inglês
+
+Seletor PT/EN junto à marca no desktop e aos controles do perfil no celular.
+A versão inglesa mantém a composição, com traduções do perfil, projetos,
+experiências (incluindo detalhes), formação, contato, filtros e mensagens acessíveis.
+Nomes próprios e comandos permanecem iguais. Datas e contagens usam o formato local.
+
+A rota `/en/` tem HTML, metadados e cartão social em inglês. A preferência escolhida
+é salva e as âncoras são preservadas na troca. PT continua como padrão sem escolha
+anterior. A página de erro oferece acesso às duas versões.

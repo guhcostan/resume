@@ -62,7 +62,7 @@ svg { display: inline-block; flex-shrink: 0; vertical-align: middle; }
 
 /* Profile is the navigation: one compact, persistent point of reference. */
 .profile-sidebar { position: sticky; top: 35px; }
-.profile-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 26px; }
+.profile-card { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 26px; }
 .guh-wordmark { display: inline-flex; align-items: baseline; font-family: var(--display); font-size: 61px; font-weight: 800; letter-spacing: -.085em; line-height: 1; margin-bottom: 24px; }
 .guh-wordmark > span { color: var(--accent); transition: transform 180ms ease; }
 .guh-wordmark:hover > span { transform: translateY(-4px); }
@@ -297,4 +297,21 @@ summary::marker { content: ""; }
   .project-card { margin-bottom: 10px; break-inside: avoid; }
   .experience-item, .about-panel { break-inside: avoid; }
   .portfolio-content > section { margin-top: 30px; }
+}
+
+/* Language links remain usable without JavaScript. */
+.profile-controls { display: flex; align-items: center; gap: 8px; }
+.language-switch { position: absolute; top: 26px; right: 26px; display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 7px; padding: 2px; gap: 1px; }
+.language-switch a { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 4px; color: var(--muted); font-family: var(--mono); font-size: 9px; }
+.language-switch a[aria-current="page"] { background: var(--button-bg); color: var(--button-ink); }
+.language-switch a:hover:not([aria-current]) { background: var(--surface-muted); color: var(--ink); }
+.not-found-links { display: flex; flex-wrap: wrap; gap: 12px; }
+@media (max-width: 760px) {
+  .profile-bottom { gap: 11px; }
+  .language-switch { position: static; }
+  .profile-controls { gap: 7px; }
+}
+@media (max-width: 370px) {
+  .profile-bottom { gap: 8px; }
+  .profile-bottom > a { gap: 4px; }
 }

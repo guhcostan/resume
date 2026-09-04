@@ -12,39 +12,9 @@ export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || `https://guhcostan.g
 export const asset = (path: string) => `${basePath}${path}`;
 
 export const projects = [
-  {
-    name: "b3analysis",
-    detail: "Equipes de agentes especializados que pesquisam e cruzam dados públicos da B3 com Claude Code. Um laboratório de orquestração e análise com IA.",
-    technology: "Python · Orquestração de agentes",
-    category: "IA",
-    color: "icon-sage",
-  },
-  {
-    name: "claude-mega-brain",
-    detail: "Contexto do projeto disponível desde o início de cada sessão do Claude Code. Uma base de conhecimento para agentes que precisam conhecer o seu código.",
-    technology: "Python · Engenharia de contexto",
-    category: "IA",
-    color: "icon-lilac",
-  },
-  {
-    name: "mac-cleaner-cli",
-    detail: "Libere espaço no Mac: caches, logs e arquivos de desenvolvimento, direto pelo terminal.",
-    technology: "TypeScript · macOS",
-    category: "Ferramentas",
-    color: "icon-charcoal",
-  },
-  {
-    name: "brasilapi-sdk",
-    detail: "CEP, CNPJ, bancos e outros dados do Brasil em um SDK TypeScript tipado e fácil de usar.",
-    technology: "TypeScript · SDK",
-    category: "Ferramentas",
-    color: "icon-sand",
-  },
-  {
-    name: "windows-cleaner-cli",
-    detail: "Limpeza de caches e arquivos temporários do Windows, com código aberto e pelo terminal.",
-    technology: "CLI · Windows",
-    category: "Ferramentas",
-    color: "icon-blue",
-  },
+  { name: "b3analysis", category: "ai", color: "icon-sage" },
+  { name: "claude-mega-brain", category: "ai", color: "icon-lilac" },
+  { name: "mac-cleaner-cli", category: "tools", color: "icon-charcoal" },
+  { name: "brasilapi-sdk", category: "tools", color: "icon-sand" },
+  { name: "windows-cleaner-cli", category: "tools", color: "icon-blue" },
 ] as const;

@@ -71,3 +71,16 @@ Falhas de rede, respostas incompletas e limites da API preservam as contagens e 
 data anteriores, sem substituir valores por zero. Isso funciona no GitHub Pages,
 sem depender de um servidor Next.js. Para atualizar a reserva, confira os cinco
 repositórios e atualize os valores e `checkedAt` no JSON.
+
+## Português e inglês
+
+- `/`: português; `/en/`: inglês. No GitHub Pages, os caminhos são `/resume/` e `/resume/en/`.
+- O seletor PT/EN salva a escolha em `guh-language` e preserva a seção atual.
+- Ao voltar ao endereço principal, a preferência salva por inglês leva a `/en/`.
+  Um link direto para `/en/` sempre abre em inglês. Sem preferência, o padrão é PT.
+- `lib/i18n/pt.ts` e `lib/i18n/en.ts` contêm os textos. O TypeScript exige as mesmas chaves.
+- `components/SiteLayout.tsx` compartilha fontes, tema e metadados; `Portfolio.tsx`
+  compartilha a interface. Layouts por idioma geram HTML estático com `lang` correto,
+  canonical, hreflang, cartão social e sitemap correspondentes.
+- A 404 global é bilíngue. As rotas e os links de idioma funcionam sem JavaScript;
+  salvar a preferência e atualizar as estrelas dependem de JavaScript.
