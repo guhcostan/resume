@@ -1,90 +1,39 @@
-# guh. — direção visual
+# Pequeno mundo — direção visual
 
-Uma página pessoal simples, útil e reconhecível: assinatura tipográfica `guh.`,
-perfil à esquerda, projetos de IA e open source à direita e experiência logo abaixo.
-No celular, tudo segue uma única coluna. O currículo fornecido e os repositórios
-públicos do autor são as fontes do conteúdo profissional.
+Ateliê habitável, inspirado na proposta de espaço acolhedor e explorável do prompt. A narrativa foi adaptada ao portfólio de Gustavo: mesa de trabalho para projetos, biblioteca para trajetória, poltrona para biografia. O personagem é um avatar estilizado fictício, não uma reprodução fotográfica.
 
-## Referências consultadas em 04/09/2026
+Paleta: papel quente #f7f3e9, floresta #283e2b, sálvia #939c79, madeira #b9824b e terracota #c57653. Títulos em Georgia; controles e texto em Manrope local. A interface ocupa uma tela no desktop e organiza texto, cena e controles verticalmente no celular. Conteúdos extensos abrem em leitor lateral não modal, com foco inicial e fechamento por Escape.
 
-- [Hivinz](https://hivinz.com/): perfil compacto, fundo pontilhado, cartões de
-  projetos e hierarquia direta. Principal referência de composição.
-- [Paco](https://paco.me/): apresentação breve e links que levam ao trabalho real.
-- [Emil Kowalski](https://emilkowal.ski/): foco no que a pessoa faz e compartilha.
-- [Lee Robinson](https://leerob.com/) e [Rauno](https://rauno.me/): consultados como
-  referências complementares de portfólios centrados em conteúdo e interação.
+Conceito: `concepts/studio.png`, gerado pela ferramenta Image Gen integrada. Brief: screenshot desktop de portfólio “guh. / pequeno mundo”, texto editorial à esquerda, ateliê isométrico à direita, paredes sálvia, piso de carvalho, tapete circular creme, mesa com computador, biblioteca, plantas, personagem, luz quente e controles HTML de navegação/rotação/zoom. O conceito orienta composição, cores e objetos; os modelos finais são geometria real e texturas procedurais, com aparência mais simplificada que o render de referência.
 
-A adaptação usa o conteúdo e a identidade do Guh. Os projetos são ferramentas de
-terminal, SDKs e agentes: seus ícones representam essas funções. O comando real
-`npx mac-cleaner-cli scan` serve como demonstração útil e pode ser copiado.
+A cena usa peças reutilizáveis. Para expandir, componha um móvel em `objects.tsx`, posicione-o em `Studio.tsx` e associe um hotspot a um painel. Os destinos do personagem ficam separados em `Character.tsx`; preserve o espaço livre para evitar cruzar móveis.
 
-## Sistema visual
+## Revisão familiar / referência mobile
 
-- Fundo cinza esverdeado `#f3f4f1`, pontos `#d8dcd2`, superfícies brancas,
-  texto `#252822`, acento verde `#53755b`.
-- Tema escuro com fundo `#171a17`, superfície `#202420` e texto `#eef0e9`.
-- Bricolage Grotesque para títulos e marca, Manrope para leitura,
-  IBM Plex Mono para tecnologias e metadados. Fontes servidas localmente.
-- Conteúdo até 1120 px, coluna do perfil com 300 px, intervalo de 36 px.
-- Cartões com borda fina, raio de 12 px, sombra discreta e movimento curto.
-- Ícones de projetos: cinco símbolos próprios, fundo pastel e arquivo WebP
-  transparente de 256 px. Logos das experiências mantêm as cores oficiais.
-- Assinatura `guh.` no perfil, identificação da página e cartão de compartilhamento;
-  monograma `g.` no favicon. Sem emojis.
+Referência visual inspecionada em https://gaga.hexly.ai/ a 390×844: cabeçalho pequeno, título serifado curto, dados discretos, diorama quase na largura inteira, atividade e controles na parte inferior. A página principal passou a ocupar uma tela. O leitor continua ao lado no desktop e abaixo no mobile, preservando o pedido de não cobrir o protagonista.
 
-## Comportamento
+Paleta revisada para papel #f3f1e9, paredes #c0c4ae e #b6bea4 e madeira clara. Paredes mais baixas ampliam a percepção do piso.
 
-Filtros Todos/Ferramentas/IA, links diretos para cada repositório, cópia de comando
-e e-mail com retorno acessível, tema persistente, currículo em PDF e experiência
-expansível com elementos `details` nativos. Navegação por âncoras e link para pular
-a navegação. Movimento respeita `prefers-reduced-motion`.
+Os quatro personagens foram adaptados da fotografia fornecida: protagonista de camiseta cinza, cabelo escuro, barba e óculos pretos; companheira com cabelo preso, brincos e roupa clara lendo; cão grande creme com bandana verde e cão pequeno caramelo de pelagem volumosa. Ambos os cães descansam fora dos corredores de navegação. A foto não foi copiada para os assets públicos.
 
-## Comparação visual com Hivinz
+Conceito de apoio: `concepts/family-mobile.png`, gerado com Image Gen integrado. Prompt: tela móvel 390×844, pequeno mundo pessoal, tipografia compacta, cabeçalho discreto, ateliê isométrico com quatro habitantes (homem de camiseta cinza e óculos, mulher lendo, cão creme e cão caramelo dormindo), cartão de atividade e controles ao pé; estética acolhedora, sálvia e marfim. O layout final segue prioritariamente a referência real do usuário, com modelos geométricos estilizados em tempo real.
 
-1. Composição: perfil fixo à esquerda e uma sequência de projetos à direita.
-2. Hierarquia: nome e função claros; nome do projeto antes da descrição técnica.
-3. Densidade: apresentação compacta, sem hero que empurre o trabalho para baixo.
-4. Superfícies: fundo pontilhado discreto e cartões claros com bordas leves.
-5. Identidade: a marca `guh.` e ícones semânticos substituem a identidade da referência.
-6. Adaptação mobile: perfil, navegação e projetos em ordem de leitura; ações ficam
-   acessíveis sem rolagem horizontal.
+## Objetos pessoais
 
-As capturas foram inspecionadas no navegador. Os textos finais correspondem ao
-conteúdo implementado; títulos, períodos, descrições e comandos são próprios.
+O setup preserva as posições de teclado e cadeira para manter a animação alinhada. A mesa tem estrutura telescópica e controle decorativos, monitor em braço articulado e notebook inspirado no MacBook em suporte. Prancha, tênis, pesos, tapete e garrafa ocupam as bordas livres; a bandeja de comida fica sobre a biblioteca. A gravura costeira identifica São Sebastião. Golden com orelhas caídas e focinho largo; chihuahua menor, com orelhas pontudas e focinho estreito.
 
-## Verificação final
+## Descoberta pelos objetos
 
-- PASS: lint, TypeScript e build estático, inclusive com `/resume`.
-- PASS: revisão visual em 360, 390, 768 e 1440 px; sem rolagem horizontal.
-- PASS: cinco ícones de projetos e três logos de empresas carregados.
-- PASS: filtros com 5/3/2 resultados, cópia do comando e do e-mail.
-- PASS: detalhes profissionais, navegação por âncoras e tema após recarregar.
-- PASS: 21 URLs exportadas respondendo, PDF válido, fontes carregadas e console
-  sem erros na versão estática servida localmente.
-- A publicação usa o workflow de `main` para o GitHub Pages; a prévia local fica na porta 3000.
+Os nove objetos interativos substituem a navegação fixa da cena. Volumes de seleção acompanham a câmera; um realce suave e uma dica curta aparecem apenas no hover. Toque executa diretamente. Arrastes acima de cinco pixels não disparam ações. O menu Explorar oferece as mesmas ações por teclado, sem sobrepor a cena. O cartão permanece visível durante a leitura e informa o estado real da animação. Rotina livre e comandos compartilham as poses, com saída da cadeira, devolução da caneca e despertar antes de outro destino.
 
-## Posicionamento em IA
+## Portfólio em primeiro plano
 
-A apresentação destaca engenharia de IA, agentes e LLMs. React Native, TypeScript,
-frontend e liderança na Thoughtworks continuam na trajetória. A disponibilidade
-para freelas foi informada pelo autor e aparece no perfil e no contato.
+A marca passa a ser Gustavo Costa / Engenheiro de software. A proposta profissional, disponibilidade para freelas, CTA de contato e links sociais dominam a coluna principal. O quarto vira uma vinheta interativa contida em um cartão, acompanhada da atividade e controles. O layout móvel usa rolagem natural para apresentar primeiro a proposta e o contato. O conceito de pequeno mundo sai da comunicação, inclusive do quadro decorativo da cena.
 
-`b3analysis` e `claude-mega-brain` abrem a lista, com descrições verificadas nos
-READMEs públicos. As ferramentas continuam acessíveis na mesma seção. Estrelas
-ficam junto aos metadados, com links para os stargazers e data da consulta.
+## Acabamento dos cães e objetos
 
-A atualização pública das contagens foi observada no navegador. Também foram
-verificados dados completos, contagem zero legítima, dados incompletos/inválidos,
-repositório de outro dono, erro de rede e limite da API. Nos erros, a reserva
-permanece com sua data original. Layout e filtros conferidos em desktop e mobile.
+Golden dourado com peito creme, patas alongadas, focinho largo, orelhas caídas e bandana; chihuahua caramelo menor, com orelhas modeladas em curva e interior rosado, focinho curto e coleira. Ambos têm caminhas com borda, respiração e pequenos movimentos ocasionais que respeitam a pausa. Objetos recebem curvas e materiais mais específicos: plantas com folhas pontudas e nervuras, vasos com espessura, livros com capas/lombadas/páginas, tênis com cadarços cruzados, prato com borda, prancha com deck e leash e toca-discos com sulcos e braço.
 
-## Inglês
+## Casa de praia
 
-Seletor PT/EN junto à marca no desktop e aos controles do perfil no celular.
-A versão inglesa mantém a composição, com traduções do perfil, projetos,
-experiências (incluindo detalhes), formação, contato, filtros e mensagens acessíveis.
-Nomes próprios e comandos permanecem iguais. Datas e contagens usam o formato local.
-
-A rota `/en/` tem HTML, metadados e cartão social em inglês. A preferência escolhida
-é salva e as âncoras são preservadas na troca. PT continua como padrão sem escolha
-anterior. A página de erro oferece acesso às duas versões.
+Preferência do usuário: branco quente, bege, cinza, palha e madeira clara. A cena passou a usar paredes off-white, assoalho claro, móveis em madeira clara, estofados de tecido bege/cinza, tapete de fibra, abajur e cesto de palha. As texturas de madeira e trama são procedurais, com iluminação diurna menos amarela. Objetos pessoais e personagens mantêm suas cores e posições. Esta direção substitui a paleta anterior de paredes sálvia e madeira mel.
