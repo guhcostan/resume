@@ -13,33 +13,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Build static site
-        # Sets basePath to "/<repo>" so project-page asset URLs resolve.
-        run: npm run build
-        env:
-          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
-
-      # Publishes ./out to the gh-pages branch via git. This avoids the
-      # Actions artifact storage quota used by the official Pages workflow.
-      - name: Deploy to gh-pages branch
+      # Site estático: sem etapa de build.
+      # Publica a raiz do repositório na branch gh-pages, que é a fonte
+      # do GitHub Pages deste projeto (guhcostan.github.io/resume/).
+      # force_orphan mantém a gh-pages enxuta, sem arquivos de deploys antigos.
+      - name: Deploy static site to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
+          publish_dir: ./
           publish_branch: gh-pages
+          force_orphan: true
+          exclude_assets: '.github,README.md,.gitignore'

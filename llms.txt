@@ -1,0 +1,61 @@
+# Gustavo Costa (Guh)
+
+> Lead Mobile & Frontend Engineer. 8+ years building apps used by millions, from airline loyalty to EdTech and fintech. Tech Anchor at Thoughtworks, working with React Native, TypeScript, iOS, Android and AI-powered features and agents.
+>
+> PT: Engenheiro Lead de Mobile e Frontend. 8+ anos criando apps usados por milhões, de fidelidade aérea a EdTech e fintech. Tech Anchor na Thoughtworks, com React Native, TypeScript, iOS, Android, features e agentes com IA.
+
+Currículo e portfólio profissional de Gustavo Costa, conhecido como Guh. Conteúdo em português e inglês (seletor PT/EN). Todas as informações vêm do currículo oficial.
+
+## Perfil / Profile
+
+- [Currículo completo (PDF)](https://guhcostan.github.io/resume/files/gustavo-costa-curriculo.pdf): official résumé, fonte dos dados deste site / official résumé, source of truth for this site
+- [GitHub](https://github.com/guhcostan): open source, incluindo mac-cleaner-cli (1.5k+ stars)
+- [LinkedIn](https://www.linkedin.com/in/guhcostan): perfil profissional / professional profile
+- [Site pessoal](https://guhcostan.dev/): personal site
+
+## Experiência / Experience (resumo / summary)
+
+- Thoughtworks (mai 2022 · hoje / May 2022 · present): Tech Anchor no app LatamPass, uma das maiores plataformas de fidelidade aérea da América Latina. Liderança de 8+ engenheiros no Brasil e Chile, arquitetura e CI/CD de projeto greenfield, cobertura de testes em 80%+ (TDD), pipelines ~35% mais rápidos (Bitrise + Jenkins). Desde o fim de 2024: engenharia assistida por IA, LLMs em produção e agentes autônomos.
+- RecargaPay (jan 2022 · mai 2022): Mobile Developer em fintech com 18.000+ usuários concorrentes.
+- Descomplica (fev 2021 · jan 2022): Mobile Developer, app EdTech construído do zero.
+- Equal - Smart Financial Management (ago 2019 · fev 2021): desenvolvimento web e mobile para gestão financeira de pequenos negócios.
+- LEMAF (fev 2018 · ago 2019): arquitetura e desenvolvimento de plataformas governamentais (SICAR/PA, SIGERH-PA).
+- Comp Júnior (nov 2017 · jan 2018): desenvolvedor trainee, sites estáticos.
+
+## Formação / Education
+
+- Universidade Federal de Lavras (Federal University of Lavras): Bacharelado em Ciência da Computação, 2015 a 2019.
+
+## Stack
+
+React Native, TypeScript, iOS, Android, Node.js, React, Next.js, Firebase, GraphQL, Java, Spring Framework, .NET Core, PostgreSQL, Vue.js, AngularJS, CI/CD (Bitrise, Jenkins), TDD, Clean Code, LLMs, agentes autônomos, Claude, Cursor.
+
+## Certificações / Certifications
+
+- Active Listening: You Can Be a Great Listener Instructor (Lauren Powers)
+- Formação Autoliderança
+- DevOps Essentials Professional Certificate (DEPCP)
+- Scrum Foundations Professional Certificate (SFPC)
+- Software Architecture Fundamentals
+
+## Contato / Contact
+
+- Email: guhcostan@gmail.com
+- Telefone / Phone: +55 35 99878-5953
+- Local / Location: São Sebastião, São Paulo, Brasil (Brazil)
+
+## Seções deste site / Sections of this site
+
+- [Sobre / About](https://guhcostan.github.io/resume/#sobre)
+- [Experiência / Experience](https://guhcostan.github.io/resume/#experiencia)
+- [Stack](https://guhcostan.github.io/resume/#stack)
+- [Projetos / Projects](https://guhcostan.github.io/resume/#projetos)
+- [Formação / Education](https://guhcostan.github.io/resume/#formacao)
+- [Certificações / Certifications](https://guhcostan.github.io/resume/#certificacoes)
+- [FAQ](https://guhcostan.github.io/resume/#faq)
+- [Contato / Contact](https://guhcostan.github.io/resume/#contato)
+
+## Optional
+
+- Versão em inglês / English version: https://guhcostan.github.io/resume/?lang=en
+- Idiomas / Languages: Português (nativo), Inglês e Espanhol (Professional Working)
