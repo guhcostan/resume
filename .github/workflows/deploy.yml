@@ -20,8 +20,9 @@ jobs:
 
       # Site estático: sem etapa de build.
       # Publica a raiz do repositório na branch gh-pages, que é a fonte
-      # do GitHub Pages deste projeto (guhcostan.github.io/resume/).
+      # do GitHub Pages deste site (https://guhcostan.dev/).
       # force_orphan mantém a gh-pages enxuta, sem arquivos de deploys antigos.
+      # cname garante o domínio customizado mesmo com force_orphan.
       - name: Deploy static site to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
@@ -29,4 +30,5 @@ jobs:
           publish_dir: ./
           publish_branch: gh-pages
           force_orphan: true
+          cname: guhcostan.dev
           exclude_assets: '.github,README.md,.gitignore'

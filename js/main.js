@@ -13,7 +13,7 @@
   'use strict';
 
   var root = document.documentElement;
-  var BASE = 'https://guhcostan.github.io/resume/';
+  var BASE = 'https://guhcostan.dev/';
   var URLS = { 'pt-BR': BASE, en: BASE + '?lang=en' };
 
   /* ---------------- Conteúdo por idioma (metadados e JSON-LD) ------------- */
@@ -91,7 +91,7 @@
         ],
         [
           'Onde vejo seu currículo completo e seu código?',
-          'O currículo completo em PDF está no link Baixar currículo (guhcostan.github.io/resume/files/gustavo-costa-curriculo.pdf) e o código aberto está no GitHub em github.com/guhcostan.'
+          'O currículo completo em PDF está no link Baixar currículo (guhcostan.dev/files/gustavo-costa-curriculo.pdf) e o código aberto está no GitHub em github.com/guhcostan.'
         ]
       ]
     },
@@ -168,7 +168,7 @@
         ],
         [
           'Where can I see your full résumé and your code?',
-          'The full résumé PDF is available through the Download résumé link (guhcostan.github.io/resume/files/gustavo-costa-curriculo.pdf) and open source code is on GitHub at github.com/guhcostan.'
+          'The full résumé PDF is available through the Download résumé link (guhcostan.dev/files/gustavo-costa-curriculo.pdf) and open source code is on GitHub at github.com/guhcostan.'
         ]
       ]
     }
@@ -214,8 +214,7 @@
           }),
           sameAs: [
             'https://www.linkedin.com/in/guhcostan',
-            'https://github.com/guhcostan',
-            'https://guhcostan.dev/'
+            'https://github.com/guhcostan'
           ]
         },
         {

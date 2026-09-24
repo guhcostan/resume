@@ -20,4 +20,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://guhcostan.github.io/resume/sitemap.xml
+Sitemap: https://guhcostan.dev/sitemap.xml

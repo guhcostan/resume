@@ -8,10 +8,9 @@ Currículo e portfólio profissional de Gustavo Costa, conhecido como Guh. Conte
 
 ## Perfil / Profile
 
-- [Currículo completo (PDF)](https://guhcostan.github.io/resume/files/gustavo-costa-curriculo.pdf): official résumé, fonte dos dados deste site / official résumé, source of truth for this site
+- [Currículo completo (PDF)](https://guhcostan.dev/files/gustavo-costa-curriculo.pdf): official résumé, fonte dos dados deste site / official résumé, source of truth for this site
 - [GitHub](https://github.com/guhcostan): open source, incluindo mac-cleaner-cli (1.9k+ estrelas / stars)
 - [LinkedIn](https://www.linkedin.com/in/guhcostan): perfil profissional / professional profile
-- [Site pessoal](https://guhcostan.dev/): personal site
 
 ## Experiência / Experience (resumo / summary)
 
@@ -54,16 +53,16 @@ React Native, TypeScript, iOS, Android, Node.js, React, Next.js, Firebase, Graph
 
 ## Seções deste site / Sections of this site
 
-- [Sobre / About](https://guhcostan.github.io/resume/#sobre)
-- [Experiência / Experience](https://guhcostan.github.io/resume/#experiencia)
-- [Stack](https://guhcostan.github.io/resume/#stack)
-- [Projetos / Projects](https://guhcostan.github.io/resume/#projetos)
-- [Formação / Education](https://guhcostan.github.io/resume/#formacao)
-- [Certificações / Certifications](https://guhcostan.github.io/resume/#certificacoes)
-- [FAQ](https://guhcostan.github.io/resume/#faq)
-- [Contato / Contact](https://guhcostan.github.io/resume/#contato)
+- [Sobre / About](https://guhcostan.dev/#sobre)
+- [Experiência / Experience](https://guhcostan.dev/#experiencia)
+- [Stack](https://guhcostan.dev/#stack)
+- [Projetos / Projects](https://guhcostan.dev/#projetos)
+- [Formação / Education](https://guhcostan.dev/#formacao)
+- [Certificações / Certifications](https://guhcostan.dev/#certificacoes)
+- [FAQ](https://guhcostan.dev/#faq)
+- [Contato / Contact](https://guhcostan.dev/#contato)
 
 ## Optional
 
-- Versão em inglês / English version: https://guhcostan.github.io/resume/?lang=en
+- Versão em inglês / English version: https://guhcostan.dev/?lang=en
 - Idiomas / Languages: Português (nativo), Inglês e Espanhol (Professional Working)
