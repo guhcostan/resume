@@ -9,7 +9,7 @@ Currículo e portfólio profissional de Gustavo Costa, conhecido como Guh. Conte
 ## Perfil / Profile
 
 - [Currículo completo (PDF)](https://guhcostan.github.io/resume/files/gustavo-costa-curriculo.pdf): official résumé, fonte dos dados deste site / official résumé, source of truth for this site
-- [GitHub](https://github.com/guhcostan): open source, incluindo mac-cleaner-cli (1.5k+ stars)
+- [GitHub](https://github.com/guhcostan): open source, incluindo mac-cleaner-cli (1.9k+ estrelas / stars)
 - [LinkedIn](https://www.linkedin.com/in/guhcostan): perfil profissional / professional profile
 - [Site pessoal](https://guhcostan.dev/): personal site
 
@@ -29,6 +29,14 @@ Currículo e portfólio profissional de Gustavo Costa, conhecido como Guh. Conte
 ## Stack
 
 React Native, TypeScript, iOS, Android, Node.js, React, Next.js, Firebase, GraphQL, Java, Spring Framework, .NET Core, PostgreSQL, Vue.js, AngularJS, CI/CD (Bitrise, Jenkins), TDD, Clean Code, LLMs, agentes autônomos, Claude, Cursor.
+
+## Projetos open source / Open source projects
+
+- [mac-cleaner-cli](https://github.com/guhcostan/mac-cleaner-cli) (1.9k+ estrelas / stars): CLI para liberar espaço em disco no macOS (caches, logs, Homebrew, Xcode), alternativa open source ao CleanMyMac. TypeScript, Node.js, npm.
+- [b3analysis](https://github.com/guhcostan/b3analysis) (128+ estrelas / stars): agente de análise de ações brasileiras (B3) com Claude Code, sem API keys. Python.
+- [claude-mega-brain](https://github.com/guhcostan/claude-mega-brain) (126+ estrelas / stars): plugin que injeta a base de conhecimento do projeto nas sessões do Claude Code. Python.
+- [windows-cleaner-cli](https://github.com/guhcostan/windows-cleaner-cli) (84+ estrelas / stars): CLI de limpeza de caches e arquivos temporários para Windows. Node.js, npm.
+- [brasilapi-sdk](https://github.com/guhcostan/brasilapi-sdk) (70+ estrelas / stars): SDK TypeScript para a BrasilAPI (CEP, CNPJ, bancos, FIPE, IBGE).
 
 ## Certificações / Certifications
 

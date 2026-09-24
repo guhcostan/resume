@@ -31,6 +31,39 @@
       alumni: 'Universidade Federal de Lavras',
       knows: ['Português', 'Inglês', 'Espanhol'],
       imageAlt: 'Retrato ilustrado em preto e branco de Gustavo Costa (Guh)',
+      openSourceName: 'Projetos open source de Gustavo Costa (Guh)',
+      openSource: [
+        {
+          name: 'mac-cleaner-cli',
+          repo: 'https://github.com/guhcostan/mac-cleaner-cli',
+          lang: 'TypeScript',
+          desc: 'CLI open source para liberar espaço em disco no macOS (caches, logs, Homebrew, Xcode), alternativa ao CleanMyMac.'
+        },
+        {
+          name: 'b3analysis',
+          repo: 'https://github.com/guhcostan/b3analysis',
+          lang: 'Python',
+          desc: 'Agente de análise de ações brasileiras (B3) construído com Claude Code, sem API keys.'
+        },
+        {
+          name: 'claude-mega-brain',
+          repo: 'https://github.com/guhcostan/claude-mega-brain',
+          lang: 'Python',
+          desc: 'Plugin que injeta a base de conhecimento do projeto nas sessões do Claude Code.'
+        },
+        {
+          name: 'brasilapi-sdk',
+          repo: 'https://github.com/guhcostan/brasilapi-sdk',
+          lang: 'TypeScript',
+          desc: 'SDK TypeScript para a BrasilAPI: CEP, CNPJ, bancos, preços FIPE e dados do IBGE.'
+        },
+        {
+          name: 'windows-cleaner-cli',
+          repo: 'https://github.com/guhcostan/windows-cleaner-cli',
+          lang: 'JavaScript',
+          desc: 'CLI open source de limpeza de caches e arquivos temporários para Windows.'
+        }
+      ],
       faq: [
         [
           'O que você faz hoje?',
@@ -75,6 +108,39 @@
       alumni: 'Federal University of Lavras',
       knows: ['Portuguese', 'English', 'Spanish'],
       imageAlt: 'Black and white illustrated portrait of Gustavo Costa (Guh)',
+      openSourceName: 'Open source projects by Gustavo Costa (Guh)',
+      openSource: [
+        {
+          name: 'mac-cleaner-cli',
+          repo: 'https://github.com/guhcostan/mac-cleaner-cli',
+          lang: 'TypeScript',
+          desc: 'Open-source macOS CLI to reclaim disk space (caches, logs, Homebrew, Xcode), an alternative to CleanMyMac.'
+        },
+        {
+          name: 'b3analysis',
+          repo: 'https://github.com/guhcostan/b3analysis',
+          lang: 'Python',
+          desc: 'Brazilian stock (B3) analysis agent built with Claude Code, no API keys required.'
+        },
+        {
+          name: 'claude-mega-brain',
+          repo: 'https://github.com/guhcostan/claude-mega-brain',
+          lang: 'Python',
+          desc: "Plugin that injects your project's knowledge base into Claude Code sessions."
+        },
+        {
+          name: 'brasilapi-sdk',
+          repo: 'https://github.com/guhcostan/brasilapi-sdk',
+          lang: 'TypeScript',
+          desc: 'TypeScript SDK for BrasilAPI: postal codes, companies, banks, FIPE and IBGE data.'
+        },
+        {
+          name: 'windows-cleaner-cli',
+          repo: 'https://github.com/guhcostan/windows-cleaner-cli',
+          lang: 'JavaScript',
+          desc: 'Open-source Windows cleaner CLI for caches and temporary files.'
+        }
+      ],
       faq: [
         [
           'What do you do today?',
@@ -169,6 +235,25 @@
               '@type': 'Question',
               name: item[0],
               acceptedAnswer: { '@type': 'Answer', text: item[1] }
+            };
+          })
+        },
+        {
+          '@type': 'ItemList',
+          '@id': BASE + '#open-source',
+          name: M.openSourceName,
+          itemListElement: M.openSource.map(function (project, index) {
+            return {
+              '@type': 'ListItem',
+              position: index + 1,
+              item: {
+                '@type': 'SoftwareSourceCode',
+                name: project.name,
+                description: project.desc,
+                codeRepository: project.repo,
+                programmingLanguage: project.lang,
+                author: { '@id': personId }
+              }
             };
           })
         }
