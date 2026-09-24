@@ -46,16 +46,18 @@
     (function () {
       var d = document.documentElement;
       d.classList.add('js');
+      // pt-BR é o idioma primário da raiz (canonical e hreflang).
+      // EN só por ?lang=en ou preferência já salva: assim URL, conteúdo e
+      // canonical ficam coerentes também para buscadores, que chegam sem
+      // localStorage e com preferência de idioma diferente (ex.: Googlebot/en-US).
       var locale = 'pt-BR';
       try {
         var q = new URLSearchParams(location.search).get('lang');
         var saved = null;
         try { saved = localStorage.getItem('guh-locale'); } catch (e) {}
-        var nav = (navigator.language || '').toLowerCase();
         if (q === 'en') { locale = 'en'; }
         else if (q === 'pt' || q === 'pt-br') { locale = 'pt-BR'; }
         else if (saved === 'en' || saved === 'pt-BR') { locale = saved; }
-        else if (nav && nav.indexOf('pt') !== 0) { locale = 'en'; }
       } catch (e) {}
       d.setAttribute('data-locale', locale);
       d.setAttribute('lang', locale === 'en' ? 'en' : 'pt-BR');

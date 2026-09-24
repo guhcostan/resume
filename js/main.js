@@ -299,19 +299,23 @@
     if (sw) sw.setAttribute('aria-checked', currentTheme === 'dark' ? 'true' : 'false');
   }
 
-  function setLocale(locale, updateUrl) {
+  function setLocale(locale) {
     if (!I18N[locale]) locale = 'pt-BR';
     root.setAttribute('data-locale', locale);
     root.setAttribute('lang', I18N[locale].lang);
-    syncLanguage();
-    try { localStorage.setItem('guh-locale', locale); } catch (e) {}
 
-    if (updateUrl && window.history && window.history.replaceState) {
+    // Mantém a URL coerente com o idioma exibido — e, portanto, com o
+    // canonical e o og:url. A raiz é sempre pt-BR; o inglês vive em ?lang=en.
+    // Isso evita canonical instável para buscadores (que chegam sem localStorage).
+    if (window.history && window.history.replaceState) {
       try {
         var target = locale === 'en' ? '?lang=en' : location.pathname;
         window.history.replaceState({}, '', target + location.hash);
       } catch (e) {}
     }
+
+    syncLanguage();
+    try { localStorage.setItem('guh-locale', locale); } catch (e) {}
   }
 
   /* ---------------- Logo por tema (tinta preta no claro, branca no escuro) */
@@ -394,7 +398,7 @@
 
     Array.prototype.forEach.call(document.querySelectorAll('[data-lang-btn]'), function (btn) {
       btn.addEventListener('click', function () {
-        setLocale(btn.getAttribute('data-lang-btn'), true);
+        setLocale(btn.getAttribute('data-lang-btn'));
       });
     });
 
@@ -408,7 +412,7 @@
     }
 
     setTheme(currentTheme, false);
-    setLocale(root.getAttribute('data-locale') === 'en' ? 'en' : 'pt-BR', false);
+    setLocale(root.getAttribute('data-locale') === 'en' ? 'en' : 'pt-BR');
 
     var year = document.getElementById('year');
     if (year) year.textContent = String(new Date().getFullYear());
