@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-locale="pt-BR" data-theme="light">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blog — Gustavo Costa (Guh)</title>
+  <meta name="description" content="Artigos de Gustavo Costa (Guh) sobre engenharia mobile, IA, open source e produtos digitais.">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f4f4f2">
+
+  <link rel="canonical" href="https://guhcostan.dev/blog/">
+  <link rel="alternate" hreflang="pt-BR" href="https://guhcostan.dev/blog/">
+  <link rel="alternate" hreflang="en" href="https://guhcostan.dev/blog/?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://guhcostan.dev/blog/">
+  <link rel="alternate" type="application/rss+xml" title="Guh — Blog (PT)" href="/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Guh — Blog (EN)" href="/feed-en.xml">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Gustavo Costa (Guh)">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:url" content="https://guhcostan.dev/blog/">
+  <meta property="og:title" content="Blog — Gustavo Costa (Guh)">
+  <meta property="og:description" content="Artigos de Gustavo Costa (Guh) sobre engenharia mobile, IA, open source e produtos digitais.">
+  <meta property="og:image" content="https://guhcostan.dev/assets/guh-logo.png">
+  <meta property="og:image:width" content="1317">
+  <meta property="og:image:height" content="1194">
+  <meta property="og:image:alt" content="Retrato ilustrado de Gustavo Costa (Guh)">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Blog — Gustavo Costa (Guh)">
+  <meta name="twitter:description" content="Artigos de Gustavo Costa (Guh) sobre engenharia mobile, IA, open source e produtos digitais.">
+  <meta name="twitter:image" content="https://guhcostan.dev/assets/guh-logo.png">
+  <meta name="twitter:image:alt" content="Retrato ilustrado de Gustavo Costa (Guh)">
+
+  <link rel="icon" type="image/png" href="/assets/guh-logo.png">
+  <link rel="apple-touch-icon" href="/assets/guh-logo.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preload" href="/assets/fonts/ebgaramond-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <script type="application/json" id="page-i18n">{
+  "pt-BR": {
+    "title": "Blog — Gustavo Costa (Guh)",
+    "description": "Artigos de Gustavo Costa (Guh) sobre engenharia mobile, IA, open source e produtos digitais."
+  },
+  "en": {
+    "title": "Blog — Gustavo Costa (Guh)",
+    "description": "Gustavo Costa (Guh)'s articles on mobile engineering, AI, open source and digital products."
+  }
+}</script>
+<script>
+    (function () {
+      var d = document.documentElement;
+      d.classList.add('js');
+      // pt-BR é o idioma primário da raiz (canonical e hreflang).
+      // EN só por ?lang=en ou preferência já salva: assim URL, conteúdo e
+      // canonical ficam coerentes também para buscadores, que chegam sem
+      // localStorage e com preferência de idioma diferente (ex.: Googlebot/en-US).
+      var locale = 'pt-BR';
+      try {
+        var q = new URLSearchParams(location.search).get('lang');
+        var saved = null;
+        try { saved = localStorage.getItem('guh-locale'); } catch (e) {}
+        if (q === 'en') { locale = 'en'; }
+        else if (q === 'pt' || q === 'pt-br') { locale = 'pt-BR'; }
+        else if (saved === 'en' || saved === 'pt-BR') { locale = saved; }
+      } catch (e) {}
+      d.setAttribute('data-locale', locale);
+      d.setAttribute('lang', locale === 'en' ? 'en' : 'pt-BR');
+      var theme = null;
+      try { theme = localStorage.getItem('guh-theme'); } catch (e) {}
+      if (theme !== 'light' && theme !== 'dark') {
+        theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      }
+      d.setAttribute('data-theme', theme);
+    })();
+  </script>
+  <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "@id": "https://guhcostan.dev/blog/#blog",
+  "name": "Guh — Blog",
+  "url": "https://guhcostan.dev/blog/",
+  "inLanguage": [
+    "pt-BR",
+    "en"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Gustavo Costa",
+    "url": "https://guhcostan.dev/"
+  },
+  "blogPost": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Bem-vindo ao blog",
+      "url": "https://guhcostan.dev/blog/bem-vindo/",
+      "datePublished": "2026-09-25"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Como este blog é feito: Markdown, build e zero JavaScript no conteúdo",
+      "url": "https://guhcostan.dev/blog/como-este-blog-e-feito/",
+      "datePublished": "2026-09-25"
+    }
+  ]
+}</script>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">
+    <span data-t="pt">Ir para o conteúdo</span><span data-t="en">Skip to content</span>
+  </a>
+
+<header class="site-header">
+    <div class="shell header__inner">
+      <a class="brand" href="/#inicio">
+        <span class="brand__mark plate">
+          <img src="/assets/guh-logo-transparente.png" data-logo
+               data-src-light="/assets/guh-logo-transparente.png"
+               data-src-dark="/assets/guh-logo-transparente-branca.png"
+               alt="" width="1317" height="1194" fetchpriority="high">
+        </span>
+        <span class="brand__text">
+          <span class="brand__name">Guh</span>
+          <span class="brand__real">Gustavo Costa</span>
+        </span>
+      </a>
+
+      <nav class="nav" id="menu" data-aria-pt="Navegação principal" data-aria-en="Main navigation" aria-label="Navegação principal">
+        <ul class="nav__list">
+          <li><a href="/#sobre"><span data-t="pt">Sobre</span><span data-t="en">About</span></a></li>
+          <li><a href="/#experiencia"><span data-t="pt">Experiência</span><span data-t="en">Experience</span></a></li>
+          <li><a href="/#projetos"><span data-t="pt">Projetos</span><span data-t="en">Projects</span></a></li>
+          <li><a href="/blog/" aria-current="page"><span data-t="pt">Blog</span><span data-t="en">Blog</span></a></li>
+          <li><a href="/#faq"><span data-t="en">FAQ</span><span data-t="pt">FAQ</span></a></li>
+          <li><a href="/#contato"><span data-t="pt">Contato</span><span data-t="en">Contact</span></a></li>
+          <li class="nav__cta">
+            <a class="btn btn--solid" href="https://guhcostan.dev/files/gustavo-costa-curriculo.pdf" target="_blank" rel="noopener">
+              <span data-t="pt">Baixar currículo</span><span data-t="en">Download résumé</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header__tools">
+        <div class="lang-switch js-only" role="group" data-aria-pt="Seleção de idioma" data-aria-en="Language selection" aria-label="Seleção de idioma">
+          <button type="button" class="lang-btn" data-lang-btn="pt-BR" lang="pt-BR" aria-pressed="true">PT</button>
+          <button type="button" class="lang-btn" data-lang-btn="en" lang="en" aria-pressed="false">EN</button>
+        </div>
+        <!-- Ícones sun/moon: Lucide v0.469.0 (licença ISC) -->
+        <button type="button" class="theme-switch js-only" data-theme-toggle role="switch" aria-checked="false"
+                data-aria-pt="Tema escuro" data-aria-en="Dark theme" aria-label="Tema escuro">
+          <span class="theme-switch__track">
+            <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+            </span>
+            <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+            </span>
+            <span class="theme-switch__knob" aria-hidden="true"></span>
+          </span>
+        </button>
+        <button type="button" class="tool-btn menu-btn js-only" data-menu-toggle aria-expanded="false" aria-controls="menu">
+          <span data-t="pt">Menu</span><span data-t="en">Menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="section">
+      <div class="shell">
+        <header class="sec-head" data-reveal>
+          <h1 class="sec-title"><span data-t="pt">Blog</span><span data-t="en">Blog</span></h1>
+          <p class="sec-lede">
+            <span data-t="pt">Artigos sobre engenharia mobile, IA, open source e o processo de construir produtos que as pessoas usam.</span>
+            <span data-t="en">Articles on mobile engineering, AI, open source and the craft of building products people use.</span>
+          </p>
+        </header>
+
+    <ol class="post-list">
+      <li class="post-card">
+        <a class="post-card__link" href="/blog/bem-vindo/">
+          <p class="post-card__meta">
+            <time datetime="2026-09-25">
+              <span data-t="pt">25 de set. de 2026</span><span data-t="en">Sep 25, 2026</span>
+            </time>
+            <span aria-hidden="true">·</span>
+            <span data-t="pt">1 min de leitura</span><span data-t="en">1 min read</span>
+          </p>
+          <h2 class="post-card__title">
+            <span data-t="pt">Bem-vindo ao blog</span><span data-t="en">Welcome to the blog</span>
+          </h2>
+          <p class="post-card__desc">
+            <span data-t="pt">Um espaço para escrever com calma sobre engenharia mobile, IA aplicada e as ferramentas que construo nos bastidores.</span><span data-t="en">A place to write, unhurried, about mobile engineering, applied AI and the tools I build behind the scenes.</span>
+          </p>
+        <ul class="tags"><li>blog</li><li>carreira</li><li>mobile</li></ul>
+        </a>
+      </li>
+      <li class="post-card">
+        <a class="post-card__link" href="/blog/como-este-blog-e-feito/">
+          <p class="post-card__meta">
+            <time datetime="2026-09-25">
+              <span data-t="pt">25 de set. de 2026</span><span data-t="en">Sep 25, 2026</span>
+            </time>
+            <span aria-hidden="true">·</span>
+            <span data-t="pt">1 min de leitura</span><span data-t="en">1 min read</span>
+          </p>
+          <h2 class="post-card__title">
+            <span data-t="pt">Como este blog é feito: Markdown, build e zero JavaScript no conteúdo</span><span data-t="en">How this blog is built: Markdown, a build step and zero JavaScript in the content</span>
+          </h2>
+          <p class="post-card__desc">
+            <span data-t="pt">Um blog bilíngue, estático e rápido: escrevo em Markdown, um gerador de ~400 linhas publica o HTML no GitHub Pages.</span><span data-t="en">A bilingual, static and fast blog: I write in Markdown and a ~400-line generator publishes the HTML to GitHub Pages.</span>
+          </p>
+        <ul class="tags"><li>static-site</li><li>markdown</li><li>github-pages</li><li>seo</li></ul>
+        </a>
+      </li>
+    </ol>
+
+        <p class="projects__more" data-reveal>
+          <a href="/feed.xml"><span data-t="pt">Assinar o RSS</span><span data-t="en">Subscribe via RSS</span> <span aria-hidden="true">↗</span></a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+<footer class="site-footer">
+    <div class="shell footer__inner">
+      <p class="footer__meta">© <span id="year">2026</span> Gustavo Costa · Guh</p>
+      <p class="footer__meta">
+        <span data-t="pt">São Sebastião, São Paulo, Brasil</span>
+        <span data-t="en">São Sebastião, São Paulo, Brazil</span>
+      </p>
+      <p class="footer__top">
+        <a href="/#inicio"><span data-t="pt">Voltar ao topo</span><span data-t="en">Back to top</span></a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="/js/main.js" defer></script>
+</body>
+</html>

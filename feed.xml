@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Guh — Blog</title>
+    <link>https://guhcostan.dev/blog/</link>
+    <description>Artigos de Gustavo Costa (Guh) sobre engenharia mobile, IA e open source.</description>
+    <language>pt-BR</language>
+    <lastBuildDate>Fri, 25 Sep 2026 13:12:03 GMT</lastBuildDate>
+    <item>
+      <title>Bem-vindo ao blog</title>
+      <link>https://guhcostan.dev/blog/bem-vindo/</link>
+      <guid isPermaLink="true">https://guhcostan.dev/blog/bem-vindo/</guid>
+      <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+      <description>Um espaço para escrever com calma sobre engenharia mobile, IA aplicada e as ferramentas que construo nos bastidores.</description>
+    </item>
+    <item>
+      <title>Como este blog é feito: Markdown, build e zero JavaScript no conteúdo</title>
+      <link>https://guhcostan.dev/blog/como-este-blog-e-feito/</link>
+      <guid isPermaLink="true">https://guhcostan.dev/blog/como-este-blog-e-feito/</guid>
+      <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+      <description>Um blog bilíngue, estático e rápido: escrevo em Markdown, um gerador de ~400 linhas publica o HTML no GitHub Pages.</description>
+    </item>
+  </channel>
+</rss>
