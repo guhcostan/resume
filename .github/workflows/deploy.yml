@@ -18,17 +18,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Site estático: sem etapa de build.
-      # Publica a raiz do repositório na branch gh-pages, que é a fonte
-      # do GitHub Pages deste site (https://guhcostan.dev/).
-      # force_orphan mantém a gh-pages enxuta, sem arquivos de deploys antigos.
-      # cname garante o domínio customizado mesmo com force_orphan.
-      - name: Deploy static site to gh-pages
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Gera o site em dist/ a partir de index.html + content/posts
+      # (blog bilíngue, feeds RSS e sitemap).
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          publish_dir: ./dist
           publish_branch: gh-pages
           force_orphan: true
           cname: guhcostan.dev
-          exclude_assets: '.github,README.md,.gitignore'

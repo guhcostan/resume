@@ -1,0 +1,14 @@
+{
+  "name": "guhcostan-dev",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Site pessoal e blog de Gustavo Costa (Guh). Estático, gerado a partir de Markdown.",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "dev": "node tools/build.mjs && python3 -m http.server 8000 --directory dist"
+  },
+  "devDependencies": {
+    "marked": "^15.0.0"
+  }
+}

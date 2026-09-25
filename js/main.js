@@ -13,8 +13,23 @@
   'use strict';
 
   var root = document.documentElement;
-  var BASE = 'https://guhcostan.dev/';
+  var SITE = 'https://guhcostan.dev';
+  var BASE = SITE + '/';
   var URLS = { 'pt-BR': BASE, en: BASE + '?lang=en' };
+
+  // Metadados por página (no blog, cada post tem seu próprio title/description).
+  var pageI18n = null;
+  try {
+    var pageI18nEl = document.getElementById('page-i18n');
+    if (pageI18nEl) pageI18n = JSON.parse(pageI18nEl.textContent);
+  } catch (e) {}
+
+  // Canonical/og:url derivados da URL real da página (não do idioma exibido),
+  // para funcionar igualmente na home e nos posts do blog.
+  function pageUrl(locale) {
+    var origin = location.origin && location.origin !== 'null' ? location.origin : SITE;
+    return origin + location.pathname + (locale === 'en' ? '?lang=en' : '');
+  }
 
   /* ---------------- Conteúdo por idioma (metadados e JSON-LD) ------------- */
   var I18N = {
@@ -262,20 +277,24 @@
 
   function syncLanguage() {
     var locale = root.getAttribute('data-locale') === 'en' ? 'en' : 'pt-BR';
-    var M = I18N[locale];
+    var M = (pageI18n && pageI18n[locale]) || I18N[locale];
+    var url = pageUrl(locale);
 
     document.title = M.title;
     setMeta('meta[name="description"]', 'content', M.description);
-    setMeta('link[rel="canonical"]', 'href', URLS[locale]);
-    setMeta('meta[property="og:url"]', 'content', URLS[locale]);
-    setMeta('meta[property="og:locale"]', 'content', M.ogLocale);
+    setMeta('link[rel="canonical"]', 'href', url);
+    setMeta('meta[property="og:url"]', 'content', url);
+    setMeta('meta[property="og:locale"]', 'content', locale === 'en' ? 'en_US' : 'pt_BR');
     setMeta('meta[property="og:title"]', 'content', M.title);
     setMeta('meta[property="og:description"]', 'content', M.description);
-    setMeta('meta[property="og:image:alt"]', 'content', M.imageAlt);
     setMeta('meta[name="twitter:title"]', 'content', M.title);
     setMeta('meta[name="twitter:description"]', 'content', M.description);
-    setMeta('meta[name="twitter:image:alt"]', 'content', M.imageAlt);
+    if (M.imageAlt) {
+      setMeta('meta[property="og:image:alt"]', 'content', M.imageAlt);
+      setMeta('meta[name="twitter:image:alt"]', 'content', M.imageAlt);
+    }
 
+    // O grafo Person/FAQ só existe na home; no blog o JSON-LD é próprio do post.
     var ld = document.getElementById('ld-graph');
     if (ld) ld.textContent = JSON.stringify(buildGraph(locale), null, 2);
 
