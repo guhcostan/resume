@@ -1,6 +1,6 @@
 # Gustavo Costa (Guh)
 
-> Lead Mobile & Frontend Engineer. 8+ years building apps used by millions, from airline loyalty to EdTech and fintech. Tech Anchor at Thoughtworks, working with React Native, TypeScript, iOS, Android and AI-powered features and agents.
+> Mobile & frontend engineer. 8+ years building apps used by millions of people. Tech Anchor at Thoughtworks, leading the technical direction of the LatamPass app, with React Native, TypeScript and AI in production.
 >
 > PT: Engenheiro Lead de Mobile e Frontend. 8+ anos criando apps usados por milhões, de fidelidade aérea a EdTech e fintech. Tech Anchor na Thoughtworks, com React Native, TypeScript, iOS, Android, features e agentes com IA.
 
@@ -59,7 +59,6 @@ React Native, TypeScript, iOS, Android, Node.js, React, Next.js, Firebase, Graph
 - [Projetos / Projects](https://guhcostan.dev/#projetos)
 - [Formação / Education](https://guhcostan.dev/#formacao)
 - [Certificações / Certifications](https://guhcostan.dev/#certificacoes)
-- [FAQ](https://guhcostan.dev/#faq)
 - [Contato / Contact](https://guhcostan.dev/#contato)
 
 ## Optional

@@ -162,7 +162,7 @@ function head({ title, description, canonicalPt, canonicalEn, ogType = 'website'
   <meta name="description" content="${esc(description)}">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#f4f4f2">
+  <meta name="theme-color" content="#fafafa">
 
   <link rel="canonical" href="${canonicalPt}">
   <link rel="alternate" hreflang="pt-BR" href="${canonicalPt}">
@@ -195,7 +195,7 @@ ${article.tags.map((t) => `  <meta property="article:tag" content="${esc(t)}">`)
   <link rel="icon" type="image/png" href="/assets/guh-logo.png">
   <link rel="apple-touch-icon" href="/assets/guh-logo.png">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="preload" href="/assets/fonts/ebgaramond-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/css/styles.css">`;
 }
 
