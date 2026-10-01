@@ -5,7 +5,7 @@
    1. Troca de idioma (PT/EN) com metadados coerentes (title, description,
       canonical, Open Graph, Twitter Card, JSON-LD, alt e aria-label)
    2. Tema claro/escuro com persistência e contraste garantido
-   3. Menu móvel acessível
+   3. Menu móvel acessível e seção ativa no menu
    O movimento (entrada do hero e revelação ao rolar) é feito só em CSS,
    com degradação segura: o conteúdo nunca fica escondido.
    ========================================================================== */
@@ -36,12 +36,12 @@
     'pt-BR': {
       lang: 'pt-BR',
       ogLocale: 'pt_BR',
-      title: 'Gustavo Costa (Guh) — Engenheiro Lead Mobile e Frontend',
+      title: 'Gustavo Costa (Guh) — Engenheiro mobile e frontend',
       description:
-        'Currículo de Gustavo Costa (Guh): 8+ anos criando apps usados por milhões. Tech Anchor na Thoughtworks. React Native, TypeScript, iOS, Android e IA em produção.',
+        'Guh (Gustavo Costa), engenheiro mobile e frontend. Tech Anchor na Thoughtworks, à frente do app LatamPass. 8+ anos com React Native e TypeScript, e IA em produção.',
       jobTitle: 'Lead Mobile & Frontend Engineer',
       personDescription:
-        'Engenheiro Lead de Mobile e Frontend com 8+ anos criando apps usados por milhões, de fidelidade aérea a EdTech e fintech. Tech Anchor na Thoughtworks, conduzindo a direção técnica do app LatamPass e trabalhando com engenharia assistida por IA.',
+        'Engenheiro mobile e frontend com 8+ anos fazendo apps usados por milhões de pessoas. Tech Anchor na Thoughtworks, responsável pela direção técnica do app LatamPass, com IA em produção desde 2024.',
       profileName: 'Gustavo Costa (Guh): currículo e portfólio',
       alumni: 'Universidade Federal de Lavras',
       knows: ['Português', 'Inglês', 'Espanhol'],
@@ -52,73 +52,43 @@
           name: 'mac-cleaner-cli',
           repo: 'https://github.com/guhcostan/mac-cleaner-cli',
           lang: 'TypeScript',
-          desc: 'CLI open source para liberar espaço em disco no macOS (caches, logs, Homebrew, Xcode), alternativa ao CleanMyMac.'
+          desc: 'Libera espaço no Mac com um comando: caches, logs e sobras de Homebrew e Xcode. Alternativa open source ao CleanMyMac.'
         },
         {
           name: 'b3analysis',
           repo: 'https://github.com/guhcostan/b3analysis',
           lang: 'Python',
-          desc: 'Agente de análise de ações brasileiras (B3) construído com Claude Code, sem API keys.'
+          desc: 'Agente de análise de ações da B3 feito com Claude Code, sem API keys.'
         },
         {
           name: 'claude-mega-brain',
           repo: 'https://github.com/guhcostan/claude-mega-brain',
           lang: 'Python',
-          desc: 'Plugin que injeta a base de conhecimento do projeto nas sessões do Claude Code.'
-        },
-        {
-          name: 'brasilapi-sdk',
-          repo: 'https://github.com/guhcostan/brasilapi-sdk',
-          lang: 'TypeScript',
-          desc: 'SDK TypeScript para a BrasilAPI: CEP, CNPJ, bancos, preços FIPE e dados do IBGE.'
+          desc: 'Plugin que dá ao Claude Code a base de conhecimento do seu projeto em toda sessão.'
         },
         {
           name: 'windows-cleaner-cli',
           repo: 'https://github.com/guhcostan/windows-cleaner-cli',
           lang: 'JavaScript',
-          desc: 'CLI open source de limpeza de caches e arquivos temporários para Windows.'
+          desc: 'Limpa caches e arquivos temporários do Windows direto do terminal.'
+        },
+        {
+          name: 'brasilapi-sdk',
+          repo: 'https://github.com/guhcostan/brasilapi-sdk',
+          lang: 'TypeScript',
+          desc: 'SDK tipado para a BrasilAPI: CEP, CNPJ, bancos, FIPE e IBGE.'
         }
-      ],
-      faq: [
-        [
-          'O que você faz hoje?',
-          'Sou Tech Anchor na Thoughtworks desde dezembro de 2024, conduzindo a direção técnica do app LatamPass, uma das maiores plataformas de fidelidade aérea da América Latina. Desde o fim de 2024 meu foco inclui engenharia assistida por IA: features com IA, integração de LLMs em produtos em produção e agentes autônomos.'
-        ],
-        [
-          'Há quanto tempo você trabalha com desenvolvimento?',
-          'Mais de 8 anos. Desde 2017 passei por Comp Júnior, LEMAF, Equal, Descomplica, RecargaPay e Thoughtworks, construindo apps usados por milhões de usuários em iOS e Android.'
-        ],
-        [
-          'Quais tecnologias você usa no dia a dia?',
-          'React Native, TypeScript, iOS, Android, React, Next.js, Node.js, Firebase e CI/CD com Bitrise e Jenkins. Em experiências anteriores também GraphQL, Vue.js, AngularJS, Spring Framework, .NET Core, Java e PostgreSQL.'
-        ],
-        [
-          'Você tem experiência liderando equipes?',
-          'Sim. Liderei uma equipe multifuncional de 8+ engenheiros no Brasil e no Chile, defini arquitetura, padrões técnicos e pipelines de CI/CD em um projeto greenfield, elevei a cobertura de testes para 80%+ com TDD e code review e mentorei engenheiros em 1:1s, pairing e coaching técnico.'
-        ],
-        [
-          'Você trabalha com inteligência artificial?',
-          'Desde o fim de 2024. Construo features com IA, integro LLMs em produtos em produção e desenvolvo agentes autônomos para acelerar fluxos de trabalho de desenvolvimento, com ferramentas como Claude e Cursor.'
-        ],
-        [
-          'Quais idiomas você fala?',
-          'Português nativo, inglês e espanhol em nível profissional (Professional Working).'
-        ],
-        [
-          'Onde vejo seu currículo completo e seu código?',
-          'O currículo completo em PDF está no link Baixar currículo (guhcostan.dev/files/gustavo-costa-curriculo.pdf) e o código aberto está no GitHub em github.com/guhcostan.'
-        ]
       ]
     },
     en: {
       lang: 'en',
       ogLocale: 'en_US',
-      title: 'Gustavo Costa (Guh) — Lead Mobile & Frontend Engineer',
+      title: 'Gustavo Costa (Guh) — Mobile & frontend engineer',
       description:
-        "Gustavo Costa (Guh) résumé: 8+ years building apps used by millions. Tech Anchor at Thoughtworks. React Native, TypeScript, iOS, Android and AI in production.",
+        "Guh (Gustavo Costa), mobile & frontend engineer. Tech Anchor at Thoughtworks, leading the LatamPass app. 8+ years of React Native and TypeScript, and AI in production.",
       jobTitle: 'Lead Mobile & Frontend Engineer',
       personDescription:
-        "Lead Mobile & Frontend Engineer with 8+ years building apps used by millions, from airline loyalty to EdTech and fintech. Tech Anchor at Thoughtworks, steering the technical direction of the LatamPass app and working on AI-assisted engineering.",
+        "Mobile and frontend engineer with 8+ years building apps used by millions of people. Tech Anchor at Thoughtworks, leading the technical direction of the LatamPass app, with AI in production since 2024.",
       profileName: 'Gustavo Costa (Guh): résumé and portfolio',
       alumni: 'Federal University of Lavras',
       knows: ['Portuguese', 'English', 'Spanish'],
@@ -129,62 +99,32 @@
           name: 'mac-cleaner-cli',
           repo: 'https://github.com/guhcostan/mac-cleaner-cli',
           lang: 'TypeScript',
-          desc: 'Open-source macOS CLI to reclaim disk space (caches, logs, Homebrew, Xcode), an alternative to CleanMyMac.'
+          desc: 'Frees up space on your Mac with one command: caches, logs, and Homebrew and Xcode leftovers. An open source alternative to CleanMyMac.'
         },
         {
           name: 'b3analysis',
           repo: 'https://github.com/guhcostan/b3analysis',
           lang: 'Python',
-          desc: 'Brazilian stock (B3) analysis agent built with Claude Code, no API keys required.'
+          desc: 'A Brazilian stock (B3) analysis agent built with Claude Code, no API keys needed.'
         },
         {
           name: 'claude-mega-brain',
           repo: 'https://github.com/guhcostan/claude-mega-brain',
           lang: 'Python',
-          desc: "Plugin that injects your project's knowledge base into Claude Code sessions."
-        },
-        {
-          name: 'brasilapi-sdk',
-          repo: 'https://github.com/guhcostan/brasilapi-sdk',
-          lang: 'TypeScript',
-          desc: 'TypeScript SDK for BrasilAPI: postal codes, companies, banks, FIPE and IBGE data.'
+          desc: "A plugin that gives Claude Code your project's knowledge base in every session."
         },
         {
           name: 'windows-cleaner-cli',
           repo: 'https://github.com/guhcostan/windows-cleaner-cli',
           lang: 'JavaScript',
-          desc: 'Open-source Windows cleaner CLI for caches and temporary files.'
+          desc: 'Clears Windows caches and temp files straight from the terminal.'
+        },
+        {
+          name: 'brasilapi-sdk',
+          repo: 'https://github.com/guhcostan/brasilapi-sdk',
+          lang: 'TypeScript',
+          desc: 'A typed SDK for BrasilAPI: postal codes, company IDs, banks, FIPE and IBGE data.'
         }
-      ],
-      faq: [
-        [
-          'What do you do today?',
-          "I have been a Tech Anchor at Thoughtworks since December 2024, driving the technical direction of the LatamPass app, one of Latin America's largest airline loyalty platforms. Since late 2024 my focus also covers AI-assisted engineering: AI-powered features, LLM integration into production products and autonomous agents."
-        ],
-        [
-          'How long have you been building software?',
-          'More than 8 years. Since 2017 I have worked at Comp Júnior, LEMAF, Equal, Descomplica, RecargaPay and Thoughtworks, building apps used by millions of users on iOS and Android.'
-        ],
-        [
-          'Which technologies do you work with?',
-          'React Native, TypeScript, iOS, Android, React, Next.js, Node.js, Firebase and CI/CD with Bitrise and Jenkins. In previous roles also GraphQL, Vue.js, AngularJS, Spring Framework, .NET Core, Java and PostgreSQL.'
-        ],
-        [
-          'Do you have team leadership experience?',
-          'Yes. I led a cross-functional team of 8+ engineers across Brazil and Chile, defined architecture, tech standards and CI/CD pipelines for a greenfield project, raised test coverage to 80%+ with TDD and code review, and mentored engineers through 1:1s, pairing sessions and technical coaching.'
-        ],
-        [
-          'Do you work with AI?',
-          'Since late 2024. I build AI-powered features, integrate LLMs into production products and develop autonomous agents to accelerate development workflows, using tools like Claude and Cursor.'
-        ],
-        [
-          'Which languages do you speak?',
-          'Native Portuguese, English and Spanish at professional working proficiency.'
-        ],
-        [
-          'Where can I see your full résumé and your code?',
-          'The full résumé PDF is available through the Download résumé link (guhcostan.dev/files/gustavo-costa-curriculo.pdf) and open source code is on GitHub at github.com/guhcostan.'
-        ]
       ]
     }
   };
@@ -241,18 +181,6 @@
           mainEntity: { '@id': personId }
         },
         {
-          '@type': 'FAQPage',
-          '@id': BASE + '#faq',
-          inLanguage: M.lang,
-          mainEntity: M.faq.map(function (item) {
-            return {
-              '@type': 'Question',
-              name: item[0],
-              acceptedAnswer: { '@type': 'Answer', text: item[1] }
-            };
-          })
-        },
-        {
           '@type': 'ItemList',
           '@id': BASE + '#open-source',
           name: M.openSourceName,
@@ -294,7 +222,7 @@
       setMeta('meta[name="twitter:image:alt"]', 'content', M.imageAlt);
     }
 
-    // O grafo Person/FAQ só existe na home; no blog o JSON-LD é próprio do post.
+    // O grafo Person só existe na home; no blog o JSON-LD é próprio do post.
     var ld = document.getElementById('ld-graph');
     if (ld) ld.textContent = JSON.stringify(buildGraph(locale), null, 2);
 
@@ -349,7 +277,7 @@
   function setTheme(theme, persist) {
     currentTheme = theme === 'dark' ? 'dark' : 'light';
     root.setAttribute('data-theme', currentTheme);
-    setMeta('meta[name="theme-color"]', 'content', currentTheme === 'dark' ? '#0f0f0e' : '#f5f3ee');
+    setMeta('meta[name="theme-color"]', 'content', currentTheme === 'dark' ? '#0a0a0a' : '#fafafa');
     if (persist) {
       storedTheme = currentTheme;
       try { localStorage.setItem('guh-theme', currentTheme); } catch (e) {}
@@ -418,21 +346,6 @@
     ids.forEach(function (id) { observer.observe(links[id].section); });
   }
 
-  /* ---------------- Impressão -------------------------------------------- */
-  function initPrint() {
-    var opened = [];
-    window.addEventListener('beforeprint', function () {
-      opened = [];
-      Array.prototype.forEach.call(document.querySelectorAll('.faq__item'), function (item) {
-        if (!item.open) { opened.push(item); item.open = true; }
-      });
-    });
-    window.addEventListener('afterprint', function () {
-      opened.forEach(function (item) { item.open = false; });
-      opened = [];
-    });
-  }
-
   /* ---------------- Inicialização ---------------------------------------- */
   function init() {
     var themeButton = document.querySelector('[data-theme-toggle]');
@@ -465,7 +378,6 @@
 
     initMenu();
     initScrollSpy();
-    initPrint();
   }
 
   if (document.readyState === 'loading') {
