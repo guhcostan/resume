@@ -9,8 +9,8 @@ Estático e sem framework de runtime: HTML, CSS e JavaScript puros. A única eta
 - `index.html` — página única (currículo/portfólio) com todo o conteúdo nos dois idiomas
 - `content/posts/*.md` — artigos do blog em Markdown (PT + EN no mesmo arquivo)
 - `tools/build.mjs` — gerador: blog, RSS e sitemap a partir de `content/posts`
-- `css/styles.css` — folha de estilo editorial, tema claro/escuro com contraste AA+
-- `js/main.js` — idioma, tema, menu móvel e metadados por página (title, canonical, OG, JSON-LD)
+- `css/styles.css` — folha de estilo editorial com cartões, acento laranja e tema claro/escuro com contraste AA+
+- `js/main.js` — idioma, tema, menu móvel, seção ativa no menu e metadados por página (title, canonical, OG, JSON-LD)
 - `assets/` — logo (original com fundo branco e versões transparentes preta/branca) e EB Garamond auto-hospedada (OFL)
 - `files/gustavo-costa-curriculo.pdf` — currículo completo em PDF
 - `robots.txt`, `llms.txt`, `site.webmanifest` — SEO e AI SEO (`sitemap.xml` é gerado no build)

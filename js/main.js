@@ -349,7 +349,7 @@
   function setTheme(theme, persist) {
     currentTheme = theme === 'dark' ? 'dark' : 'light';
     root.setAttribute('data-theme', currentTheme);
-    setMeta('meta[name="theme-color"]', 'content', currentTheme === 'dark' ? '#0c0c0c' : '#f4f4f2');
+    setMeta('meta[name="theme-color"]', 'content', currentTheme === 'dark' ? '#0f0f0e' : '#f5f3ee');
     if (persist) {
       storedTheme = currentTheme;
       try { localStorage.setItem('guh-theme', currentTheme); } catch (e) {}
@@ -389,6 +389,33 @@
       if (desktop.addEventListener) desktop.addEventListener('change', onChange);
       else if (desktop.addListener) desktop.addListener(onChange);
     }
+  }
+
+  /* ---------------- Seção ativa no menu (só na home) --------------------- */
+  // Marca com aria-current="location" o link da seção visível. No blog o
+  // link ativo já vem com aria-current="page" do build e nada é alterado.
+  function initScrollSpy() {
+    if (!('IntersectionObserver' in window)) return;
+    var links = {};
+    Array.prototype.forEach.call(document.querySelectorAll('.nav a[href^="#"]'), function (link) {
+      var section = document.getElementById(link.getAttribute('href').slice(1));
+      if (section) links[section.id] = { link: link, section: section };
+    });
+    var ids = Object.keys(links);
+    if (!ids.length) return;
+
+    var visible = {};
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) { visible[entry.target.id] = entry.isIntersecting; });
+      var active = null;
+      ids.forEach(function (id) { if (!active && visible[id]) active = id; });
+      ids.forEach(function (id) {
+        if (id === active) links[id].link.setAttribute('aria-current', 'location');
+        else links[id].link.removeAttribute('aria-current');
+      });
+    }, { rootMargin: '-35% 0px -60% 0px' });
+
+    ids.forEach(function (id) { observer.observe(links[id].section); });
   }
 
   /* ---------------- Impressão -------------------------------------------- */
@@ -437,6 +464,7 @@
     if (year) year.textContent = String(new Date().getFullYear());
 
     initMenu();
+    initScrollSpy();
     initPrint();
   }
 

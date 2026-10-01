@@ -162,7 +162,7 @@ function head({ title, description, canonicalPt, canonicalEn, ogType = 'website'
   <meta name="description" content="${esc(description)}">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#f4f4f2">
+  <meta name="theme-color" content="#f5f3ee">
 
   <link rel="canonical" href="${canonicalPt}">
   <link rel="alternate" hreflang="pt-BR" href="${canonicalPt}">
