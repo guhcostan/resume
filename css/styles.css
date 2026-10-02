@@ -253,11 +253,11 @@ html[data-locale="en"] [data-t="pt"] {
    O CSS troca a imagem antes da pintura; o JavaScript mantém o atributo
    src coerente para navegadores sem suporte a content em imagens. */
 [data-logo] {
-  content: url("../assets/guh-logo-transparente.png");
+  content: url("../assets/guh-logo-transparente.webp");
 }
 
 html[data-theme="dark"] [data-logo] {
-  content: url("../assets/guh-logo-transparente-branca.png");
+  content: url("../assets/guh-logo-transparente-branca.webp");
 }
 
 .plate img {
@@ -521,6 +521,11 @@ html[data-theme="dark"] .theme-switch__icon--moon {
   scroll-margin-top: 3.5rem;
 }
 
+/* Âncora interna (fora de .section): não fica atrás do cabeçalho fixo */
+#certificacoes {
+  scroll-margin-top: 5rem;
+}
+
 .band {
   margin-top: clamp(2.5rem, 6vw, 4rem);
 }
@@ -548,6 +553,12 @@ html[data-theme="dark"] .theme-switch__icon--moon {
   display: grid;
   gap: 2.5rem;
   min-width: 0;
+}
+
+/* Abertura de seção: resume o assunto e se sustenta sozinha */
+.sec-intro {
+  max-width: 62ch;
+  color: var(--ink-soft);
 }
 
 /* ---------- Sobre ---------- */
@@ -594,7 +605,6 @@ html[data-theme="dark"] .theme-switch__icon--moon {
 
 /* ---------- Experiência ---------- */
 .jobs {
-  gap: 0;
   border-top: 1px solid var(--rule);
 }
 

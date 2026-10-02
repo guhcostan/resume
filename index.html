@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Gustavo Costa (Guh) — Engenheiro mobile e frontend</title>
-  <meta name="description" content="Guh (Gustavo Costa), engenheiro mobile e frontend. Tech Anchor na Thoughtworks, à frente do app LatamPass. 8+ anos com React Native e TypeScript, e IA em produção.">
+  <meta name="description" content="Guh (Gustavo Costa), engenheiro mobile e frontend. Tech Anchor na Thoughtworks, à frente do LatamPass. 8+ anos de React Native, TypeScript e IA em produção.">
   <meta name="author" content="Gustavo Costa">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
   <meta name="color-scheme" content="light dark">
@@ -24,7 +24,7 @@
   <meta property="profile:username" content="guhcostan">
   <meta property="og:url" content="https://guhcostan.dev/">
   <meta property="og:title" content="Gustavo Costa (Guh) — Engenheiro mobile e frontend">
-  <meta property="og:description" content="Guh (Gustavo Costa), engenheiro mobile e frontend. Tech Anchor na Thoughtworks, à frente do app LatamPass. 8+ anos com React Native e TypeScript, e IA em produção.">
+  <meta property="og:description" content="Guh (Gustavo Costa), engenheiro mobile e frontend. Tech Anchor na Thoughtworks, à frente do LatamPass. 8+ anos de React Native, TypeScript e IA em produção.">
   <meta property="og:image" content="https://guhcostan.dev/assets/guh-logo.png">
   <meta property="og:image:width" content="1317">
   <meta property="og:image:height" content="1194">
@@ -32,7 +32,7 @@
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Gustavo Costa (Guh) — Engenheiro mobile e frontend">
-  <meta name="twitter:description" content="Guh (Gustavo Costa), engenheiro mobile e frontend. Tech Anchor na Thoughtworks, à frente do app LatamPass. 8+ anos com React Native e TypeScript, e IA em produção.">
+  <meta name="twitter:description" content="Guh (Gustavo Costa), engenheiro mobile e frontend. Tech Anchor na Thoughtworks, à frente do LatamPass. 8+ anos de React Native, TypeScript e IA em produção.">
   <meta name="twitter:image" content="https://guhcostan.dev/assets/guh-logo.png">
   <meta name="twitter:image:alt" content="Retrato ilustrado em preto e branco de Gustavo Costa (Guh)">
 
@@ -107,8 +107,18 @@
         ],
         "sameAs": [
           "https://www.linkedin.com/in/guhcostan",
-          "https://github.com/guhcostan"
+          "https://github.com/guhcostan",
+          "https://www.npmjs.com/~guhcostan"
         ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://guhcostan.dev/#website",
+        "name": "Gustavo Costa (Guh)",
+        "alternateName": "guhcostan.dev",
+        "url": "https://guhcostan.dev/",
+        "inLanguage": ["pt-BR", "en"],
+        "publisher": { "@id": "https://guhcostan.dev/#person" }
       },
       {
         "@type": "ProfilePage",
@@ -116,6 +126,7 @@
         "name": "Gustavo Costa (Guh): currículo e portfólio",
         "url": "https://guhcostan.dev/",
         "inLanguage": ["pt-BR", "en"],
+        "isPartOf": { "@id": "https://guhcostan.dev/#website" },
         "mainEntity": { "@id": "https://guhcostan.dev/#person" }
       },
       {
@@ -198,9 +209,9 @@
     <div class="shell header__inner">
       <a class="brand" href="/">
         <span class="brand__mark plate">
-          <img src="assets/guh-logo-transparente.png" data-logo
-               data-src-light="assets/guh-logo-transparente.png"
-               data-src-dark="assets/guh-logo-transparente-branca.png"
+          <img src="assets/guh-logo-transparente.webp" data-logo
+               data-src-light="assets/guh-logo-transparente.webp"
+               data-src-dark="assets/guh-logo-transparente-branca.webp"
                alt="" width="1317" height="1194">
         </span>
         <span class="brand__name">Guh</span>
@@ -272,10 +283,10 @@
 
         <figure class="hero__figure">
           <span class="plate hero__plate">
-            <img src="assets/guh-logo-transparente.png" width="1317" height="1194" fetchpriority="high"
+            <img src="assets/guh-logo-transparente.webp" width="1317" height="1194" fetchpriority="high"
                  data-logo
-                 data-src-light="assets/guh-logo-transparente.png"
-                 data-src-dark="assets/guh-logo-transparente-branca.png"
+                 data-src-light="assets/guh-logo-transparente.webp"
+                 data-src-dark="assets/guh-logo-transparente-branca.webp"
                  data-alt-pt="Retrato ilustrado em preto e branco de Gustavo Costa, conhecido como Guh"
                  data-alt-en="Black and white illustrated portrait of Gustavo Costa, known as Guh"
                  alt="Retrato ilustrado em preto e branco de Gustavo Costa, conhecido como Guh">
@@ -309,7 +320,7 @@
     <section class="section" id="sobre" aria-labelledby="sobre-title">
       <div class="shell grid">
         <header class="sec-head">
-          <h2 class="sec-title" id="sobre-title"><span data-t="pt">Sobre</span><span data-t="en">About</span></h2>
+          <h2 class="sec-title" id="sobre-title"><span data-t="pt">Quem é o Guh?</span><span data-t="en">Who is Guh?</span></h2>
         </header>
 
         <div class="sec-body">
@@ -349,91 +360,97 @@
           <h2 class="sec-title" id="experiencia-title"><span data-t="pt">Experiência</span><span data-t="en">Experience</span></h2>
         </header>
 
-        <ol class="sec-body jobs">
-          <li class="job" data-reveal>
-            <div class="job__head">
-              <h3 class="job__company">Thoughtworks</h3>
-              <p class="job__period"><span data-t="pt">mai 2022 – hoje</span><span data-t="en">May 2022 – present</span></p>
-            </div>
-            <ul class="job__roles">
-              <li><span>Tech Anchor</span> <span class="job__when"><span data-t="pt">dez 2024 – hoje</span><span data-t="en">Dec 2024 – present</span></span></li>
-              <li><span>Technical Lead</span> <span class="job__when"><span data-t="pt">abr 2023 – hoje</span><span data-t="en">Apr 2023 – present</span></span></li>
-              <li><span>Mobile Engineer</span> <span class="job__when"><span data-t="pt">mai 2022 – jul 2023</span><span data-t="en">May 2022 – Jul 2023</span></span></li>
-            </ul>
-            <p class="job__summary">
-              <span data-t="pt">App LatamPass, em React Native, com milhões de usuários em iOS e Android. Times no Brasil e no Chile.</span>
-              <span data-t="en">The LatamPass app, built in React Native, with millions of users on iOS and Android. Teams in Brazil and Chile.</span>
-            </p>
-            <ul class="job__points">
-              <li><span data-t="pt">Direção técnica do produto e alinhamento entre squads</span><span data-t="en">Technical direction of the product and alignment across squads</span></li>
-              <li><span data-t="pt">Liderança de 8+ engenheiros, com mentoria em 1:1s e pairing</span><span data-t="en">Led 8+ engineers, mentoring through 1:1s and pairing</span></li>
-              <li><span data-t="pt">Arquitetura, padrões e CI/CD de um projeto greenfield</span><span data-t="en">Architecture, standards and CI/CD for a greenfield project</span></li>
-              <li><span data-t="pt">Cobertura de testes acima de 80% com TDD e code review</span><span data-t="en">Test coverage above 80% through TDD and code review</span></li>
-              <li><span data-t="pt">Pipelines ~35% mais rápidos com Bitrise e Jenkins</span><span data-t="en">Pipelines ~35% faster with Bitrise and Jenkins</span></li>
-              <li><span data-t="pt">Features com IA, LLMs no produto e agentes no fluxo de desenvolvimento</span><span data-t="en">AI features, LLMs in the product and agents in the dev workflow</span></li>
-            </ul>
-          </li>
+        <div class="sec-body">
+          <p class="sec-intro">
+            <span data-t="pt">Gustavo Costa (Guh) trabalha com desenvolvimento de software desde 2017 e passou por seis empresas: Comp Júnior, LEMAF, Equal, Descomplica, RecargaPay e Thoughtworks. Desde maio de 2022 está na Thoughtworks, no app LatamPass, onde foi de Mobile Engineer a Technical Lead e, em dezembro de 2024, a Tech Anchor.</span>
+            <span data-t="en">Gustavo Costa (Guh) has been building software since 2017 across six companies: Comp Júnior, LEMAF, Equal, Descomplica, RecargaPay and Thoughtworks. Since May 2022 he has been at Thoughtworks on the LatamPass app, growing from Mobile Engineer to Technical Lead and, in December 2024, to Tech Anchor.</span>
+          </p>
+          <ol class="jobs">
+            <li class="job" data-reveal>
+              <div class="job__head">
+                <h3 class="job__company">Thoughtworks</h3>
+                <p class="job__period"><span data-t="pt">mai 2022 – hoje</span><span data-t="en">May 2022 – present</span></p>
+              </div>
+              <ul class="job__roles">
+                <li><span>Tech Anchor</span> <span class="job__when"><span data-t="pt">dez 2024 – hoje</span><span data-t="en">Dec 2024 – present</span></span></li>
+                <li><span>Technical Lead</span> <span class="job__when"><span data-t="pt">abr 2023 – hoje</span><span data-t="en">Apr 2023 – present</span></span></li>
+                <li><span>Mobile Engineer</span> <span class="job__when"><span data-t="pt">mai 2022 – jul 2023</span><span data-t="en">May 2022 – Jul 2023</span></span></li>
+              </ul>
+              <p class="job__summary">
+                <span data-t="pt">Na Thoughtworks, trabalho no app LatamPass, em React Native, com milhões de usuários em iOS e Android. Times no Brasil e no Chile.</span>
+                <span data-t="en">At Thoughtworks I work on the LatamPass app, built in React Native, with millions of users on iOS and Android. Teams in Brazil and Chile.</span>
+              </p>
+              <ul class="job__points">
+                <li><span data-t="pt">Direção técnica do produto e alinhamento entre squads</span><span data-t="en">Technical direction of the product and alignment across squads</span></li>
+                <li><span data-t="pt">Liderança de 8+ engenheiros, com mentoria em 1:1s e pairing</span><span data-t="en">Led 8+ engineers, mentoring through 1:1s and pairing</span></li>
+                <li><span data-t="pt">Arquitetura, padrões e CI/CD de um projeto greenfield</span><span data-t="en">Architecture, standards and CI/CD for a greenfield project</span></li>
+                <li><span data-t="pt">Cobertura de testes acima de 80% com TDD e code review</span><span data-t="en">Test coverage above 80% through TDD and code review</span></li>
+                <li><span data-t="pt">Pipelines ~35% mais rápidos com Bitrise e Jenkins</span><span data-t="en">Pipelines ~35% faster with Bitrise and Jenkins</span></li>
+                <li><span data-t="pt">Features com IA, LLMs no produto e agentes no fluxo de desenvolvimento</span><span data-t="en">AI features, LLMs in the product and agents in the dev workflow</span></li>
+              </ul>
+            </li>
 
-          <li class="job" data-reveal>
-            <div class="job__head">
-              <h3 class="job__company">RecargaPay</h3>
-              <p class="job__period"><span data-t="pt">jan 2022 – mai 2022</span><span data-t="en">Jan 2022 – May 2022</span></p>
-            </div>
-            <p class="job__title">Mobile Developer</p>
-            <p class="job__summary">
-              <span data-t="pt">Features em React Native para um app de pagamentos com 18 mil+ usuários simultâneos, com dependências e segurança sempre em dia.</span>
-              <span data-t="en">React Native features for a payments app with 18k+ concurrent users, keeping dependencies and security up to date.</span>
-            </p>
-          </li>
+            <li class="job" data-reveal>
+              <div class="job__head">
+                <h3 class="job__company">RecargaPay</h3>
+                <p class="job__period"><span data-t="pt">jan 2022 – mai 2022</span><span data-t="en">Jan 2022 – May 2022</span></p>
+              </div>
+              <p class="job__title">Mobile Developer</p>
+              <p class="job__summary">
+                <span data-t="pt">Na RecargaPay, desenvolvi features em React Native para um app de pagamentos com 18 mil+ usuários simultâneos, com dependências e segurança sempre em dia.</span>
+                <span data-t="en">At RecargaPay I built React Native features for a payments app with 18k+ concurrent users, keeping dependencies and security up to date.</span>
+              </p>
+            </li>
 
-          <li class="job" data-reveal>
-            <div class="job__head">
-              <h3 class="job__company">Descomplica</h3>
-              <p class="job__period"><span data-t="pt">fev 2021 – jan 2022</span><span data-t="en">Feb 2021 – Jan 2022</span></p>
-            </div>
-            <p class="job__title">Mobile Developer</p>
-            <p class="job__summary">
-              <span data-t="pt">Construí do zero o app da plataforma de educação, bem avaliado na App Store e na Play Store. React Native, TypeScript, GraphQL e Node.js, com releases pelo Bitrise.</span>
-              <span data-t="en">Built the education platform's app from scratch, well rated on the App Store and Play Store. React Native, TypeScript, GraphQL and Node.js, released through Bitrise.</span>
-            </p>
-          </li>
+            <li class="job" data-reveal>
+              <div class="job__head">
+                <h3 class="job__company">Descomplica</h3>
+                <p class="job__period"><span data-t="pt">fev 2021 – jan 2022</span><span data-t="en">Feb 2021 – Jan 2022</span></p>
+              </div>
+              <p class="job__title">Mobile Developer</p>
+              <p class="job__summary">
+                <span data-t="pt">Na Descomplica, construí do zero o app da plataforma de educação, bem avaliado na App Store e na Play Store. React Native, TypeScript, GraphQL e Node.js, com releases pelo Bitrise.</span>
+                <span data-t="en">At Descomplica I built the education platform's app from scratch, well rated on the App Store and Play Store. React Native, TypeScript, GraphQL and Node.js, released through Bitrise.</span>
+              </p>
+            </li>
 
-          <li class="job" data-reveal>
-            <div class="job__head">
-              <h3 class="job__company">Equal</h3>
-              <p class="job__period"><span data-t="pt">ago 2019 – fev 2021</span><span data-t="en">Aug 2019 – Feb 2021</span></p>
-            </div>
-            <p class="job__title"><span data-t="pt">Desenvolvedor web e mobile</span><span data-t="en">Web and mobile developer</span></p>
-            <p class="job__summary">
-              <span data-t="pt">Gestão financeira para pequenos negócios: pagamentos, faturamento e relatórios em React, React Native e TypeScript, com integrações em Node.js e Java.</span>
-              <span data-t="en">Financial management for small businesses: payments, invoicing and reports in React, React Native and TypeScript, with Node.js and Java integrations.</span>
-            </p>
-          </li>
+            <li class="job" data-reveal>
+              <div class="job__head">
+                <h3 class="job__company">Equal</h3>
+                <p class="job__period"><span data-t="pt">ago 2019 – fev 2021</span><span data-t="en">Aug 2019 – Feb 2021</span></p>
+              </div>
+              <p class="job__title"><span data-t="pt">Desenvolvedor web e mobile</span><span data-t="en">Web and mobile developer</span></p>
+              <p class="job__summary">
+                <span data-t="pt">Na Equal, trabalhei em gestão financeira para pequenos negócios: pagamentos, faturamento e relatórios em React, React Native e TypeScript, com integrações em Node.js e Java.</span>
+                <span data-t="en">At Equal I worked on financial management for small businesses: payments, invoicing and reports in React, React Native and TypeScript, with Node.js and Java integrations.</span>
+              </p>
+            </li>
 
-          <li class="job" data-reveal>
-            <div class="job__head">
-              <h3 class="job__company">LEMAF</h3>
-              <p class="job__period"><span data-t="pt">fev 2018 – ago 2019</span><span data-t="en">Feb 2018 – Aug 2019</span></p>
-            </div>
-            <p class="job__title"><span data-t="pt">Desenvolvedor e arquiteto web</span><span data-t="en">Web developer and architect</span></p>
-            <p class="job__summary">
-              <span data-t="pt">Sistemas usados por órgãos ambientais, como o SICAR/PA (Cadastro Ambiental Rural) e o SIGERH-PA (recursos hídricos). .NET Core, Spring, Node.js, React e Vue.</span>
-              <span data-t="en">Systems used by environmental agencies, such as SICAR/PA (rural environmental registry) and SIGERH-PA (water resources). .NET Core, Spring, Node.js, React and Vue.</span>
-            </p>
-          </li>
+            <li class="job" data-reveal>
+              <div class="job__head">
+                <h3 class="job__company">LEMAF</h3>
+                <p class="job__period"><span data-t="pt">fev 2018 – ago 2019</span><span data-t="en">Feb 2018 – Aug 2019</span></p>
+              </div>
+              <p class="job__title"><span data-t="pt">Desenvolvedor e arquiteto web</span><span data-t="en">Web developer and architect</span></p>
+              <p class="job__summary">
+                <span data-t="pt">No LEMAF, desenvolvi sistemas usados por órgãos ambientais, como o SICAR/PA (Cadastro Ambiental Rural) e o SIGERH-PA (recursos hídricos). .NET Core, Spring, Node.js, React e Vue.</span>
+                <span data-t="en">At LEMAF I built systems used by environmental agencies, such as SICAR/PA (rural environmental registry) and SIGERH-PA (water resources). .NET Core, Spring, Node.js, React and Vue.</span>
+              </p>
+            </li>
 
-          <li class="job" data-reveal>
-            <div class="job__head">
-              <h3 class="job__company">Comp Júnior</h3>
-              <p class="job__period"><span data-t="pt">nov 2017 – jan 2018</span><span data-t="en">Nov 2017 – Jan 2018</span></p>
-            </div>
-            <p class="job__title"><span data-t="pt">Desenvolvedor trainee</span><span data-t="en">Trainee developer</span></p>
-            <p class="job__summary">
-              <span data-t="pt">Primeiros sites e primeira experiência de trabalho em time.</span>
-              <span data-t="en">First websites and first experience working on a team.</span>
-            </p>
-          </li>
-        </ol>
+            <li class="job" data-reveal>
+              <div class="job__head">
+                <h3 class="job__company">Comp Júnior</h3>
+                <p class="job__period"><span data-t="pt">nov 2017 – jan 2018</span><span data-t="en">Nov 2017 – Jan 2018</span></p>
+              </div>
+              <p class="job__title"><span data-t="pt">Desenvolvedor trainee</span><span data-t="en">Trainee developer</span></p>
+              <p class="job__summary">
+                <span data-t="pt">Na Comp Júnior, fiz os primeiros sites e tive a primeira experiência de trabalho em time.</span>
+                <span data-t="en">At Comp Júnior I built my first websites and had my first experience working on a team.</span>
+              </p>
+            </li>
+          </ol>
+        </div>
       </div>
     </section>
 
@@ -442,13 +459,13 @@
       <div class="shell grid">
         <header class="sec-head">
           <h2 class="sec-title" id="projetos-title"><span data-t="pt">Projetos</span><span data-t="en">Projects</span></h2>
-          <p class="sec-lede">
-            <span data-t="pt">Ferramentas open source que mantenho no tempo livre.</span>
-            <span data-t="en">Open source tools I maintain in my spare time.</span>
-          </p>
         </header>
 
         <div class="sec-body">
+          <p class="sec-intro">
+            <span data-t="pt">Gustavo Costa (Guh) mantém ferramentas open source no GitHub no tempo livre. Juntas, elas somam mais de 2 mil estrelas; a mais popular é o mac-cleaner-cli, com 1.9k. As outras vão de agentes de IA feitos com Claude Code a um SDK para dados públicos brasileiros.</span>
+            <span data-t="en">Gustavo Costa (Guh) maintains open source tools on GitHub in his spare time. Together they have 2,000+ stars; the most popular is mac-cleaner-cli, with 1.9k. The others range from AI agents built with Claude Code to an SDK for Brazilian public data.</span>
+          </p>
           <ol class="repos">
             <li class="repo" data-reveal>
               <div class="repo__head">
@@ -456,8 +473,8 @@
                 <p class="repo__stars"><span aria-hidden="true">★</span> 1.9k</p>
               </div>
               <p class="repo__desc">
-                <span data-t="pt">Libera espaço no Mac com um comando: caches, logs e sobras de Homebrew e Xcode. Alternativa open source ao CleanMyMac.</span>
-                <span data-t="en">Frees up space on your Mac with one command: caches, logs, and Homebrew and Xcode leftovers. An open source alternative to CleanMyMac.</span>
+                <span data-t="pt">O mac-cleaner-cli libera espaço no Mac com um comando: caches, logs e sobras de Homebrew e Xcode. Alternativa open source ao CleanMyMac.</span>
+                <span data-t="en">mac-cleaner-cli frees up space on your Mac with one command: caches, logs, and Homebrew and Xcode leftovers. An open source alternative to CleanMyMac.</span>
               </p>
               <p class="repo__meta">TypeScript · Node.js · <a href="https://www.npmjs.com/package/mac-cleaner-cli" target="_blank" rel="noopener">npm ↗</a></p>
             </li>
@@ -468,8 +485,8 @@
                 <p class="repo__stars"><span aria-hidden="true">★</span> 128</p>
               </div>
               <p class="repo__desc">
-                <span data-t="pt">Agente de análise de ações da B3 feito com Claude Code. Avalia fundamentos e gera relatórios diários, sem API keys.</span>
-                <span data-t="en">A Brazilian stock (B3) analysis agent built with Claude Code. It reviews fundamentals and writes daily reports, no API keys needed.</span>
+                <span data-t="pt">O b3analysis é um agente de análise de ações da B3 feito com Claude Code. Avalia fundamentos e gera relatórios diários, sem API keys.</span>
+                <span data-t="en">b3analysis is a Brazilian stock (B3) analysis agent built with Claude Code. It reviews fundamentals and writes daily reports, no API keys needed.</span>
               </p>
               <p class="repo__meta">Python · Claude Code</p>
             </li>
@@ -480,8 +497,8 @@
                 <p class="repo__stars"><span aria-hidden="true">★</span> 126</p>
               </div>
               <p class="repo__desc">
-                <span data-t="pt">Plugin que dá ao Claude Code a base de conhecimento do seu projeto em toda sessão.</span>
-                <span data-t="en">A plugin that gives Claude Code your project's knowledge base in every session.</span>
+                <span data-t="pt">O claude-mega-brain é um plugin que dá ao Claude Code a base de conhecimento do seu projeto em toda sessão.</span>
+                <span data-t="en">claude-mega-brain is a plugin that gives Claude Code your project's knowledge base in every session.</span>
               </p>
               <p class="repo__meta">Python · Claude Code</p>
             </li>
@@ -492,8 +509,8 @@
                 <p class="repo__stars"><span aria-hidden="true">★</span> 84</p>
               </div>
               <p class="repo__desc">
-                <span data-t="pt">A mesma ideia para Windows: limpa caches e arquivos temporários direto do terminal.</span>
-                <span data-t="en">The same idea for Windows: clears caches and temp files straight from the terminal.</span>
+                <span data-t="pt">O windows-cleaner-cli leva a mesma ideia para o Windows: limpa caches e arquivos temporários direto do terminal.</span>
+                <span data-t="en">windows-cleaner-cli brings the same idea to Windows: it clears caches and temp files straight from the terminal.</span>
               </p>
               <p class="repo__meta">JavaScript · Node.js · npm</p>
             </li>
@@ -504,8 +521,8 @@
                 <p class="repo__stars"><span aria-hidden="true">★</span> 70</p>
               </div>
               <p class="repo__desc">
-                <span data-t="pt">SDK tipado para a BrasilAPI: CEP, CNPJ, bancos, FIPE e IBGE sem escrever integração do zero.</span>
-                <span data-t="en">A typed SDK for BrasilAPI: postal codes, company IDs, banks, FIPE and IBGE data without writing the integration yourself.</span>
+                <span data-t="pt">O brasilapi-sdk é um SDK tipado para a BrasilAPI: CEP, CNPJ, bancos, FIPE e IBGE sem escrever integração do zero.</span>
+                <span data-t="en">brasilapi-sdk is a typed SDK for BrasilAPI: postal codes, company IDs, banks, FIPE and IBGE data without writing the integration yourself.</span>
               </p>
               <p class="repo__meta">TypeScript · Node.js</p>
             </li>
@@ -524,31 +541,37 @@
     <section class="section" id="stack" aria-labelledby="stack-title">
       <div class="shell grid">
         <header class="sec-head">
-          <h2 class="sec-title" id="stack-title">Stack</h2>
+          <h2 class="sec-title" id="stack-title"><span data-t="pt">Com quais tecnologias o Guh trabalha?</span><span data-t="en">What technologies does Guh work with?</span></h2>
         </header>
 
-        <dl class="sec-body rows" data-reveal>
-          <div class="row">
-            <dt>Mobile</dt>
-            <dd>React Native, iOS, Android, Firebase</dd>
-          </div>
-          <div class="row">
-            <dt>Web</dt>
-            <dd>TypeScript, React, Next.js, Vue.js, AngularJS</dd>
-          </div>
-          <div class="row">
-            <dt>Backend</dt>
-            <dd>Node.js, Java, Spring, .NET Core, GraphQL, PostgreSQL</dd>
-          </div>
-          <div class="row">
-            <dt><span data-t="pt">Entrega</span><span data-t="en">Delivery</span></dt>
-            <dd>CI/CD, Bitrise, Jenkins, TDD, Clean Code</dd>
-          </div>
-          <div class="row">
-            <dt><span data-t="pt">IA</span><span data-t="en">AI</span></dt>
-            <dd><span data-t="pt">LLMs, agentes, Claude, Cursor</span><span data-t="en">LLMs, agents, Claude, Cursor</span></dd>
-          </div>
-        </dl>
+        <div class="sec-body">
+          <p class="sec-intro">
+            <span data-t="pt">Gustavo Costa (Guh) trabalha principalmente com React Native e TypeScript em apps iOS e Android, e com React e Next.js na web. Em experiências anteriores usou Node.js, Java, Spring, .NET Core, GraphQL e PostgreSQL no backend. A entrega se apoia em CI/CD com Bitrise e Jenkins, TDD e Clean Code e, desde o fim de 2024, em LLMs e agentes de IA com Claude e Cursor.</span>
+            <span data-t="en">Gustavo Costa (Guh) works mainly with React Native and TypeScript on iOS and Android apps, and with React and Next.js on the web. In previous roles he used Node.js, Java, Spring, .NET Core, GraphQL and PostgreSQL on the backend. His delivery relies on CI/CD with Bitrise and Jenkins, TDD and Clean Code and, since late 2024, LLMs and AI agents with Claude and Cursor.</span>
+          </p>
+          <dl class="rows" data-reveal>
+            <div class="row">
+              <dt>Mobile</dt>
+              <dd>React Native, iOS, Android, Firebase</dd>
+            </div>
+            <div class="row">
+              <dt>Web</dt>
+              <dd>TypeScript, React, Next.js, Vue.js, AngularJS</dd>
+            </div>
+            <div class="row">
+              <dt>Backend</dt>
+              <dd>Node.js, Java, Spring, .NET Core, GraphQL, PostgreSQL</dd>
+            </div>
+            <div class="row">
+              <dt><span data-t="pt">Entrega</span><span data-t="en">Delivery</span></dt>
+              <dd>CI/CD, Bitrise, Jenkins, TDD, Clean Code</dd>
+            </div>
+            <div class="row">
+              <dt><span data-t="pt">IA</span><span data-t="en">AI</span></dt>
+              <dd><span data-t="pt">LLMs, agentes, Claude, Cursor</span><span data-t="en">LLMs, agents, Claude, Cursor</span></dd>
+            </div>
+          </dl>
+        </div>
       </div>
     </section>
 
@@ -556,30 +579,36 @@
     <section class="section" id="formacao" aria-labelledby="formacao-title">
       <div class="shell grid">
         <header class="sec-head">
-          <h2 class="sec-title" id="formacao-title"><span data-t="pt">Formação</span><span data-t="en">Education</span></h2>
+          <h2 class="sec-title" id="formacao-title"><span data-t="pt">Onde o Guh estudou?</span><span data-t="en">Where did Guh study?</span></h2>
         </header>
 
-        <dl class="sec-body rows" data-reveal>
-          <div class="row">
-            <dt>2015 – 2019</dt>
-            <dd>
-              <span data-t="pt">Bacharelado em Ciência da Computação, Universidade Federal de Lavras</span>
-              <span data-t="en">BSc in Computer Science, Federal University of Lavras</span>
-            </dd>
-          </div>
-          <div class="row" id="certificacoes">
-            <dt><span data-t="pt">Certificações</span><span data-t="en">Certifications</span></dt>
-            <dd>
-              <ul class="plain">
-                <li>Software Architecture Fundamentals</li>
-                <li>DevOps Essentials Professional Certificate (DEPCP)</li>
-                <li>Scrum Foundations Professional Certificate (SFPC)</li>
-                <li>Active Listening: You Can Be a Great Listener</li>
-                <li>Formação Autoliderança</li>
-              </ul>
-            </dd>
-          </div>
-        </dl>
+        <div class="sec-body">
+          <p class="sec-intro">
+            <span data-t="pt">Gustavo Costa (Guh) é bacharel em Ciência da Computação pela Universidade Federal de Lavras (UFLA), onde estudou de 2015 a 2019; começou a trabalhar como desenvolvedor em 2017, ainda na graduação. Também tem certificações em arquitetura de software, DevOps, Scrum, escuta ativa e autoliderança.</span>
+            <span data-t="en">Gustavo Costa (Guh) holds a BSc in Computer Science from the Federal University of Lavras (UFLA), where he studied from 2015 to 2019; he started working as a developer in 2017, while still in college. He also holds certifications in software architecture, DevOps, Scrum, active listening and self-leadership.</span>
+          </p>
+          <dl class="rows" data-reveal>
+            <div class="row">
+              <dt>2015 – 2019</dt>
+              <dd>
+                <span data-t="pt">Bacharelado em Ciência da Computação, Universidade Federal de Lavras</span>
+                <span data-t="en">BSc in Computer Science, Federal University of Lavras</span>
+              </dd>
+            </div>
+            <div class="row" id="certificacoes">
+              <dt><span data-t="pt">Certificações</span><span data-t="en">Certifications</span></dt>
+              <dd>
+                <ul class="plain">
+                  <li>Software Architecture Fundamentals</li>
+                  <li>DevOps Essentials Professional Certificate (DEPCP)</li>
+                  <li>Scrum Foundations Professional Certificate (SFPC)</li>
+                  <li>Active Listening: You Can Be a Great Listener</li>
+                  <li>Formação Autoliderança</li>
+                </ul>
+              </dd>
+            </div>
+          </dl>
+        </div>
       </div>
     </section>
 
@@ -597,6 +626,7 @@
         <ul class="band__links">
           <li><a href="https://www.linkedin.com/in/guhcostan" target="_blank" rel="noopener me">LinkedIn ↗</a></li>
           <li><a href="https://github.com/guhcostan" target="_blank" rel="noopener me">GitHub ↗</a></li>
+          <li><a href="https://www.npmjs.com/~guhcostan" target="_blank" rel="noopener me">npm ↗</a></li>
           <li><a href="https://guhcostan.dev/files/gustavo-costa-curriculo.pdf" target="_blank" rel="noopener"><span data-t="pt">Currículo (PDF)</span><span data-t="en">Résumé (PDF)</span> ↗</a></li>
           <li><a href="tel:+5535998785953">+55 35 99878-5953</a></li>
         </ul>

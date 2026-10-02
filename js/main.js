@@ -38,7 +38,7 @@
       ogLocale: 'pt_BR',
       title: 'Gustavo Costa (Guh) — Engenheiro mobile e frontend',
       description:
-        'Guh (Gustavo Costa), engenheiro mobile e frontend. Tech Anchor na Thoughtworks, à frente do app LatamPass. 8+ anos com React Native e TypeScript, e IA em produção.',
+        'Guh (Gustavo Costa), engenheiro mobile e frontend. Tech Anchor na Thoughtworks, à frente do LatamPass. 8+ anos de React Native, TypeScript e IA em produção.',
       jobTitle: 'Lead Mobile & Frontend Engineer',
       personDescription:
         'Engenheiro mobile e frontend com 8+ anos fazendo apps usados por milhões de pessoas. Tech Anchor na Thoughtworks, responsável pela direção técnica do app LatamPass, com IA em produção desde 2024.',
@@ -85,7 +85,7 @@
       ogLocale: 'en_US',
       title: 'Gustavo Costa (Guh) — Mobile & frontend engineer',
       description:
-        "Guh (Gustavo Costa), mobile & frontend engineer. Tech Anchor at Thoughtworks, leading the LatamPass app. 8+ years of React Native and TypeScript, and AI in production.",
+        "Guh (Gustavo Costa), mobile & frontend engineer. Tech Anchor at Thoughtworks, leading LatamPass. 8+ years of React Native, TypeScript and AI in production.",
       jobTitle: 'Lead Mobile & Frontend Engineer',
       personDescription:
         "Mobile and frontend engineer with 8+ years building apps used by millions of people. Tech Anchor at Thoughtworks, leading the technical direction of the LatamPass app, with AI in production since 2024.",
@@ -169,8 +169,18 @@
           }),
           sameAs: [
             'https://www.linkedin.com/in/guhcostan',
-            'https://github.com/guhcostan'
+            'https://github.com/guhcostan',
+            'https://www.npmjs.com/~guhcostan'
           ]
+        },
+        {
+          '@type': 'WebSite',
+          '@id': BASE + '#website',
+          name: 'Gustavo Costa (Guh)',
+          alternateName: 'guhcostan.dev',
+          url: BASE,
+          inLanguage: ['pt-BR', 'en'],
+          publisher: { '@id': personId }
         },
         {
           '@type': 'ProfilePage',
@@ -178,6 +188,7 @@
           name: M.profileName,
           url: URLS[locale],
           inLanguage: ['pt-BR', 'en'],
+          isPartOf: { '@id': BASE + '#website' },
           mainEntity: { '@id': personId }
         },
         {

@@ -11,6 +11,7 @@ Currículo e portfólio profissional de Gustavo Costa, conhecido como Guh. Conte
 - [Currículo completo (PDF)](https://guhcostan.dev/files/gustavo-costa-curriculo.pdf): official résumé, fonte dos dados deste site / official résumé, source of truth for this site
 - [GitHub](https://github.com/guhcostan): open source, incluindo mac-cleaner-cli (1.9k+ estrelas / stars)
 - [LinkedIn](https://www.linkedin.com/in/guhcostan): perfil profissional / professional profile
+- [npm](https://www.npmjs.com/~guhcostan): pacotes publicados, incluindo mac-cleaner-cli / published packages, including mac-cleaner-cli
 
 ## Experiência / Experience (resumo / summary)
 
