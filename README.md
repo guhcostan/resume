@@ -8,6 +8,7 @@ Estático e sem framework de runtime: HTML, CSS e JavaScript puros. A única eta
 
 - `index.html` — página única (currículo/portfólio) com todo o conteúdo nos dois idiomas
 - `content/posts/*.md` — artigos do blog em Markdown (PT + EN no mesmo arquivo)
+- `content/pages/*.md` — páginas institucionais (privacidade, termos), publicadas em `/<slug>/` no mesmo formato dos posts
 - `tools/build.mjs` — gerador: blog, RSS e sitemap a partir de `content/posts`
 - `css/styles.css` — folha de estilo minimalista em preto, branco e cinzas, tema claro/escuro com contraste AA+
 - `js/main.js` — idioma, tema, menu móvel, seção ativa no menu e metadados por página (title, canonical, OG, JSON-LD)
@@ -58,3 +59,14 @@ Push na `main` dispara `.github/workflows/deploy.yml`, que instala as dependênc
 O arquivo `CNAME` na raiz (e a opção `cname` do workflow) define o domínio customizado; o `force_orphan` mantém a `gh-pages` enxuta.
 
 A implementação anterior (app Next.js + Vite) segue preservada no histórico do git até o commit `bbcd4e1`.
+
+## Hospedagem e headers
+
+O site é publicado no GitHub Pages (branch `gh-pages`) e servido pela Cloudflare, que adiciona HSTS e os headers de segurança (CSP, X-Frame-Options, Referrer-Policy, Permissions-Policy) por uma regra de transformação de resposta.
+
+A CSP libera o script inline de bootstrap (tema e idioma, no `<head>` do `index.html`) pelo hash SHA-256 dele. **Se esse script mudar, atualize o hash na regra da Cloudflare**, senão a troca de tema e idioma para de funcionar. Para calcular:
+
+```sh
+node -e "const s=require('fs').readFileSync('index.html','utf8').match(/<script>([\s\S]*?)<\/script>/)[1];console.log('sha256-'+require('crypto').createHash('sha256').update(s).digest('base64'))"
+```
+

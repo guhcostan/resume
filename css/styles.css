@@ -837,6 +837,12 @@ html[data-theme="dark"] .theme-switch__icon--moon {
   color: var(--ink-soft);
 }
 
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
 .footer__inner a {
   text-decoration: none;
 }

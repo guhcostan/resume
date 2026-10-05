@@ -198,7 +198,8 @@
           sameAs: [
             'https://www.linkedin.com/in/guhcostan',
             'https://github.com/guhcostan',
-            'https://www.npmjs.com/~guhcostan'
+            'https://www.npmjs.com/~guhcostan',
+            'https://x.com/guhcostandev'
           ]
         },
         {

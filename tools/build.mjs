@@ -14,6 +14,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
 const POSTS_DIR = path.join(ROOT, 'content', 'posts');
+const PAGES_DIR = path.join(ROOT, 'content', 'pages');
 const SITE = 'https://guhcostan.dev';
 
 const log = (...a) => console.log('[build]', ...a);
@@ -135,6 +136,43 @@ async function readPosts() {
   return posts.sort((a, b) => b.date - a.date);
 }
 
+/* ---------- Páginas institucionais (privacidade, termos) ----------
+   Mesmo formato dos posts (frontmatter + PT/EN separados por <!-- en -->),
+   publicadas em /<slug>/. */
+async function readPages() {
+  let files = [];
+  try {
+    files = (await fs.readdir(PAGES_DIR)).filter((f) => /\.mdx?$/i.test(f));
+  } catch {
+    return [];
+  }
+  const pages = [];
+  for (const file of files) {
+    const raw = await fs.readFile(path.join(PAGES_DIR, file), 'utf8');
+    const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+    if (!match) throw new Error(`Frontmatter ausente em pages/${file}`);
+    const fm = parseFrontmatter(match[1]);
+    const [ptBody, enBody] = splitLanguages(match[2]);
+    for (const key of ['title', 'title_en', 'description', 'description_en', 'updated']) {
+      if (!fm[key]) throw new Error(`Campo "${key}" faltando em pages/${file}`);
+    }
+    if (!ptBody?.trim() || !enBody?.trim()) throw new Error(`pages/${file}: faltou o corpo PT e/ou EN`);
+    const updated = new Date(fm.updated);
+    if (Number.isNaN(updated.getTime())) throw new Error(`Data inválida em pages/${file}: ${fm.updated}`);
+    pages.push({
+      slug: fm.slug || slugFromFilename(file),
+      title: fm.title,
+      title_en: fm.title_en,
+      description: fm.description,
+      description_en: fm.description_en,
+      updated,
+      htmlPt: marked.parse(ptBody),
+      htmlEn: marked.parse(enBody)
+    });
+  }
+  return pages;
+}
+
 /* ---------- Formatação ---------- */
 const fmtPT = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' });
 const fmtEN = new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
@@ -157,7 +195,7 @@ const toAbsolute = (s) =>
 /* ---------- Head comum ---------- */
 function head({ title, description, canonicalPt, canonicalEn, ogType = 'website', article, feed = true }) {
   const canonicalEnFull = canonicalEn;
-  const ogImage = `${SITE}/assets/guh-logo.png`;
+  const ogImage = `${SITE}/assets/og-image.png`;
   return `
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -182,21 +220,24 @@ ${feed ? `  <link rel="alternate" type="application/rss+xml" title="Guh — Blog
   <meta property="og:title" content="${esc(title)}">
   <meta property="og:description" content="${esc(description)}">
   <meta property="og:image" content="${ogImage}">
-  <meta property="og:image:width" content="1317">
-  <meta property="og:image:height" content="1194">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Retrato ilustrado de Gustavo Costa (Guh)">
 ${article ? `  <meta property="article:published_time" content="${article.published}">
   <meta property="article:modified_time" content="${article.modified}">
 ${article.tags.map((t) => `  <meta property="article:tag" content="${esc(t)}">`).join('\n')}
 ` : ''}
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@guhcostandev">
+  <meta name="twitter:creator" content="@guhcostandev">
   <meta name="twitter:title" content="${esc(title)}">
   <meta name="twitter:description" content="${esc(description)}">
   <meta name="twitter:image" content="${ogImage}">
   <meta name="twitter:image:alt" content="Retrato ilustrado de Gustavo Costa (Guh)">
 
-  <link rel="icon" type="image/png" href="/assets/guh-logo.png">
-  <link rel="apple-touch-icon" href="/assets/guh-logo.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon-180.png">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/css/styles.css">`;
@@ -403,6 +444,61 @@ function postHtml(p, shell) {
   });
 }
 
+/* ---------- Página institucional ---------- */
+function staticPageHtml(pg, shell) {
+  const url = `${SITE}/${pg.slug}/`;
+  const main = `  <main id="main-content">
+    <article class="post">
+      <div class="shell">
+        <div class="post__inner">
+          <header class="post__header">
+            <p class="post__meta">
+              <span data-t="pt">Atualizado em</span><span data-t="en">Updated</span>
+              <time datetime="${iso(pg.updated)}">
+                <span data-t="pt">${esc(fmtPT.format(pg.updated))}</span><span data-t="en">${esc(fmtEN.format(pg.updated))}</span>
+              </time>
+            </p>
+            <h1 class="post__title">
+              <span data-t="pt">${esc(pg.title)}</span><span data-t="en">${esc(pg.title_en)}</span>
+            </h1>
+            <p class="post__lead">
+              <span data-t="pt">${esc(pg.description)}</span><span data-t="en">${esc(pg.description_en)}</span>
+            </p>
+          </header>
+
+          <div class="prose">
+            <div data-t="pt">${pg.htmlPt}</div>
+            <div data-t="en">${pg.htmlEn}</div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>`;
+
+  return page({
+    headExtras: head({ title: `${pg.title} — Guh`, description: pg.description, canonicalPt: url, canonicalEn: `${url}?lang=en` }),
+    bootstrap: shell.bootstrap,
+    pageI18n: {
+      'pt-BR': { title: `${pg.title} — Guh`, description: pg.description },
+      en: { title: `${pg.title_en} — Guh`, description: pg.description_en }
+    },
+    jsonld: jsonLd({
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: pg.title,
+      alternateName: pg.title_en,
+      description: pg.description,
+      url,
+      inLanguage: ['pt-BR', 'en'],
+      dateModified: pg.updated.toISOString(),
+      isPartOf: { '@id': `${SITE}/#website` }
+    }),
+    header: shell.headerPlain,
+    main,
+    footer: shell.footer
+  });
+}
+
 /* ---------- Feeds ---------- */
 function rss(locale, posts) {
   const pt = locale === 'pt-BR';
@@ -439,12 +535,13 @@ ${items}
 }
 
 /* ---------- Sitemap ---------- */
-function sitemap(posts) {
+function sitemap(posts, pages = []) {
   const today = new Date().toISOString().slice(0, 10);
   const entries = [
     { path: '/', lastmod: today, priority: '1.0' },
     { path: '/blog/', lastmod: today, priority: '0.8' },
-    ...posts.map((p) => ({ path: `/blog/${p.slug}/`, lastmod: iso(p.updated), priority: '0.7' }))
+    ...posts.map((p) => ({ path: `/blog/${p.slug}/`, lastmod: iso(p.updated), priority: '0.7' })),
+    ...pages.map((pg) => ({ path: `/${pg.slug}/`, lastmod: iso(pg.updated), priority: '0.3' }))
   ];
   const urlEntry = (pathName, lastmod, priority) => {
     const pt = `${SITE}${pathName}`;
@@ -492,13 +589,15 @@ async function build() {
   const indexHtml = await fs.readFile(path.join(ROOT, 'index.html'), 'utf8');
   const shell = {
     bootstrap: extract(indexHtml, /<script>\s*\(function \(\) \{[\s\S]*?\}\)\(\);\s*<\/script>/, 'o script de bootstrap'),
-    header: toAbsolute(extract(indexHtml, /<header class="site-header">[\s\S]*?<\/header>/, 'o <header>'))
-      .replace(/(<a[^>]*href="\/blog\/")/, '$1 aria-current="page"'),
+    headerPlain: toAbsolute(extract(indexHtml, /<header class="site-header">[\s\S]*?<\/header>/, 'o <header>')),
     footer: toAbsolute(extract(indexHtml, /<footer class="site-footer">[\s\S]*?<\/footer>/, 'o <footer>'))
   };
 
+  shell.header = shell.headerPlain.replace(/(<a[^>]*href="\/blog\/")/, '$1 aria-current="page"');
+
   const posts = await readPosts();
-  log(`${posts.length} post(s)`);
+  const pages = await readPages();
+  log(`${posts.length} post(s), ${pages.length} página(s)`);
 
   await fs.rm(DIST, { recursive: true, force: true });
   await fs.mkdir(DIST, { recursive: true });
@@ -538,10 +637,17 @@ async function build() {
     await fs.writeFile(path.join(dir, 'index.html'), postHtml(p, shell));
   }
 
+  // Páginas institucionais
+  for (const pg of pages) {
+    const dir = path.join(DIST, pg.slug);
+    await fs.mkdir(dir, { recursive: true });
+    await fs.writeFile(path.join(dir, 'index.html'), staticPageHtml(pg, shell));
+  }
+
   // Feeds + sitemap
   await fs.writeFile(path.join(DIST, 'feed.xml'), rss('pt-BR', posts));
   await fs.writeFile(path.join(DIST, 'feed-en.xml'), rss('en', posts));
-  await fs.writeFile(path.join(DIST, 'sitemap.xml'), sitemap(posts));
+  await fs.writeFile(path.join(DIST, 'sitemap.xml'), sitemap(posts, pages));
 
   log('site gerado em dist/');
 }

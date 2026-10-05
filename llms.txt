@@ -11,6 +11,7 @@ Currículo e portfólio profissional de Gustavo Costa, conhecido como Guh. Conte
 - [Currículo completo (PDF)](https://guhcostan.dev/files/gustavo-costa-curriculo.pdf): official résumé, fonte dos dados deste site / official résumé, source of truth for this site
 - [GitHub](https://github.com/guhcostan): open source, incluindo mac-cleaner-cli (1.9k+ estrelas / stars)
 - [LinkedIn](https://www.linkedin.com/in/guhcostan): perfil profissional / professional profile
+- [X](https://x.com/guhcostandev): @guhcostandev
 - [npm](https://www.npmjs.com/~guhcostan): pacotes publicados, incluindo mac-cleaner-cli / published packages, including mac-cleaner-cli
 
 ## Experiência / Experience (resumo / summary)
@@ -66,3 +67,8 @@ React Native, TypeScript, iOS, Android, Node.js, React, Next.js, Firebase, Graph
 
 - Versão em inglês / English version: https://guhcostan.dev/?lang=en
 - Idiomas / Languages: Português (nativo), Inglês e Espanhol (Professional Working)
+
+## Institucional / Legal
+
+- [Política de privacidade / Privacy policy](https://guhcostan.dev/privacidade/)
+- [Termos de uso / Terms of use](https://guhcostan.dev/termos/)

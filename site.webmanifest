@@ -1,7 +1,7 @@
 {
-  "name": "Gustavo Costa (Guh) — Lead Mobile & Frontend Engineer",
+  "name": "Gustavo Costa (Guh) — Engenheiro mobile e frontend",
   "short_name": "Guh",
-  "description": "Currículo e portfólio de Gustavo Costa (Guh): Lead Mobile & Frontend Engineer, Tech Anchor na Thoughtworks. React Native, TypeScript, iOS, Android e IA.",
+  "description": "Guh (Gustavo Costa), engenheiro mobile e frontend. Tech Anchor na Thoughtworks, à frente do LatamPass. 8+ anos de React Native, TypeScript e IA.",
   "lang": "pt-BR",
   "dir": "ltr",
   "start_url": "./",
@@ -11,8 +11,14 @@
   "theme_color": "#fafafa",
   "icons": [
     {
-      "src": "assets/guh-logo.png",
-      "sizes": "1317x1194",
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     }
