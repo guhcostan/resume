@@ -15,7 +15,8 @@ Estático e sem framework de runtime: HTML, CSS e JavaScript puros. A única eta
 - `assets/` — logo (original com fundo branco e versões transparentes preta/branca) e Inter auto-hospedada (OFL)
 - `files/gustavo-costa-curriculo.pdf` — currículo completo em PDF
 - `robots.txt`, `llms.txt`, `site.webmanifest` — SEO e AI SEO (`sitemap.xml` é gerado no build)
-- `CNAME` — domínio customizado `guhcostan.dev` (publicado no `gh-pages`)
+- `_headers` — headers de segurança e cache aplicados pela Cloudflare
+- `wrangler.jsonc` — configuração do Worker que serve `dist/` na Cloudflare
 
 ## Rodar localmente
 
@@ -54,17 +55,23 @@ Rode `npm run build` e confira `dist/blog/`.
 
 ## Publicação
 
-Push na `main` dispara `.github/workflows/deploy.yml`, que instala as dependências, roda o build e publica `dist/` na branch `gh-pages` (fonte do GitHub Pages): https://guhcostan.dev/
+O site roda no **Cloudflare Workers** (assets estáticos, sem código de servidor), no domínio https://guhcostan.dev/.
 
-O arquivo `CNAME` na raiz (e a opção `cname` do workflow) define o domínio customizado; o `force_orphan` mantém a `gh-pages` enxuta.
+Push na `main` dispara o **Workers Builds** da Cloudflare, conectado a este repositório: ele roda `npm run build` e depois `npx wrangler deploy`, que publica `dist/` conforme o `wrangler.jsonc`. Endereços inexistentes caem na página `404.html` gerada pelo build.
+
+Para testar localmente como na Cloudflare (headers, 404, barras no fim das URLs):
+
+```sh
+npm run build && npx wrangler dev
+```
 
 A implementação anterior (app Next.js + Vite) segue preservada no histórico do git até o commit `bbcd4e1`.
 
 ## Hospedagem e headers
 
-O site é publicado no GitHub Pages (branch `gh-pages`) e servido pela Cloudflare, que adiciona HSTS e os headers de segurança (CSP, X-Frame-Options, Referrer-Policy, Permissions-Policy) por uma regra de transformação de resposta.
+Os headers de segurança (CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy) e de cache ficam no arquivo `_headers`, versionado aqui. O HSTS e o HTTPS obrigatório são configurações da zona na Cloudflare.
 
-A CSP libera o script inline de bootstrap (tema e idioma, no `<head>` do `index.html`) pelo hash SHA-256 dele. **Se esse script mudar, atualize o hash na regra da Cloudflare**, senão a troca de tema e idioma para de funcionar. Para calcular:
+A CSP libera o script inline de bootstrap (tema e idioma, no `<head>` do `index.html`) pelo hash SHA-256 dele. Se esse script mudar, o `npm run build` falha e mostra o hash novo para colocar no `_headers`. Para calcular à mão:
 
 ```sh
 node -e "const s=require('fs').readFileSync('index.html','utf8').match(/<script>([\s\S]*?)<\/script>/)[1];console.log('sha256-'+require('crypto').createHash('sha256').update(s).digest('base64'))"

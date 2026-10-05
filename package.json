@@ -9,6 +9,7 @@
     "dev": "node tools/build.mjs && python3 -m http.server 8000 --directory dist"
   },
   "devDependencies": {
-    "marked": "^15.0.0"
+    "marked": "^15.0.0",
+    "wrangler": "^4.147.0"
   }
 }

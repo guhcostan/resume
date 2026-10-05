@@ -8,6 +8,7 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 import { marked } from 'marked';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -499,6 +500,37 @@ function staticPageHtml(pg, shell) {
   });
 }
 
+/* ---------- 404 ---------- */
+function notFoundHtml(shell) {
+  const main = `  <main id="main-content">
+    <section class="section">
+      <div class="shell">
+        <header class="sec-head">
+          <h1 class="sec-title"><span data-t="pt">Página não encontrada</span><span data-t="en">Page not found</span></h1>
+        </header>
+        <p class="sec-intro">
+          <span data-t="pt">O endereço não existe ou mudou de lugar.</span>
+          <span data-t="en">This address does not exist or has moved.</span>
+        </p>
+        <p class="more"><a href="/"><span data-t="pt">Voltar ao início</span><span data-t="en">Back to the home page</span></a> · <a href="/blog/">Blog</a></p>
+      </div>
+    </section>
+  </main>`;
+  return page({
+    headExtras: head({ title: 'Página não encontrada — Guh', description: 'O endereço não existe ou mudou de lugar.', canonicalPt: `${SITE}/`, canonicalEn: `${SITE}/?lang=en`, feed: false })
+      .replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex">'),
+    bootstrap: shell.bootstrap,
+    pageI18n: {
+      'pt-BR': { title: 'Página não encontrada — Guh', description: 'O endereço não existe ou mudou de lugar.' },
+      en: { title: 'Page not found — Guh', description: 'This address does not exist or has moved.' }
+    },
+    jsonld: jsonLd({ '@context': 'https://schema.org', '@type': 'WebPage', name: 'Página não encontrada' }),
+    header: shell.headerPlain,
+    main,
+    footer: shell.footer
+  });
+}
+
 /* ---------- Feeds ---------- */
 function rss(locale, posts) {
   const pt = locale === 'pt-BR';
@@ -593,6 +625,15 @@ async function build() {
     footer: toAbsolute(extract(indexHtml, /<footer class="site-footer">[\s\S]*?<\/footer>/, 'o <footer>'))
   };
 
+  // A CSP do _headers libera o script de bootstrap pelo hash: se o script
+  // mudar sem o hash acompanhar, o tema e o idioma quebram em produção.
+  const bootstrapCode = shell.bootstrap.replace(/^<script>/, '').replace(/<\/script>$/, '');
+  const bootstrapHash = `sha256-${createHash('sha256').update(bootstrapCode).digest('base64')}`;
+  const headersFile = await fs.readFile(path.join(ROOT, '_headers'), 'utf8');
+  if (!headersFile.includes(`'${bootstrapHash}'`)) {
+    throw new Error(`a CSP do _headers não libera o script de bootstrap; troque o hash por '${bootstrapHash}'`);
+  }
+
   shell.header = shell.headerPlain.replace(/(<a[^>]*href="\/blog\/")/, '$1 aria-current="page"');
 
   const posts = await readPosts();
@@ -604,7 +645,7 @@ async function build() {
 
   // Estáticos
   await fs.copyFile(path.join(ROOT, 'index.html'), path.join(DIST, 'index.html'));
-  await fs.copyFile(path.join(ROOT, 'CNAME'), path.join(DIST, 'CNAME'));
+  await fs.copyFile(path.join(ROOT, '_headers'), path.join(DIST, '_headers'));
   await fs.copyFile(path.join(ROOT, 'robots.txt'), path.join(DIST, 'robots.txt'));
   await fs.copyFile(path.join(ROOT, 'site.webmanifest'), path.join(DIST, 'site.webmanifest'));
   for (const dir of ['assets', 'css', 'js', 'files']) {
@@ -615,7 +656,7 @@ async function build() {
       else throw err;
     }
   }
-  await fs.writeFile(path.join(DIST, '.nojekyll'), '');
+  await fs.writeFile(path.join(DIST, '404.html'), notFoundHtml(shell));
 
   // llms.txt = base + seção de blog gerada
   const llmsBase = await fs.readFile(path.join(ROOT, 'llms.txt'), 'utf8');

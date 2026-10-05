@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Site estático: Worker só com assets, sem script. O conteúdo vem de dist/,
+  // gerado por `npm run build`.
+  "name": "guhcostan-dev",
+  "compatibility_date": "2026-10-05",
+  "assets": {
+    "directory": "./dist/",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}
