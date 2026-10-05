@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-locale="pt-BR" data-theme="light">
+<html lang="pt-BR" data-locale="pt-BR">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,8 +7,8 @@
   <meta name="description" content="Guh (Gustavo Costa), engenheiro mobile e frontend. Tech Anchor na Thoughtworks, à frente do LatamPass. 8+ anos de React Native, TypeScript e IA.">
   <meta name="author" content="Gustavo Costa">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-  <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#fafafa">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0c0d0b">
 
   <link rel="canonical" href="https://guhcostan.dev/">
   <link rel="alternate" hreflang="pt-BR" href="https://guhcostan.dev/">
@@ -28,7 +28,7 @@
   <meta property="og:image" content="https://guhcostan.dev/assets/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Retrato ilustrado em preto e branco de Gustavo Costa (Guh)">
+  <meta property="og:image:alt" content="Gustavo Costa (Guh) em pixel art: o nome feito de blocos, um agente laranja e o avatar de óculos escuros">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@guhcostandev">
@@ -36,12 +36,14 @@
   <meta name="twitter:title" content="Gustavo Costa (Guh) — Engenheiro mobile e frontend">
   <meta name="twitter:description" content="Guh (Gustavo Costa), engenheiro mobile e frontend. Tech Anchor na Thoughtworks, à frente do LatamPass. 8+ anos de React Native, TypeScript e IA.">
   <meta name="twitter:image" content="https://guhcostan.dev/assets/og-image.png">
-  <meta name="twitter:image:alt" content="Retrato ilustrado em preto e branco de Gustavo Costa (Guh)">
+  <meta name="twitter:image:alt" content="Gustavo Costa (Guh) em pixel art: o nome feito de blocos, um agente laranja e o avatar de óculos escuros">
 
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png">
   <link rel="manifest" href="site.webmanifest">
+  <link rel="preload" href="assets/fonts/silkscreen-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/silkscreen-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/styles.css">
 
@@ -64,14 +66,17 @@
       } catch (e) {}
       d.setAttribute('data-locale', locale);
       d.setAttribute('lang', locale === 'en' ? 'en' : 'pt-BR');
-      var theme = null;
-      try { theme = localStorage.getItem('guh-theme'); } catch (e) {}
-      if (theme !== 'light' && theme !== 'dark') {
-        theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
-      }
-      d.setAttribute('data-theme', theme);
+      // Intro: na home, uma vez por sessão, os agentes constroem o nome antes
+      // do resto do início aparecer. Nunca com menos movimento ou link direto
+      // para uma seção. O CSS revela tudo sozinho se o JavaScript falhar.
+      try {
+        var home = location.pathname === '/' || /\/index\.html$/.test(location.pathname);
+        var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (home && !calm && !location.hash && !sessionStorage.getItem('guh-intro')) d.classList.add('intro');
+      } catch (e) {}
     })();
   </script>
+
 
   <!-- Versão estática (pt-BR) do grafo; o main.js reescreve no idioma ativo -->
   <script type="application/ld+json" id="ld-graph">
@@ -235,6 +240,7 @@
   }
   </script>
 </head>
+
 <body>
   <a class="skip-link" href="#main-content">
     <span data-t="pt">Ir para o conteúdo</span><span data-t="en">Skip to content</span>
@@ -242,31 +248,16 @@
 
   <header class="site-header">
     <div class="shell header__inner">
-      <a class="brand" href="/">
-        <span class="brand__mark plate">
-          <img src="assets/guh-logo-transparente-80.webp" data-logo
-               srcset="assets/guh-logo-transparente-80.webp 80w, assets/guh-logo-transparente-160.webp 160w" sizes="34px"
-               data-src-light="assets/guh-logo-transparente-80.webp"
-               data-src-dark="assets/guh-logo-transparente-branca-80.webp"
-               data-srcset-light="assets/guh-logo-transparente-80.webp 80w, assets/guh-logo-transparente-160.webp 160w"
-               data-srcset-dark="assets/guh-logo-transparente-branca-80.webp 80w, assets/guh-logo-transparente-branca-160.webp 160w"
-               alt="" width="1317" height="1194">
-        </span>
-        <span class="brand__name">Guh</span>
-      </a>
+      <a class="brand" href="/">Gustavo Costa</a>
 
       <nav class="nav" id="menu" data-aria-pt="Navegação principal" data-aria-en="Main navigation" aria-label="Navegação principal">
         <ul class="nav__list">
+          <li><a href="#projetos"><span data-t="pt">Projetos</span><span data-t="en">Projects</span></a></li>
           <li><a href="#sobre"><span data-t="pt">Sobre</span><span data-t="en">About</span></a></li>
           <li><a href="#experiencia"><span data-t="pt">Experiência</span><span data-t="en">Experience</span></a></li>
-          <li><a href="#projetos"><span data-t="pt">Projetos</span><span data-t="en">Projects</span></a></li>
           <li><a href="/blog/">Blog</a></li>
           <li><a href="#contato"><span data-t="pt">Contato</span><span data-t="en">Contact</span></a></li>
-          <li class="nav__cta">
-            <a class="btn btn--solid" href="https://guhcostan.dev/files/gustavo-costa-curriculo.pdf" target="_blank" rel="noopener">
-              <span data-t="pt">Currículo (PDF)</span><span data-t="en">Résumé (PDF)</span>
-            </a>
-          </li>
+          <li><a class="nav__gh" href="https://github.com/guhcostan" target="_blank" rel="noopener me">GitHub <i class="i i--ne" aria-hidden="true"></i></a></li>
         </ul>
       </nav>
 
@@ -275,20 +266,7 @@
           <button type="button" class="lang-btn" data-lang-btn="pt-BR" lang="pt-BR" aria-pressed="true">PT</button>
           <button type="button" class="lang-btn" data-lang-btn="en" lang="en" aria-pressed="false">EN</button>
         </div>
-        <!-- Ícones sun/moon: Lucide v0.469.0 (licença ISC) -->
-        <button type="button" class="theme-switch js-only" data-theme-toggle role="switch" aria-checked="false"
-                data-aria-pt="Tema escuro" data-aria-en="Dark theme" aria-label="Tema escuro">
-          <span class="theme-switch__track">
-            <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-            </span>
-            <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-            </span>
-            <span class="theme-switch__knob" aria-hidden="true"></span>
-          </span>
-        </button>
-        <button type="button" class="tool-btn menu-btn js-only" data-menu-toggle aria-expanded="false" aria-controls="menu">
+        <button type="button" class="menu-btn js-only" data-menu-toggle aria-expanded="false" aria-controls="menu">
           Menu
         </button>
       </div>
@@ -298,75 +276,233 @@
   <main id="main-content">
     <!-- INÍCIO -->
     <section class="hero" id="inicio" aria-labelledby="hero-title">
-      <div class="shell hero__inner">
-        <div class="hero__copy">
-          <p class="hero__kicker">Gustavo Costa · Lead Mobile &amp; Frontend Engineer</p>
-          <h1 class="hero__title" id="hero-title">
-            <span data-t="pt">Faço apps que milhões de pessoas usam.</span>
-            <span data-t="en">I build apps millions of people use.</span>
-          </h1>
-          <p class="hero__sub">
-            <span data-t="pt">Sou Tech Anchor na Thoughtworks e respondo pela direção técnica do app LatamPass, um dos maiores programas de fidelidade aérea da América Latina. São 8+ anos de React Native e TypeScript e, desde 2024, IA em produção.</span>
-            <span data-t="en">I'm a Tech Anchor at Thoughtworks, leading the technical direction of the LatamPass app, one of Latin America's largest airline loyalty programs. 8+ years of React Native and TypeScript and, since 2024, AI in production.</span>
-          </p>
-          <div class="hero__actions">
-            <a class="btn btn--solid" href="https://guhcostan.dev/files/gustavo-costa-curriculo.pdf" target="_blank" rel="noopener">
-              <span data-t="pt">Currículo (PDF)</span><span data-t="en">Résumé (PDF)</span>
-            </a>
-            <a class="btn btn--ghost" href="#contato">
-              <span data-t="pt">Falar comigo</span><span data-t="en">Get in touch</span>
-            </a>
-          </div>
+      <div class="shell">
+        <h1 class="hero__name" id="hero-title" data-build><span class="w">Gustavo</span> <span class="w">Costa</span></h1>
+
+        <p class="hero__sub hero__reveal">
+          <span data-t="pt">
+            <span>Engenheiro mobile e frontend.</span>
+            <span>Tech Anchor na <a class="hl hl--orange" href="https://www.thoughtworks.com/" target="_blank" rel="noopener">Thoughtworks</a>, no app LatamPass.</span>
+            <span>Criador do <a class="hl hl--green" href="https://github.com/guhcostan/mac-cleaner-cli" target="_blank" rel="noopener">mac-cleaner-cli</a>.</span>
+          </span>
+          <span data-t="en">
+            <span>Mobile &amp; frontend engineer.</span>
+            <span>Tech Anchor at <a class="hl hl--orange" href="https://www.thoughtworks.com/" target="_blank" rel="noopener">Thoughtworks</a>, on the LatamPass app.</span>
+            <span>Creator of <a class="hl hl--green" href="https://github.com/guhcostan/mac-cleaner-cli" target="_blank" rel="noopener">mac-cleaner-cli</a>.</span>
+          </span>
+        </p>
+
+        <div class="hero__actions hero__reveal">
+          <a class="btn btn--light" href="#projetos">
+            <span data-t="pt">Ver projetos</span><span data-t="en">See projects</span> <i class="i i--down" aria-hidden="true"></i>
+          </a>
+          <a class="btn btn--ghost" href="https://guhcostan.dev/files/gustavo-costa-curriculo.pdf" target="_blank" rel="noopener">
+            <span data-t="pt">Currículo PDF</span><span data-t="en">Résumé PDF</span> <i class="i i--ne" aria-hidden="true"></i>
+          </a>
         </div>
 
-        <figure class="hero__figure">
-          <span class="plate hero__plate">
-            <img src="assets/guh-logo-transparente-640.webp" width="1317" height="1194" fetchpriority="high"
-                 srcset="assets/guh-logo-transparente-160.webp 160w, assets/guh-logo-transparente-320.webp 320w, assets/guh-logo-transparente-640.webp 640w"
-                 sizes="(min-width: 900px) 280px, 180px"
-                 data-logo
-                 data-src-light="assets/guh-logo-transparente-640.webp"
-                 data-src-dark="assets/guh-logo-transparente-branca-640.webp"
-                 data-srcset-light="assets/guh-logo-transparente-160.webp 160w, assets/guh-logo-transparente-320.webp 320w, assets/guh-logo-transparente-640.webp 640w"
-                 data-srcset-dark="assets/guh-logo-transparente-branca-160.webp 160w, assets/guh-logo-transparente-branca-320.webp 320w, assets/guh-logo-transparente-branca-640.webp 640w"
-                 data-alt-pt="Retrato ilustrado em preto e branco de Gustavo Costa, conhecido como Guh"
-                 data-alt-en="Black and white illustrated portrait of Gustavo Costa, known as Guh"
-                 alt="Retrato ilustrado em preto e branco de Gustavo Costa, conhecido como Guh">
-          </span>
-        </figure>
-      </div>
-
-      <div class="shell">
-        <ul class="stats">
-          <li class="stat">
-            <span class="stat__value">8+</span>
-            <span class="stat__label"><span data-t="pt">anos fazendo apps mobile e web</span><span data-t="en">years shipping mobile and web apps</span></span>
-          </li>
-          <li class="stat">
-            <span class="stat__value">8+</span>
-            <span class="stat__label"><span data-t="pt">engenheiros liderados no Brasil e no Chile</span><span data-t="en">engineers led across Brazil and Chile</span></span>
-          </li>
-          <li class="stat">
-            <span class="stat__value">80%+</span>
-            <span class="stat__label"><span data-t="pt">de cobertura de testes no LatamPass</span><span data-t="en">test coverage on LatamPass</span></span>
-          </li>
-          <li class="stat">
-            <span class="stat__value">2k+</span>
-            <span class="stat__label"><span data-t="pt">estrelas em projetos open source</span><span data-t="en">stars across open source projects</span></span>
-          </li>
+        <ul class="hero__social hero__reveal">
+          <li><a href="https://www.linkedin.com/in/guhcostan" target="_blank" rel="noopener me">LinkedIn</a></li>
+          <li><a href="https://github.com/guhcostan" target="_blank" rel="noopener me">GitHub</a></li>
+          <li><a href="https://x.com/guhcostandev" target="_blank" rel="noopener me">X</a></li>
+          <li><a href="https://www.npmjs.com/~guhcostan" target="_blank" rel="noopener me">npm</a></li>
         </ul>
+
+        <div class="ground hero__reveal" data-ground></div>
+      </div>
+    </section>
+
+    <!-- PROJETOS -->
+    <section class="section" id="projetos" aria-labelledby="projetos-title">
+      <div class="shell">
+        <h2 class="sec-title" id="projetos-title"><span data-t="pt">Projetos open source</span><span data-t="en">Open source projects</span></h2>
+        <p class="sec-intro">
+          <span data-t="pt">Gustavo Costa (Guh) mantém ferramentas open source no GitHub no tempo livre. Juntas, elas somam mais de 2 mil estrelas; a mais popular é o mac-cleaner-cli, com 1.9k. As outras vão de agentes de IA feitos com Claude Code a um SDK para dados públicos brasileiros.</span>
+          <span data-t="en">Gustavo Costa (Guh) maintains open source tools on GitHub in his spare time. Together they have 2,000+ stars; the most popular is mac-cleaner-cli, with 1.9k. The others range from AI agents built with Claude Code to an SDK for Brazilian public data.</span>
+        </p>
+
+        <ol class="cards sec-body">
+          <li class="card card--wide box" data-reveal>
+            <div class="preview" data-preview aria-hidden="true">
+              <p><span class="ps">$</span> npx mac-cleaner-cli</p>
+              <p class="dim">scanning your mac for cleanable files...</p>
+              <p><span class="pbar"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></p>
+              <p><span class="sel">[x]</span> trash      <span class="sel">[x]</span> browser cache</p>
+              <p><span class="sel">[x]</span> homebrew   <span class="sel">[x]</span> dev cache</p>
+              <p class="ok">cleaning complete!</p>
+            </div>
+            <div class="card__body">
+              <h3 class="card__title">mac-cleaner-cli</h3>
+              <p class="card__desc">
+                <span data-t="pt">O mac-cleaner-cli libera espaço no Mac com um comando: caches, logs e sobras de Homebrew e Xcode. Alternativa open source ao CleanMyMac.</span>
+                <span data-t="en">mac-cleaner-cli frees up space on your Mac with one command: caches, logs, and Homebrew and Xcode leftovers. An open source alternative to CleanMyMac.</span>
+              </p>
+              <p class="card__stat"><i class="i i--star" aria-hidden="true"></i> <span data-t="pt">1.9K estrelas</span><span data-t="en">1.9K stars</span></p>
+              <p class="card__meta">TypeScript · Node.js</p>
+              <p class="card__links">
+                <a class="link-px" href="https://github.com/guhcostan/mac-cleaner-cli" target="_blank" rel="noopener">GitHub <i class="i i--ne" aria-hidden="true"></i></a>
+                <a class="link-px" href="https://www.npmjs.com/package/mac-cleaner-cli" target="_blank" rel="noopener">npm <i class="i i--ne" aria-hidden="true"></i></a>
+              </p>
+            </div>
+          </li>
+
+          <li class="card box" data-reveal>
+            <div class="preview" data-preview aria-hidden="true">
+              <p><span class="ps">&gt;</span> /b3:analyze WEGE3.SA</p>
+              <div class="preview__agents" data-agents="3"></div>
+              <p class="dim"><span data-t="pt">3 agentes analisando...</span><span data-t="en">3 agents analyzing...</span></p>
+              <div class="candles"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <p class="ok"><span data-t="pt">relatório pronto</span><span data-t="en">report ready</span></p>
+            </div>
+            <div class="card__body">
+              <h3 class="card__title">b3analysis</h3>
+              <p class="card__desc">
+                <span data-t="pt">O b3analysis é um agente de análise de ações da B3 feito com Claude Code. Avalia fundamentos e gera relatórios diários, sem API keys.</span>
+                <span data-t="en">b3analysis is a Brazilian stock (B3) analysis agent built with Claude Code. It reviews fundamentals and writes daily reports, no API keys needed.</span>
+              </p>
+              <p class="card__stat"><i class="i i--star" aria-hidden="true"></i> <span data-t="pt">128 estrelas</span><span data-t="en">128 stars</span></p>
+              <p class="card__meta">Python · Claude Code</p>
+              <p class="card__links">
+                <a class="link-px" href="https://github.com/guhcostan/b3analysis" target="_blank" rel="noopener">GitHub <i class="i i--ne" aria-hidden="true"></i></a>
+              </p>
+            </div>
+          </li>
+
+          <li class="card box" data-reveal>
+            <div class="preview" data-preview aria-hidden="true">
+              <p><span class="ps">&gt;</span> /plugin install mega-brain@mega-brain</p>
+              <p><span class="ps">&gt;</span> /mega-brain:init</p>
+              <div class="brain"><i class="o"></i><i class="o"></i><i></i><i></i><i></i><i></i><i></i><i class="o"></i><i class="o"></i><i class="o"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="o"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="o"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i><i></i><i></i><i class="o"></i><i class="o"></i><i class="o"></i></div>
+              <p class="ok"><span data-t="pt">base de conhecimento carregada</span><span data-t="en">knowledge base loaded</span></p>
+            </div>
+            <div class="card__body">
+              <h3 class="card__title">claude-mega-brain</h3>
+              <p class="card__desc">
+                <span data-t="pt">O claude-mega-brain é um plugin que dá ao Claude Code a base de conhecimento do seu projeto em toda sessão.</span>
+                <span data-t="en">claude-mega-brain is a plugin that gives Claude Code your project's knowledge base in every session.</span>
+              </p>
+              <p class="card__stat"><i class="i i--star" aria-hidden="true"></i> <span data-t="pt">126 estrelas</span><span data-t="en">126 stars</span></p>
+              <p class="card__meta">Python · Claude Code</p>
+              <p class="card__links">
+                <a class="link-px" href="https://github.com/guhcostan/claude-mega-brain" target="_blank" rel="noopener">GitHub <i class="i i--ne" aria-hidden="true"></i></a>
+              </p>
+            </div>
+          </li>
+
+          <li class="card box" data-reveal>
+            <div class="preview" data-preview aria-hidden="true">
+              <p><span class="ps">$</span> npx windows-cleaner-cli</p>
+              <p class="dim">found 32.5 gb that can be cleaned</p>
+              <p><span class="sel">[x]</span> recycle bin        2.1 gb</p>
+              <p><span class="sel">[x]</span> development cache  15.9 gb</p>
+              <p>proceed with cleaning? <span class="ok">y</span></p>
+              <p class="ok">freed 32.5 gb of disk space!</p>
+            </div>
+            <div class="card__body">
+              <h3 class="card__title">windows-cleaner-cli</h3>
+              <p class="card__desc">
+                <span data-t="pt">O windows-cleaner-cli leva a mesma ideia para o Windows: limpa caches e arquivos temporários direto do terminal.</span>
+                <span data-t="en">windows-cleaner-cli brings the same idea to Windows: it clears caches and temp files straight from the terminal.</span>
+              </p>
+              <p class="card__stat"><i class="i i--star" aria-hidden="true"></i> <span data-t="pt">84 estrelas</span><span data-t="en">84 stars</span></p>
+              <p class="card__meta">JavaScript · Node.js</p>
+              <p class="card__links">
+                <a class="link-px" href="https://github.com/guhcostan/windows-cleaner-cli" target="_blank" rel="noopener">GitHub <i class="i i--ne" aria-hidden="true"></i></a>
+                <a class="link-px" href="https://www.npmjs.com/package/windows-cleaner-cli" target="_blank" rel="noopener">npm <i class="i i--ne" aria-hidden="true"></i></a>
+              </p>
+            </div>
+          </li>
+
+          <li class="card box" data-reveal>
+            <div class="preview" data-preview aria-hidden="true">
+              <p><span class="ps">&gt;</span> await cep().getCep(<span class="str">'05010-000'</span>)</p>
+              <p class="dim">{</p>
+              <p>  state: <span class="str">"SP"</span>,</p>
+              <p>  city: <span class="str">"São Paulo"</span>,</p>
+              <p>  street: <span class="str">"Rua Caiubi"</span></p>
+              <p class="dim">}</p>
+            </div>
+            <div class="card__body">
+              <h3 class="card__title">brasilapi-sdk</h3>
+              <p class="card__desc">
+                <span data-t="pt">O brasilapi-sdk é um SDK tipado para a BrasilAPI: CEP, CNPJ, bancos, FIPE e IBGE sem escrever integração do zero.</span>
+                <span data-t="en">brasilapi-sdk is a typed SDK for BrasilAPI: postal codes, company IDs, banks, FIPE and IBGE data without writing the integration yourself.</span>
+              </p>
+              <p class="card__stat"><i class="i i--star" aria-hidden="true"></i> <span data-t="pt">70 estrelas</span><span data-t="en">70 stars</span></p>
+              <p class="card__meta">TypeScript · Node.js</p>
+              <p class="card__links">
+                <a class="link-px" href="https://github.com/guhcostan/brasilapi-sdk" target="_blank" rel="noopener">GitHub <i class="i i--ne" aria-hidden="true"></i></a>
+              </p>
+            </div>
+          </li>
+        </ol>
+
+        <p class="more">
+          <a href="https://github.com/guhcostan" target="_blank" rel="noopener me">
+            <span data-t="pt">Tudo no GitHub</span><span data-t="en">Everything on GitHub</span> <i class="i i--ne" aria-hidden="true"></i>
+          </a>
+        </p>
       </div>
     </section>
 
     <!-- SOBRE -->
     <section class="section" id="sobre" aria-labelledby="sobre-title">
-      <div class="shell grid">
-        <header class="sec-head">
-          <h2 class="sec-title" id="sobre-title"><span data-t="pt">Quem é o Guh?</span><span data-t="en">Who is Guh?</span></h2>
-        </header>
+      <div class="shell">
+        <h2 class="sec-title" id="sobre-title"><span data-t="pt">Sobre mim</span><span data-t="en">About me</span></h2>
 
-        <div class="sec-body">
-          <div class="about" data-reveal>
+        <article class="player box sec-body" data-reveal>
+          <div class="player__art">
+            <img src="assets/avatar-pixel.png" width="64" height="65" loading="lazy"
+                 data-alt-pt="Avatar em pixel art de Gustavo Costa (Guh): cabelo cacheado, óculos escuros e bigode"
+                 data-alt-en="Pixel art avatar of Gustavo Costa (Guh): curly hair, sunglasses and a mustache"
+                 alt="Avatar em pixel art de Gustavo Costa (Guh): cabelo cacheado, óculos escuros e bigode">
+          </div>
+
+          <div class="player__info">
+            <div>
+              <div class="player__top">
+                <p class="player__tag">Player 1</p>
+                <p class="player__lvl">
+                  <span class="flags" role="img" data-aria-pt="Fala português, inglês e espanhol" data-aria-en="Speaks Portuguese, English and Spanish" aria-label="Fala português, inglês e espanhol">
+                    <svg viewBox="0 0 11 8" shape-rendering="crispEdges" aria-hidden="true"><rect width="11" height="8" fill="#1f9a4a"/><path fill="#f2c94c" d="M4 1h3v1H4zM2 2h7v1H2zM1 3h9v2H1zM2 5h7v1H2zM4 6h3v1H4z"/><path fill="#2a4d9b" d="M4 3h3v2H4z"/></svg>
+                    <svg viewBox="0 0 11 8" shape-rendering="crispEdges" aria-hidden="true"><rect width="11" height="8" fill="#eceee6"/><path fill="#c8463d" d="M0 0h11v1H0zM0 2h11v1H0zM0 4h11v1H0zM0 6h11v1H0z"/><path fill="#2a4d9b" d="M0 0h5v4H0z"/><path fill="#eceee6" d="M1 1h1v1H1zM3 1h1v1H3zM2 2h1v1H2z"/></svg>
+                    <svg viewBox="0 0 11 8" shape-rendering="crispEdges" aria-hidden="true"><rect width="11" height="8" fill="#c8463d"/><path fill="#f2c94c" d="M0 2h11v4H0z"/></svg>
+                  </span>
+                  <span>Lvl 8</span>
+                </p>
+              </div>
+              <p class="player__name">Gustavo Costa</p>
+              <p class="player__class">
+                <span data-t="pt">Classe: Tech Anchor · São Sebastião, SP</span>
+                <span data-t="en">Class: Tech Anchor · São Sebastião, Brazil</span>
+              </p>
+            </div>
+
+            <div class="player__block">
+              <h3 class="player__label"><span data-t="pt">Inventário</span><span data-t="en">Inventory</span></h3>
+              <dl class="inv">
+                <div><dt>LatamPass</dt><dd><span data-t="pt">milhões de usuários</span><span data-t="en">millions of users</span></dd></div>
+                <div><dt>mac-cleaner-cli</dt><dd><span data-t="pt">1.9K estrelas</span><span data-t="en">1.9K stars</span></dd></div>
+                <div><dt><span data-t="pt">Time liderado</span><span data-t="en">Team led</span></dt><dd><span data-t="pt">8+ engenheiros</span><span data-t="en">8+ engineers</span></dd></div>
+                <div><dt>Open source</dt><dd><span data-t="pt">2K+ estrelas</span><span data-t="en">2K+ stars</span></dd></div>
+                <div><dt><span data-t="pt">Testes</span><span data-t="en">Tests</span></dt><dd><span data-t="pt">80%+ de cobertura</span><span data-t="en">80%+ coverage</span></dd></div>
+                <div><dt>Pipelines</dt><dd><span data-t="pt">~35% mais rápidos</span><span data-t="en">~35% faster</span></dd></div>
+              </dl>
+            </div>
+
+            <div class="player__block">
+              <h3 class="player__label"><span data-t="pt">Golpe especial</span><span data-t="en">Special move</span></h3>
+              <p class="player__move">
+                <span data-t="pt">Software rápido, confiável e fácil de manter, que entrega valor e não só feature.</span>
+                <span data-t="en">Software that is fast, reliable and easy to maintain, and that delivers value rather than just features.</span>
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <div class="lore" data-reveal>
+          <h3 class="lore__title"><span data-t="pt">Quem é o Guh?</span><span data-t="en">Who is Guh?</span></h3>
+          <div class="about">
             <p class="lead">
               <span data-t="pt">Comecei em 2017, fazendo sites como trainee na Comp Júnior. De lá passei por sistemas ambientais do governo, gestão financeira, educação e pagamentos até chegar ao mobile em grande escala.</span>
               <span data-t="en">I started in 2017, building websites as a trainee at Comp Júnior. From there I worked on government environmental systems, financial management, education and payments before landing in mobile at scale.</span>
@@ -380,39 +516,28 @@
               <span data-t="en">I care about software that is fast, reliable and easy to maintain, and that delivers value rather than just features. Since late 2024 I've also been working with AI: LLM-powered features in the product and agents that speed up the team's day-to-day. On the side, I maintain open source tools.</span>
             </p>
           </div>
-
-          <dl class="rows rows--compact" data-reveal>
-            <div class="row">
-              <dt><span data-t="pt">Base</span><span data-t="en">Based in</span></dt>
-              <dd><span data-t="pt">São Sebastião, SP, Brasil</span><span data-t="en">São Sebastião, SP, Brazil</span></dd>
-            </div>
-            <div class="row">
-              <dt><span data-t="pt">Idiomas</span><span data-t="en">Languages</span></dt>
-              <dd><span data-t="pt">Português, inglês e espanhol</span><span data-t="en">Portuguese, English and Spanish</span></dd>
-            </div>
-          </dl>
         </div>
       </div>
     </section>
 
     <!-- EXPERIÊNCIA -->
     <section class="section" id="experiencia" aria-labelledby="experiencia-title">
-      <div class="shell grid">
-        <header class="sec-head">
-          <h2 class="sec-title" id="experiencia-title"><span data-t="pt">Experiência</span><span data-t="en">Experience</span></h2>
-        </header>
+      <div class="shell">
+        <h2 class="sec-title" id="experiencia-title"><span data-t="pt">Experiência</span><span data-t="en">Experience</span></h2>
+        <p class="sec-sub js-only" data-bricks-hint><span data-t="pt">Um tijolo por trimestre em cada empresa.</span><span data-t="en">One brick per quarter at each company.</span></p>
+        <p class="sec-intro">
+          <span data-t="pt">Gustavo Costa (Guh) trabalha com desenvolvimento de software desde 2017 e passou por seis empresas: Comp Júnior, LEMAF, Equal, Descomplica, RecargaPay e Thoughtworks. Desde maio de 2022 está na Thoughtworks, no app LatamPass, onde foi de Mobile Engineer a Technical Lead e, em dezembro de 2024, a Tech Anchor.</span>
+          <span data-t="en">Gustavo Costa (Guh) has been building software since 2017 across six companies: Comp Júnior, LEMAF, Equal, Descomplica, RecargaPay and Thoughtworks. Since May 2022 he has been at Thoughtworks on the LatamPass app, growing from Mobile Engineer to Technical Lead and, in December 2024, to Tech Anchor.</span>
+        </p>
 
-        <div class="sec-body">
-          <p class="sec-intro">
-            <span data-t="pt">Gustavo Costa (Guh) trabalha com desenvolvimento de software desde 2017 e passou por seis empresas: Comp Júnior, LEMAF, Equal, Descomplica, RecargaPay e Thoughtworks. Desde maio de 2022 está na Thoughtworks, no app LatamPass, onde foi de Mobile Engineer a Technical Lead e, em dezembro de 2024, a Tech Anchor.</span>
-            <span data-t="en">Gustavo Costa (Guh) has been building software since 2017 across six companies: Comp Júnior, LEMAF, Equal, Descomplica, RecargaPay and Thoughtworks. Since May 2022 he has been at Thoughtworks on the LatamPass app, growing from Mobile Engineer to Technical Lead and, in December 2024, to Tech Anchor.</span>
-          </p>
-          <ol class="jobs">
-            <li class="job" data-reveal>
-              <div class="job__head">
-                <h3 class="job__company">Thoughtworks</h3>
-                <p class="job__period"><span data-t="pt">mai 2022 – hoje</span><span data-t="en">May 2022 – present</span></p>
-              </div>
+        <ol class="jobs sec-body">
+          <li class="job" data-reveal>
+            <div class="job__side">
+              <h3 class="job__company">Thoughtworks</h3>
+              <p class="job__period"><span data-t="pt">mai 2022 – hoje</span><span data-t="en">May 2022 – present</span></p>
+              <div class="job__bricks" data-from="2022-05" aria-hidden="true"></div>
+            </div>
+            <div class="job__main">
               <ul class="job__roles">
                 <li><span>Tech Anchor</span> <span class="job__when"><span data-t="pt">dez 2024 – hoje</span><span data-t="en">Dec 2024 – present</span></span></li>
                 <li><span>Technical Lead</span> <span class="job__when"><span data-t="pt">abr 2023 – hoje</span><span data-t="en">Apr 2023 – present</span></span></li>
@@ -430,206 +555,127 @@
                 <li><span data-t="pt">Pipelines ~35% mais rápidos com Bitrise e Jenkins</span><span data-t="en">Pipelines ~35% faster with Bitrise and Jenkins</span></li>
                 <li><span data-t="pt">Features com IA, LLMs no produto e agentes no fluxo de desenvolvimento</span><span data-t="en">AI features, LLMs in the product and agents in the dev workflow</span></li>
               </ul>
-            </li>
+            </div>
+          </li>
 
-            <li class="job" data-reveal>
-              <div class="job__head">
-                <h3 class="job__company">RecargaPay</h3>
-                <p class="job__period"><span data-t="pt">jan 2022 – mai 2022</span><span data-t="en">Jan 2022 – May 2022</span></p>
-              </div>
+          <li class="job" data-reveal>
+            <div class="job__side">
+              <h3 class="job__company">RecargaPay</h3>
+              <p class="job__period"><span data-t="pt">jan 2022 – mai 2022</span><span data-t="en">Jan 2022 – May 2022</span></p>
+              <div class="job__bricks" data-from="2022-01" data-to="2022-05" aria-hidden="true"></div>
+            </div>
+            <div class="job__main">
               <p class="job__title">Mobile Developer</p>
               <p class="job__summary">
                 <span data-t="pt">Na RecargaPay, desenvolvi features em React Native para um app de pagamentos com 18 mil+ usuários simultâneos, com dependências e segurança sempre em dia.</span>
                 <span data-t="en">At RecargaPay I built React Native features for a payments app with 18k+ concurrent users, keeping dependencies and security up to date.</span>
               </p>
-            </li>
+            </div>
+          </li>
 
-            <li class="job" data-reveal>
-              <div class="job__head">
-                <h3 class="job__company">Descomplica</h3>
-                <p class="job__period"><span data-t="pt">fev 2021 – jan 2022</span><span data-t="en">Feb 2021 – Jan 2022</span></p>
-              </div>
+          <li class="job" data-reveal>
+            <div class="job__side">
+              <h3 class="job__company">Descomplica</h3>
+              <p class="job__period"><span data-t="pt">fev 2021 – jan 2022</span><span data-t="en">Feb 2021 – Jan 2022</span></p>
+              <div class="job__bricks" data-from="2021-02" data-to="2022-01" aria-hidden="true"></div>
+            </div>
+            <div class="job__main">
               <p class="job__title">Mobile Developer</p>
               <p class="job__summary">
                 <span data-t="pt">Na Descomplica, construí do zero o app da plataforma de educação, bem avaliado na App Store e na Play Store. React Native, TypeScript, GraphQL e Node.js, com releases pelo Bitrise.</span>
                 <span data-t="en">At Descomplica I built the education platform's app from scratch, well rated on the App Store and Play Store. React Native, TypeScript, GraphQL and Node.js, released through Bitrise.</span>
               </p>
-            </li>
+            </div>
+          </li>
 
-            <li class="job" data-reveal>
-              <div class="job__head">
-                <h3 class="job__company">Equal</h3>
-                <p class="job__period"><span data-t="pt">ago 2019 – fev 2021</span><span data-t="en">Aug 2019 – Feb 2021</span></p>
-              </div>
+          <li class="job" data-reveal>
+            <div class="job__side">
+              <h3 class="job__company">Equal</h3>
+              <p class="job__period"><span data-t="pt">ago 2019 – fev 2021</span><span data-t="en">Aug 2019 – Feb 2021</span></p>
+              <div class="job__bricks" data-from="2019-08" data-to="2021-02" aria-hidden="true"></div>
+            </div>
+            <div class="job__main">
               <p class="job__title"><span data-t="pt">Desenvolvedor web e mobile</span><span data-t="en">Web and mobile developer</span></p>
               <p class="job__summary">
                 <span data-t="pt">Na Equal, trabalhei em gestão financeira para pequenos negócios: pagamentos, faturamento e relatórios em React, React Native e TypeScript, com integrações em Node.js e Java.</span>
                 <span data-t="en">At Equal I worked on financial management for small businesses: payments, invoicing and reports in React, React Native and TypeScript, with Node.js and Java integrations.</span>
               </p>
-            </li>
+            </div>
+          </li>
 
-            <li class="job" data-reveal>
-              <div class="job__head">
-                <h3 class="job__company">LEMAF</h3>
-                <p class="job__period"><span data-t="pt">fev 2018 – ago 2019</span><span data-t="en">Feb 2018 – Aug 2019</span></p>
-              </div>
+          <li class="job" data-reveal>
+            <div class="job__side">
+              <h3 class="job__company">LEMAF</h3>
+              <p class="job__period"><span data-t="pt">fev 2018 – ago 2019</span><span data-t="en">Feb 2018 – Aug 2019</span></p>
+              <div class="job__bricks" data-from="2018-02" data-to="2019-08" aria-hidden="true"></div>
+            </div>
+            <div class="job__main">
               <p class="job__title"><span data-t="pt">Desenvolvedor e arquiteto web</span><span data-t="en">Web developer and architect</span></p>
               <p class="job__summary">
                 <span data-t="pt">No LEMAF, desenvolvi sistemas usados por órgãos ambientais, como o SICAR/PA (Cadastro Ambiental Rural) e o SIGERH-PA (recursos hídricos). .NET Core, Spring, Node.js, React e Vue.</span>
                 <span data-t="en">At LEMAF I built systems used by environmental agencies, such as SICAR/PA (rural environmental registry) and SIGERH-PA (water resources). .NET Core, Spring, Node.js, React and Vue.</span>
               </p>
-            </li>
+            </div>
+          </li>
 
-            <li class="job" data-reveal>
-              <div class="job__head">
-                <h3 class="job__company">Comp Júnior</h3>
-                <p class="job__period"><span data-t="pt">nov 2017 – jan 2018</span><span data-t="en">Nov 2017 – Jan 2018</span></p>
-              </div>
+          <li class="job" data-reveal>
+            <div class="job__side">
+              <h3 class="job__company">Comp Júnior</h3>
+              <p class="job__period"><span data-t="pt">nov 2017 – jan 2018</span><span data-t="en">Nov 2017 – Jan 2018</span></p>
+              <div class="job__bricks" data-from="2017-11" data-to="2018-01" aria-hidden="true"></div>
+            </div>
+            <div class="job__main">
               <p class="job__title"><span data-t="pt">Desenvolvedor trainee</span><span data-t="en">Trainee developer</span></p>
               <p class="job__summary">
                 <span data-t="pt">Na Comp Júnior, fiz os primeiros sites e tive a primeira experiência de trabalho em time.</span>
                 <span data-t="en">At Comp Júnior I built my first websites and had my first experience working on a team.</span>
               </p>
-            </li>
-          </ol>
-        </div>
+            </div>
+          </li>
+        </ol>
       </div>
     </section>
 
-    <!-- PROJETOS -->
-    <section class="section" id="projetos" aria-labelledby="projetos-title">
-      <div class="shell grid">
-        <header class="sec-head">
-          <h2 class="sec-title" id="projetos-title"><span data-t="pt">Projetos</span><span data-t="en">Projects</span></h2>
-        </header>
-
-        <div class="sec-body">
-          <p class="sec-intro">
-            <span data-t="pt">Gustavo Costa (Guh) mantém ferramentas open source no GitHub no tempo livre. Juntas, elas somam mais de 2 mil estrelas; a mais popular é o mac-cleaner-cli, com 1.9k. As outras vão de agentes de IA feitos com Claude Code a um SDK para dados públicos brasileiros.</span>
-            <span data-t="en">Gustavo Costa (Guh) maintains open source tools on GitHub in his spare time. Together they have 2,000+ stars; the most popular is mac-cleaner-cli, with 1.9k. The others range from AI agents built with Claude Code to an SDK for Brazilian public data.</span>
-          </p>
-          <ol class="repos">
-            <li class="repo" data-reveal>
-              <div class="repo__head">
-                <h3 class="repo__name"><a href="https://github.com/guhcostan/mac-cleaner-cli" target="_blank" rel="noopener">mac-cleaner-cli</a></h3>
-                <p class="repo__stars"><span aria-hidden="true">★</span> 1.9k</p>
-              </div>
-              <p class="repo__desc">
-                <span data-t="pt">O mac-cleaner-cli libera espaço no Mac com um comando: caches, logs e sobras de Homebrew e Xcode. Alternativa open source ao CleanMyMac.</span>
-                <span data-t="en">mac-cleaner-cli frees up space on your Mac with one command: caches, logs, and Homebrew and Xcode leftovers. An open source alternative to CleanMyMac.</span>
-              </p>
-              <p class="repo__meta">TypeScript · Node.js · <a href="https://www.npmjs.com/package/mac-cleaner-cli" target="_blank" rel="noopener">npm ↗</a></p>
-            </li>
-
-            <li class="repo" data-reveal>
-              <div class="repo__head">
-                <h3 class="repo__name"><a href="https://github.com/guhcostan/b3analysis" target="_blank" rel="noopener">b3analysis</a></h3>
-                <p class="repo__stars"><span aria-hidden="true">★</span> 128</p>
-              </div>
-              <p class="repo__desc">
-                <span data-t="pt">O b3analysis é um agente de análise de ações da B3 feito com Claude Code. Avalia fundamentos e gera relatórios diários, sem API keys.</span>
-                <span data-t="en">b3analysis is a Brazilian stock (B3) analysis agent built with Claude Code. It reviews fundamentals and writes daily reports, no API keys needed.</span>
-              </p>
-              <p class="repo__meta">Python · Claude Code</p>
-            </li>
-
-            <li class="repo" data-reveal>
-              <div class="repo__head">
-                <h3 class="repo__name"><a href="https://github.com/guhcostan/claude-mega-brain" target="_blank" rel="noopener">claude-mega-brain</a></h3>
-                <p class="repo__stars"><span aria-hidden="true">★</span> 126</p>
-              </div>
-              <p class="repo__desc">
-                <span data-t="pt">O claude-mega-brain é um plugin que dá ao Claude Code a base de conhecimento do seu projeto em toda sessão.</span>
-                <span data-t="en">claude-mega-brain is a plugin that gives Claude Code your project's knowledge base in every session.</span>
-              </p>
-              <p class="repo__meta">Python · Claude Code</p>
-            </li>
-
-            <li class="repo" data-reveal>
-              <div class="repo__head">
-                <h3 class="repo__name"><a href="https://github.com/guhcostan/windows-cleaner-cli" target="_blank" rel="noopener">windows-cleaner-cli</a></h3>
-                <p class="repo__stars"><span aria-hidden="true">★</span> 84</p>
-              </div>
-              <p class="repo__desc">
-                <span data-t="pt">O windows-cleaner-cli leva a mesma ideia para o Windows: limpa caches e arquivos temporários direto do terminal.</span>
-                <span data-t="en">windows-cleaner-cli brings the same idea to Windows: it clears caches and temp files straight from the terminal.</span>
-              </p>
-              <p class="repo__meta">JavaScript · Node.js · npm</p>
-            </li>
-
-            <li class="repo" data-reveal>
-              <div class="repo__head">
-                <h3 class="repo__name"><a href="https://github.com/guhcostan/brasilapi-sdk" target="_blank" rel="noopener">brasilapi-sdk</a></h3>
-                <p class="repo__stars"><span aria-hidden="true">★</span> 70</p>
-              </div>
-              <p class="repo__desc">
-                <span data-t="pt">O brasilapi-sdk é um SDK tipado para a BrasilAPI: CEP, CNPJ, bancos, FIPE e IBGE sem escrever integração do zero.</span>
-                <span data-t="en">brasilapi-sdk is a typed SDK for BrasilAPI: postal codes, company IDs, banks, FIPE and IBGE data without writing the integration yourself.</span>
-              </p>
-              <p class="repo__meta">TypeScript · Node.js</p>
-            </li>
-          </ol>
-
-          <p class="more">
-            <a href="https://github.com/guhcostan" target="_blank" rel="noopener me">
-              <span data-t="pt">Tudo no GitHub</span><span data-t="en">Everything on GitHub</span> <span aria-hidden="true">↗</span>
-            </a>
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- STACK -->
-    <section class="section" id="stack" aria-labelledby="stack-title">
-      <div class="shell grid">
-        <header class="sec-head">
-          <h2 class="sec-title" id="stack-title"><span data-t="pt">Com quais tecnologias o Guh trabalha?</span><span data-t="en">What technologies does Guh work with?</span></h2>
-        </header>
-
-        <div class="sec-body">
+    <!-- STACK E FORMAÇÃO -->
+    <div class="section">
+      <div class="shell split">
+        <section id="stack" aria-labelledby="stack-title">
+          <h2 class="sec-title sec-title--q" id="stack-title"><span data-t="pt">Com quais tecnologias o Guh trabalha?</span><span data-t="en">What technologies does Guh work with?</span></h2>
           <p class="sec-intro">
             <span data-t="pt">Gustavo Costa (Guh) trabalha principalmente com React Native e TypeScript em apps iOS e Android, e com React e Next.js na web. Em experiências anteriores usou Node.js, Java, Spring, .NET Core, GraphQL e PostgreSQL no backend. A entrega se apoia em CI/CD com Bitrise e Jenkins, TDD e Clean Code e, desde o fim de 2024, em LLMs e agentes de IA com Claude e Cursor.</span>
             <span data-t="en">Gustavo Costa (Guh) works mainly with React Native and TypeScript on iOS and Android apps, and with React and Next.js on the web. In previous roles he used Node.js, Java, Spring, .NET Core, GraphQL and PostgreSQL on the backend. His delivery relies on CI/CD with Bitrise and Jenkins, TDD and Clean Code and, since late 2024, LLMs and AI agents with Claude and Cursor.</span>
           </p>
-          <dl class="rows" data-reveal>
+          <dl class="rows sec-body" data-reveal>
             <div class="row">
               <dt>Mobile</dt>
-              <dd>React Native, iOS, Android, Firebase</dd>
+              <dd><ul class="chips"><li>React Native</li><li>iOS</li><li>Android</li><li>Firebase</li></ul></dd>
             </div>
             <div class="row">
               <dt>Web</dt>
-              <dd>TypeScript, React, Next.js, Vue.js, AngularJS</dd>
+              <dd><ul class="chips"><li>TypeScript</li><li>React</li><li>Next.js</li><li>Vue.js</li><li>AngularJS</li></ul></dd>
             </div>
             <div class="row">
               <dt>Backend</dt>
-              <dd>Node.js, Java, Spring, .NET Core, GraphQL, PostgreSQL</dd>
+              <dd><ul class="chips"><li>Node.js</li><li>Java</li><li>Spring</li><li>.NET Core</li><li>GraphQL</li><li>PostgreSQL</li></ul></dd>
             </div>
             <div class="row">
               <dt><span data-t="pt">Entrega</span><span data-t="en">Delivery</span></dt>
-              <dd>CI/CD, Bitrise, Jenkins, TDD, Clean Code</dd>
+              <dd><ul class="chips"><li>CI/CD</li><li>Bitrise</li><li>Jenkins</li><li>TDD</li><li>Clean Code</li></ul></dd>
             </div>
             <div class="row">
               <dt><span data-t="pt">IA</span><span data-t="en">AI</span></dt>
-              <dd><span data-t="pt">LLMs, agentes, Claude, Cursor</span><span data-t="en">LLMs, agents, Claude, Cursor</span></dd>
+              <dd><ul class="chips"><li>LLMs</li><li><span data-t="pt">Agentes</span><span data-t="en">Agents</span></li><li>Claude</li><li>Cursor</li></ul></dd>
             </div>
           </dl>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <!-- FORMAÇÃO -->
-    <section class="section" id="formacao" aria-labelledby="formacao-title">
-      <div class="shell grid">
-        <header class="sec-head">
-          <h2 class="sec-title" id="formacao-title"><span data-t="pt">Onde o Guh estudou?</span><span data-t="en">Where did Guh study?</span></h2>
-        </header>
-
-        <div class="sec-body">
+        <section id="formacao" aria-labelledby="formacao-title">
+          <h2 class="sec-title sec-title--q" id="formacao-title"><span data-t="pt">Onde o Guh estudou?</span><span data-t="en">Where did Guh study?</span></h2>
           <p class="sec-intro">
             <span data-t="pt">Gustavo Costa (Guh) é bacharel em Ciência da Computação pela Universidade Federal de Lavras (UFLA), onde estudou de 2015 a 2019; começou a trabalhar como desenvolvedor em 2017, ainda na graduação. Também tem certificações em arquitetura de software, DevOps, Scrum, escuta ativa e autoliderança.</span>
             <span data-t="en">Gustavo Costa (Guh) holds a BSc in Computer Science from the Federal University of Lavras (UFLA), where he studied from 2015 to 2019; he started working as a developer in 2017, while still in college. He also holds certifications in software architecture, DevOps, Scrum, active listening and self-leadership.</span>
           </p>
-          <dl class="rows" data-reveal>
+          <dl class="rows sec-body" data-reveal>
             <div class="row">
               <dt>2015 – 2019</dt>
               <dd>
@@ -650,44 +696,103 @@
               </dd>
             </div>
           </dl>
+        </section>
+      </div>
+    </div>
+
+    <!-- UM ANO EM BLOCOS -->
+    <section class="section" id="blocos" aria-labelledby="blocos-title">
+      <div class="shell">
+        <h2 class="sec-title" id="blocos-title"><span data-t="pt">Um ano em blocos</span><span data-t="en">A year in blocks</span></h2>
+        <p class="sec-sub">
+          <span data-t="pt">Cada dia com commit é um bloco. Quanto mais verde, mais eu entreguei.</span>
+          <span data-t="en">Every day I committed is a block. The greener, the more I shipped.</span>
+        </p>
+        <div class="sec-body">
+          <!-- contrib:start (o build troca este bloco pelo gráfico de contribuições) -->
+          <p class="more">
+            <a href="https://github.com/guhcostan" target="_blank" rel="noopener">
+              <span data-t="pt">Ver contribuições no GitHub</span><span data-t="en">See contributions on GitHub</span> <i class="i i--ne" aria-hidden="true"></i>
+            </a>
+          </p>
+          <!-- contrib:end -->
         </div>
       </div>
     </section>
 
-    <!-- CONTATO -->
-    <section class="section band" id="contato" aria-labelledby="contato-title">
+    <!-- BLOG -->
+    <section class="section" id="log" aria-labelledby="log-title">
       <div class="shell">
-        <h2 class="band__title" id="contato-title">
-          <span data-t="pt">Vamos conversar.</span><span data-t="en">Let's talk.</span>
-        </h2>
-        <p class="band__lead">
+        <h2 class="sec-title" id="log-title">Blog</h2>
+        <div class="sec-body">
+          <!-- log:start (o build troca este bloco pelo post mais recente) -->
+          <p class="sec-intro">
+            <span data-t="pt">Artigos sobre engenharia mobile, IA, open source e o processo de construir produtos que as pessoas usam.</span>
+            <span data-t="en">Articles on mobile engineering, AI, open source and the craft of building products people use.</span>
+          </p>
+          <!-- log:end -->
+        </div>
+        <p class="more">
+          <a href="/blog/"><span data-t="pt">Todos os posts</span><span data-t="en">All posts</span> <i class="i i--right" aria-hidden="true"></i></a>
+        </p>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section class="section" id="contato" aria-labelledby="contato-title">
+      <div class="shell">
+        <h2 class="sec-title" id="contato-title"><span data-t="pt">Contato</span><span data-t="en">Contact</span></h2>
+        <p class="sec-sub">
           <span data-t="pt">Para oportunidades, projetos ou uma conversa sobre mobile, frontend e IA.</span>
           <span data-t="en">For opportunities, projects or a chat about mobile, frontend and AI.</span>
         </p>
-        <p class="band__email"><a href="mailto:guhcostan@gmail.com">guhcostan@gmail.com</a></p>
-        <ul class="band__links">
-          <li><a href="https://www.linkedin.com/in/guhcostan" target="_blank" rel="noopener me">LinkedIn ↗</a></li>
-          <li><a href="https://github.com/guhcostan" target="_blank" rel="noopener me">GitHub ↗</a></li>
-          <li><a href="https://www.npmjs.com/~guhcostan" target="_blank" rel="noopener me">npm ↗</a></li>
-          <li><a href="https://x.com/guhcostandev" target="_blank" rel="noopener me">X ↗</a></li>
-          <li><a href="https://guhcostan.dev/files/gustavo-costa-curriculo.pdf" target="_blank" rel="noopener"><span data-t="pt">Currículo (PDF)</span><span data-t="en">Résumé (PDF)</span> ↗</a></li>
-          <li><a href="tel:+5535998785953">+55 35 99878-5953</a></li>
-        </ul>
+
+        <div class="contact sec-body">
+          <ul class="links">
+            <li><a href="mailto:guhcostan@gmail.com"><span class="links__name">E-mail</span><span class="links__handle">guhcostan@gmail.com <i class="i i--ne" aria-hidden="true"></i></span></a></li>
+            <li><a href="https://www.linkedin.com/in/guhcostan" target="_blank" rel="noopener me"><span class="links__name">LinkedIn</span><span class="links__handle">@guhcostan <i class="i i--ne" aria-hidden="true"></i></span></a></li>
+            <li><a href="https://github.com/guhcostan" target="_blank" rel="noopener me"><span class="links__name">GitHub</span><span class="links__handle">@guhcostan <i class="i i--ne" aria-hidden="true"></i></span></a></li>
+            <li><a href="https://x.com/guhcostandev" target="_blank" rel="noopener me"><span class="links__name">X</span><span class="links__handle">@guhcostandev <i class="i i--ne" aria-hidden="true"></i></span></a></li>
+            <li><a href="https://www.npmjs.com/~guhcostan" target="_blank" rel="noopener me"><span class="links__name">npm</span><span class="links__handle">~guhcostan <i class="i i--ne" aria-hidden="true"></i></span></a></li>
+            <li><a href="https://guhcostan.dev/files/gustavo-costa-curriculo.pdf" target="_blank" rel="noopener"><span class="links__name"><span data-t="pt">Currículo</span><span data-t="en">Résumé</span></span><span class="links__handle">PDF <i class="i i--ne" aria-hidden="true"></i></span></a></li>
+            <li><a href="tel:+5535998785953"><span class="links__name"><span data-t="pt">Telefone</span><span data-t="en">Phone</span></span><span class="links__handle">+55 35 99878-5953</span></a></li>
+          </ul>
+
+          <div class="term box js-only" data-term>
+            <div class="term__bar"><span class="term__dots" aria-hidden="true"></span> <span data-t="pt">visitante@guhcostan.dev</span><span data-t="en">guest@guhcostan.dev</span></div>
+            <div class="term__screen" data-term-screen>
+              <div class="term__out" data-term-out role="log" aria-live="polite"></div>
+              <form class="term__prompt" data-term-form autocomplete="off">
+                <label class="term__ps1" for="term-input"><span class="u"><span data-t="pt">visitante</span><span data-t="en">guest</span></span> <span class="p">~ $</span></label>
+                <input class="term__input" id="term-input" data-term-input type="text" enterkeyhint="send" autocapitalize="off" spellcheck="false">
+              </form>
+            </div>
+            <div class="term__actions">
+              <button type="button" class="btn btn--light btn--sm" data-cmd="nota"><span data-t="pt">Escrever nota</span><span data-t="en">Write a note</span></button>
+              <button type="button" class="btn btn--dark btn--sm" data-cmd="velha"><span data-t="pt">Jogo da velha</span><span data-t="en">Tic-tac-toe</span></button>
+              <button type="button" class="btn btn--dark btn--sm" data-cmd="ajuda"><span data-t="pt">Ajuda</span><span data-t="en">Help</span></button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="shell footer__inner">
-      <p>© <span id="year">2026</span> Gustavo Costa · São Sebastião, SP</p>
+      <p><span data-t="pt">Construído bloco a bloco.</span><span data-t="en">Built block by block.</span> © <span id="year">2026</span> Gustavo Costa</p>
       <ul class="footer__links">
         <li><a href="/privacidade/" rel="privacy-policy"><span data-t="pt">Privacidade</span><span data-t="en">Privacy</span></a></li>
         <li><a href="/termos/" rel="terms-of-service"><span data-t="pt">Termos de uso</span><span data-t="en">Terms of use</span></a></li>
-        <li><a href="#inicio"><span data-t="pt">Voltar ao topo ↑</span><span data-t="en">Back to top ↑</span></a></li>
+        <li><a href="#inicio"><span data-t="pt">Voltar ao topo</span><span data-t="en">Back to top</span> <i class="i i--up" aria-hidden="true"></i></a></li>
       </ul>
+      <button type="button" class="secrets js-only" data-secrets aria-expanded="false">
+        <span data-t="pt">Segredos</span><span data-t="en">Secrets</span> <b data-secrets-count>0/10</b>
+      </button>
     </div>
   </footer>
 
   <script src="js/main.js" defer></script>
+  <script src="js/play.js" defer></script>
 </body>
 </html>

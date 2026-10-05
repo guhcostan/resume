@@ -9,14 +9,25 @@ Estático e sem framework de runtime: HTML, CSS e JavaScript puros. A única eta
 - `index.html` — página única (currículo/portfólio) com todo o conteúdo nos dois idiomas
 - `content/posts/*.md` — artigos do blog em Markdown (PT + EN no mesmo arquivo)
 - `content/pages/*.md` — páginas institucionais (privacidade, termos), publicadas em `/<slug>/` no mesmo formato dos posts
-- `tools/build.mjs` — gerador: blog, RSS e sitemap a partir de `content/posts`
-- `css/styles.css` — folha de estilo minimalista em preto, branco e cinzas, tema claro/escuro com contraste AA+
-- `js/main.js` — idioma, tema, menu móvel, seção ativa no menu e metadados por página (title, canonical, OG, JSON-LD)
-- `assets/` — logo (original com fundo branco e versões transparentes preta/branca) e Inter auto-hospedada (OFL)
+- `content/data/contributions.json` — snapshot do último ano de contribuições no GitHub (seção "Um ano em blocos")
+- `tools/build.mjs` — gerador: blog, RSS, sitemap e a home (injeta o gráfico de contribuições e o post mais recente)
+- `tools/contributions.mjs` — atualiza o snapshot de contribuições (`npm run contributions`)
+- `css/styles.css` — visual em pixel art: fundo quase preto, Silkscreen nos títulos e rótulos, Inter nos textos longos
+- `js/main.js` — idioma, menu móvel, seção ativa no menu e metadados por página (title, canonical, OG, JSON-LD)
+- `js/play.js` — a parte lúdica: agentes que constroem o nome na intro, agente que anda no chão, prévias dos projetos, terminal do contato (com jogo da velha) e segredos
+- `assets/` — avatar em pixel art (`avatar-pixel.png`, gerado a partir da logo), imagem de compartilhamento, ícones e as fontes Silkscreen e Inter auto-hospedadas (OFL)
 - `files/gustavo-costa-curriculo.pdf` — currículo completo em PDF
 - `robots.txt`, `llms.txt`, `site.webmanifest` — SEO e AI SEO (`sitemap.xml` é gerado no build)
 - `_headers` — headers de segurança e cache aplicados pela Cloudflare
 - `wrangler.jsonc` — configuração do Worker que serve `dist/` na Cloudflare
+
+## Visual
+
+Tudo é construído com blocos. A Silkscreen desenha numa grade de 1/8 em, então com 32 ou 64px cada pixel da fonte vira um bloco inteiro na tela; a intro usa isso para amostrar o nome dos pixels reais da fonte e uma equipe de agentes larga cada bloco no lugar. No fim, o canvas sai e fica o texto de verdade, pixel sobre pixel.
+
+Sem JavaScript, o site continua inteiro: só não tem intro, agentes, terminal nem segredos. Com `prefers-reduced-motion`, nada se mexe. A intro roda uma vez por sessão, só na home, e dá para pular com Esc.
+
+O gráfico "Um ano em blocos" vem do build: ele tenta baixar as contribuições mais recentes e, se a rede falhar, usa o snapshot versionado. Para builds sem rede, `CONTRIB_OFFLINE=1 npm run build`.
 
 ## Rodar localmente
 
@@ -71,7 +82,7 @@ A implementação anterior (app Next.js + Vite) segue preservada no histórico d
 
 Os headers de segurança (CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy) e de cache ficam no arquivo `_headers`, versionado aqui. O HSTS e o HTTPS obrigatório são configurações da zona na Cloudflare.
 
-A CSP libera o script inline de bootstrap (tema e idioma, no `<head>` do `index.html`) pelo hash SHA-256 dele. Se esse script mudar, o `npm run build` falha e mostra o hash novo para colocar no `_headers`. Para calcular à mão:
+A CSP libera o script inline de bootstrap (idioma e intro, no `<head>` do `index.html`) pelo hash SHA-256 dele. Se esse script mudar, o `npm run build` falha e mostra o hash novo para colocar no `_headers`. Para calcular à mão:
 
 ```sh
 node -e "const s=require('fs').readFileSync('index.html','utf8').match(/<script>([\s\S]*?)<\/script>/)[1];console.log('sha256-'+require('crypto').createHash('sha256').update(s).digest('base64'))"

@@ -1,10 +1,10 @@
 # Headers de segurança e cache aplicados pelo Cloudflare Workers (static assets).
-# A CSP libera o script inline de bootstrap (tema/idioma, no <head>) pelo hash
+# A CSP libera o script inline de bootstrap (idioma e intro, no <head>) pelo hash
 # SHA-256 dele: se esse script mudar, atualize o hash (comando no README).
 # O beacon do Cloudflare Web Analytics é injetado pela Cloudflare na borda.
 
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-ZB2iw2UwqqKBPdxBamRL8gvTxGDzVE51h6iyrx5J2po=' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-ZwtDvo8VG+ycbM9linzhfN3M8odwfB8xcNnK12p75ZE=' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

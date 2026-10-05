@@ -4,10 +4,9 @@
    Responsabilidades:
    1. Troca de idioma (PT/EN) com metadados coerentes (title, description,
       canonical, Open Graph, Twitter Card, JSON-LD, alt e aria-label)
-   2. Tema claro/escuro com persistência e contraste garantido
-   3. Menu móvel acessível e seção ativa no menu
-   O movimento (entrada do hero e revelação ao rolar) é feito só em CSS,
-   com degradação segura: o conteúdo nunca fica escondido.
+   2. Menu móvel acessível e seção ativa no menu
+   A parte lúdica (agentes, intro, terminal, segredos) fica em play.js,
+   que ouve o evento "guh:locale" disparado aqui a cada troca de idioma.
    ========================================================================== */
 (function () {
   'use strict';
@@ -45,7 +44,7 @@
       profileName: 'Gustavo Costa (Guh): currículo e portfólio',
       alumni: 'Universidade Federal de Lavras',
       knows: ['Português', 'Inglês', 'Espanhol'],
-      imageAlt: 'Retrato ilustrado em preto e branco de Gustavo Costa (Guh)',
+      imageAlt: 'Gustavo Costa (Guh) em pixel art: o nome feito de blocos, um agente laranja e o avatar de óculos escuros',
       faq: [
         [
           "Quem é o Guh?",
@@ -106,7 +105,7 @@
       profileName: 'Gustavo Costa (Guh): résumé and portfolio',
       alumni: 'Federal University of Lavras',
       knows: ['Portuguese', 'English', 'Spanish'],
-      imageAlt: 'Black and white illustrated portrait of Gustavo Costa (Guh)',
+      imageAlt: 'Gustavo Costa (Guh) in pixel art: his name made of blocks, an orange agent and the sunglasses avatar',
       faq: [
         [
           "Who is Guh?",
@@ -156,10 +155,6 @@
       ]
     }
   };
-
-  var currentTheme = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-  var storedTheme = null;
-  try { storedTheme = localStorage.getItem('guh-theme'); } catch (e) {}
 
   /* ---------------- Utilidades de metadados ------------------------------ */
   function setMeta(selector, attr, value) {
@@ -288,17 +283,9 @@
     Array.prototype.forEach.call(document.querySelectorAll('[data-lang-btn]'), function (btn) {
       btn.setAttribute('aria-pressed', btn.getAttribute('data-lang-btn') === locale ? 'true' : 'false');
     });
-
-    renderThemeSwitch();
   }
 
-  /* O switch de tema não usa texto: o estado vive em aria-checked */
-  function renderThemeSwitch() {
-    var sw = document.querySelector('[data-theme-toggle]');
-    if (sw) sw.setAttribute('aria-checked', currentTheme === 'dark' ? 'true' : 'false');
-  }
-
-  function setLocale(locale) {
+  function setLocale(locale, byUser) {
     if (!I18N[locale]) locale = 'pt-BR';
     root.setAttribute('data-locale', locale);
     root.setAttribute('lang', I18N[locale].lang);
@@ -315,29 +302,15 @@
 
     syncLanguage();
     try { localStorage.setItem('guh-locale', locale); } catch (e) {}
-  }
 
-  /* ---------------- Logo por tema (tinta preta no claro, branca no escuro) */
-  function applyLogo(theme) {
-    Array.prototype.forEach.call(document.querySelectorAll('[data-logo]'), function (img) {
-      var src = theme === 'dark' ? img.getAttribute('data-src-dark') : img.getAttribute('data-src-light');
-      var srcset = theme === 'dark' ? img.getAttribute('data-srcset-dark') : img.getAttribute('data-srcset-light');
-      if (srcset && img.getAttribute('srcset') !== srcset) img.setAttribute('srcset', srcset);
-      if (src && img.getAttribute('src') !== src) img.setAttribute('src', src);
-    });
-  }
-
-  /* ---------------- Tema ------------------------------------------------- */
-  function setTheme(theme, persist) {
-    currentTheme = theme === 'dark' ? 'dark' : 'light';
-    root.setAttribute('data-theme', currentTheme);
-    setMeta('meta[name="theme-color"]', 'content', currentTheme === 'dark' ? '#0a0a0a' : '#fafafa');
-    if (persist) {
-      storedTheme = currentTheme;
-      try { localStorage.setItem('guh-theme', currentTheme); } catch (e) {}
+    var event;
+    try {
+      event = new CustomEvent('guh:locale', { detail: { locale: locale, byUser: !!byUser } });
+    } catch (e) {
+      event = document.createEvent('CustomEvent');
+      event.initCustomEvent('guh:locale', false, false, { locale: locale, byUser: !!byUser });
     }
-    applyLogo(currentTheme);
-    renderThemeSwitch();
+    document.dispatchEvent(event);
   }
 
   /* ---------------- Menu móvel ------------------------------------------- */
@@ -402,29 +375,13 @@
 
   /* ---------------- Inicialização ---------------------------------------- */
   function init() {
-    var themeButton = document.querySelector('[data-theme-toggle]');
-    if (themeButton) {
-      themeButton.addEventListener('click', function () {
-        setTheme(currentTheme === 'dark' ? 'light' : 'dark', true);
-      });
-    }
-
     Array.prototype.forEach.call(document.querySelectorAll('[data-lang-btn]'), function (btn) {
       btn.addEventListener('click', function () {
-        setLocale(btn.getAttribute('data-lang-btn'));
+        var locale = btn.getAttribute('data-lang-btn');
+        if (locale !== root.getAttribute('data-locale')) setLocale(locale, true);
       });
     });
 
-    if (!storedTheme && window.matchMedia) {
-      var dark = window.matchMedia('(prefers-color-scheme: dark)');
-      var onSchemeChange = function (event) {
-        if (!storedTheme) setTheme(event.matches ? 'dark' : 'light', false);
-      };
-      if (dark.addEventListener) dark.addEventListener('change', onSchemeChange);
-      else if (dark.addListener) dark.addListener(onSchemeChange);
-    }
-
-    setTheme(currentTheme, false);
     setLocale(root.getAttribute('data-locale') === 'en' ? 'en' : 'pt-BR');
 
     var year = document.getElementById('year');
