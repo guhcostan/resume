@@ -149,7 +149,10 @@ function extract(html, re, name) {
 const toAbsolute = (s) =>
   s
     .replace(/href="#/g, 'href="/#')
-    .replace(/(\bsrc|\bhref|data-src-light|data-src-dark)="assets\//g, '$1="/assets/');
+    .replace(/(\bsrc|\bhref|data-src-light|data-src-dark)="assets\//g, '$1="/assets/')
+    // srcset tem vários candidatos separados por vírgula
+    .replace(/((?:\bsrcset|data-srcset-light|data-srcset-dark)="[^"]*")/g, (attr) =>
+      attr.replace(/(["\s])assets\//g, '$1/assets/'));
 
 /* ---------- Head comum ---------- */
 function head({ title, description, canonicalPt, canonicalEn, ogType = 'website', article, feed = true }) {
@@ -211,7 +214,7 @@ ${bootstrap}
   <script type="application/ld+json">${jsonld}</script>
 </head>
 <body>
-  <a class="skip-link" href="#conteudo">
+  <a class="skip-link" href="#main-content">
     <span data-t="pt">Ir para o conteúdo</span><span data-t="en">Skip to content</span>
   </a>
 
@@ -279,7 +282,7 @@ function blogIndexHtml(posts, shell) {
     ? `    <ol class="post-list">\n${cards}\n    </ol>`
     : empty;
 
-  const main = `  <main id="conteudo">
+  const main = `  <main id="main-content">
     <section class="section">
       <div class="shell">
         <header class="sec-head" data-reveal>
@@ -342,7 +345,7 @@ function postHtml(p, shell) {
   const tags = p.tags.length ? `\n          <ul class="tags">${p.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>` : '';
   const url = `${SITE}/blog/${p.slug}/`;
 
-  const main = `  <main id="conteudo">
+  const main = `  <main id="main-content">
     <article class="post">
       <div class="shell">
         <div class="post__inner">

@@ -252,12 +252,16 @@ html[data-locale="en"] [data-t="pt"] {
    Mesmo desenho em duas tintas: preta no claro, branca no escuro.
    O CSS troca a imagem antes da pintura; o JavaScript mantém o atributo
    src coerente para navegadores sem suporte a content em imagens. */
-[data-logo] {
-  content: url("../assets/guh-logo-transparente.webp");
+/* No claro vale o src/srcset do HTML. No escuro, o CSS troca a tinta antes
+   da pintura, com a mesma resolução que o srcset escolheria. */
+html[data-theme="dark"] .brand__mark [data-logo] {
+  content: image-set(url("../assets/guh-logo-transparente-branca-80.webp") 1x,
+    url("../assets/guh-logo-transparente-branca-160.webp") 2x);
 }
 
-html[data-theme="dark"] [data-logo] {
-  content: url("../assets/guh-logo-transparente-branca.webp");
+html[data-theme="dark"] .hero__plate [data-logo] {
+  content: image-set(url("../assets/guh-logo-transparente-branca-320.webp") 1x,
+    url("../assets/guh-logo-transparente-branca-640.webp") 2x);
 }
 
 .plate img {

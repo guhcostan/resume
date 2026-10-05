@@ -38,7 +38,7 @@
       ogLocale: 'pt_BR',
       title: 'Gustavo Costa (Guh) — Engenheiro mobile e frontend',
       description:
-        'Guh (Gustavo Costa), engenheiro mobile e frontend. Tech Anchor na Thoughtworks, à frente do LatamPass. 8+ anos de React Native, TypeScript e IA em produção.',
+        'Guh (Gustavo Costa), engenheiro mobile e frontend. Tech Anchor na Thoughtworks, à frente do LatamPass. 8+ anos de React Native, TypeScript e IA.',
       jobTitle: 'Lead Mobile & Frontend Engineer',
       personDescription:
         'Engenheiro mobile e frontend com 8+ anos fazendo apps usados por milhões de pessoas. Tech Anchor na Thoughtworks, responsável pela direção técnica do app LatamPass, com IA em produção desde 2024.',
@@ -46,6 +46,20 @@
       alumni: 'Universidade Federal de Lavras',
       knows: ['Português', 'Inglês', 'Espanhol'],
       imageAlt: 'Retrato ilustrado em preto e branco de Gustavo Costa (Guh)',
+      faq: [
+        [
+          "Quem é o Guh?",
+          "Comecei em 2017, fazendo sites como trainee na Comp Júnior. De lá passei por sistemas ambientais do governo, gestão financeira, educação e pagamentos até chegar ao mobile em grande escala. Na Thoughtworks, fui um dos primeiros engenheiros do app LatamPass. Ajudei a definir arquitetura, padrões e CI/CD desde o primeiro dia, liderei um time de 8+ pessoas entre Brasil e Chile e hoje cuido da direção técnica do produto. Gosto de software rápido, confiável e fácil de manter, que entrega valor e não só feature. Desde o fim de 2024 também trabalho com IA: features com LLMs no produto e agentes que aceleram o dia a dia do time. Nas horas vagas, mantenho ferramentas open source."
+        ],
+        [
+          "Com quais tecnologias o Guh trabalha?",
+          "Gustavo Costa (Guh) trabalha principalmente com React Native e TypeScript em apps iOS e Android, e com React e Next.js na web. Em experiências anteriores usou Node.js, Java, Spring, .NET Core, GraphQL e PostgreSQL no backend. A entrega se apoia em CI/CD com Bitrise e Jenkins, TDD e Clean Code e, desde o fim de 2024, em LLMs e agentes de IA com Claude e Cursor."
+        ],
+        [
+          "Onde o Guh estudou?",
+          "Gustavo Costa (Guh) é bacharel em Ciência da Computação pela Universidade Federal de Lavras (UFLA), onde estudou de 2015 a 2019; começou a trabalhar como desenvolvedor em 2017, ainda na graduação. Também tem certificações em arquitetura de software, DevOps, Scrum, escuta ativa e autoliderança."
+        ]
+      ],
       openSourceName: 'Projetos open source de Gustavo Costa (Guh)',
       openSource: [
         {
@@ -85,7 +99,7 @@
       ogLocale: 'en_US',
       title: 'Gustavo Costa (Guh) — Mobile & frontend engineer',
       description:
-        "Guh (Gustavo Costa), mobile & frontend engineer. Tech Anchor at Thoughtworks, leading LatamPass. 8+ years of React Native, TypeScript and AI in production.",
+        "Guh (Gustavo Costa), mobile & frontend engineer. Tech Anchor at Thoughtworks, leading LatamPass. 8+ years of React Native, TypeScript and AI.",
       jobTitle: 'Lead Mobile & Frontend Engineer',
       personDescription:
         "Mobile and frontend engineer with 8+ years building apps used by millions of people. Tech Anchor at Thoughtworks, leading the technical direction of the LatamPass app, with AI in production since 2024.",
@@ -93,6 +107,20 @@
       alumni: 'Federal University of Lavras',
       knows: ['Portuguese', 'English', 'Spanish'],
       imageAlt: 'Black and white illustrated portrait of Gustavo Costa (Guh)',
+      faq: [
+        [
+          "Who is Guh?",
+          "I started in 2017, building websites as a trainee at Comp Júnior. From there I worked on government environmental systems, financial management, education and payments before landing in mobile at scale. At Thoughtworks I was one of the founding engineers of the LatamPass app. I helped set the architecture, standards and CI/CD from day one, led a team of 8+ people across Brazil and Chile, and now own the product's technical direction. I care about software that is fast, reliable and easy to maintain, and that delivers value rather than just features. Since late 2024 I've also been working with AI: LLM-powered features in the product and agents that speed up the team's day-to-day. On the side, I maintain open source tools."
+        ],
+        [
+          "What technologies does Guh work with?",
+          "Gustavo Costa (Guh) works mainly with React Native and TypeScript on iOS and Android apps, and with React and Next.js on the web. In previous roles he used Node.js, Java, Spring, .NET Core, GraphQL and PostgreSQL on the backend. His delivery relies on CI/CD with Bitrise and Jenkins, TDD and Clean Code and, since late 2024, LLMs and AI agents with Claude and Cursor."
+        ],
+        [
+          "Where did Guh study?",
+          "Gustavo Costa (Guh) holds a BSc in Computer Science from the Federal University of Lavras (UFLA), where he studied from 2015 to 2019; he started working as a developer in 2017, while still in college. He also holds certifications in software architecture, DevOps, Scrum, active listening and self-leadership."
+        ]
+      ],
       openSourceName: 'Open source projects by Gustavo Costa (Guh)',
       openSource: [
         {
@@ -192,6 +220,18 @@
           mainEntity: { '@id': personId }
         },
         {
+          '@type': 'FAQPage',
+          '@id': BASE + '#faq',
+          inLanguage: M.lang,
+          mainEntity: M.faq.map(function (item) {
+            return {
+              '@type': 'Question',
+              name: item[0],
+              acceptedAnswer: { '@type': 'Answer', text: item[1] }
+            };
+          })
+        },
+        {
           '@type': 'ItemList',
           '@id': BASE + '#open-source',
           name: M.openSourceName,
@@ -280,6 +320,8 @@
   function applyLogo(theme) {
     Array.prototype.forEach.call(document.querySelectorAll('[data-logo]'), function (img) {
       var src = theme === 'dark' ? img.getAttribute('data-src-dark') : img.getAttribute('data-src-light');
+      var srcset = theme === 'dark' ? img.getAttribute('data-srcset-dark') : img.getAttribute('data-srcset-light');
+      if (srcset && img.getAttribute('srcset') !== srcset) img.setAttribute('srcset', srcset);
       if (src && img.getAttribute('src') !== src) img.setAttribute('src', src);
     });
   }
