@@ -693,7 +693,7 @@
     const history = [];
     let hIndex = 0;
     let note = null; // fluxo da nota: { step, msg, from }
-    let game = null; // jogo da velha: { b, over, cells }
+    let game = null; // jogo da velha: { b, over, thinking, cells }
     let typed = false;
 
     const placeholder = () => {
@@ -846,7 +846,7 @@
       game.cells.forEach((cell, i) => {
         cell.textContent = game.b[i] || String(i + 1);
         cell.className = game.b[i] ? game.b[i].toLowerCase() : '';
-        cell.disabled = !!game.b[i] || game.over;
+        cell.disabled = !!game.b[i] || game.over || game.thinking;
       });
     }
 
@@ -868,15 +868,19 @@
     }
 
     function play(i) {
-      if (!game || game.over || game.b[i]) return;
+      if (!game || game.over || game.thinking || game.b[i]) return;
       game.b[i] = 'X';
       renderGame();
       let w = winner(game.b);
       if (w) return endGame(w);
-      game.cells.forEach((c) => { c.disabled = true; });
+      const current = game;
+      current.thinking = true;
+      renderGame();
       setTimeout(() => {
-        game.b[bestMove(game.b)] = 'O';
-        w = winner(game.b);
+        if (game !== current || current.over) return;
+        current.b[bestMove(current.b)] = 'O';
+        current.thinking = false;
+        w = winner(current.b);
         if (w) return endGame(w);
         renderGame();
       }, 380);
@@ -889,7 +893,7 @@
       grid.className = 'ttt';
       grid.setAttribute('role', 'group');
       grid.setAttribute('aria-label', t('Jogo da velha', 'Tic-tac-toe'));
-      game = { b: ['', '', '', '', '', '', '', '', ''], over: false, cells: [] };
+      game = { b: ['', '', '', '', '', '', '', '', ''], over: false, thinking: false, cells: [] };
       const current = game;
       for (let i = 0; i < 9; i++) {
         const cell = document.createElement('button');
