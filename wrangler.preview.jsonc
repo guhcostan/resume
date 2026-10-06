@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Prévia do site em guhcostan.dev/preview/, gerada por `npm run build:preview`.
+  // Worker separado, só com assets, preso à rota /preview*: a produção
+  // (Worker "resume", domínio guhcostan.dev) não é tocada.
+  "name": "resume-preview",
+  "compatibility_date": "2026-10-05",
+  "workers_dev": false,
+  "routes": [{ "pattern": "guhcostan.dev/preview*", "zone_name": "guhcostan.dev" }],
+  "assets": {
+    "directory": "./dist-preview/",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}

@@ -6,6 +6,7 @@
   "description": "Site pessoal e blog de Gustavo Costa (Guh). Estático, gerado a partir de Markdown.",
   "scripts": {
     "build": "node tools/build.mjs",
+    "build:preview": "node tools/build.mjs && node tools/preview.mjs",
     "contributions": "node tools/contributions.mjs",
     "dev": "node tools/build.mjs && python3 -m http.server 8000 --directory dist"
   },
