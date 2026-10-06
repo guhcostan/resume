@@ -10,6 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { marked } from 'marked';
+import { CONTRIB_FILE, fetchContributions } from './contributions.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -17,6 +18,7 @@ const DIST = path.join(ROOT, 'dist');
 const POSTS_DIR = path.join(ROOT, 'content', 'posts');
 const PAGES_DIR = path.join(ROOT, 'content', 'pages');
 const SITE = 'https://guhcostan.dev';
+const OG_ALT = 'Gustavo Costa (Guh) em pixel art: o nome feito de blocos, um agente laranja e o avatar de óculos escuros';
 
 const log = (...a) => console.log('[build]', ...a);
 const esc = (s = '') =>
@@ -203,8 +205,8 @@ function head({ title, description, canonicalPt, canonicalEn, ogType = 'website'
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-  <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#fafafa">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0c0d0b">
 
   <link rel="canonical" href="${canonicalPt}">
   <link rel="alternate" hreflang="pt-BR" href="${canonicalPt}">
@@ -223,7 +225,7 @@ ${feed ? `  <link rel="alternate" type="application/rss+xml" title="Guh — Blog
   <meta property="og:image" content="${ogImage}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Retrato ilustrado de Gustavo Costa (Guh)">
+  <meta property="og:image:alt" content="${OG_ALT}">
 ${article ? `  <meta property="article:published_time" content="${article.published}">
   <meta property="article:modified_time" content="${article.modified}">
 ${article.tags.map((t) => `  <meta property="article:tag" content="${esc(t)}">`).join('\n')}
@@ -234,12 +236,14 @@ ${article.tags.map((t) => `  <meta property="article:tag" content="${esc(t)}">`)
   <meta name="twitter:title" content="${esc(title)}">
   <meta name="twitter:description" content="${esc(description)}">
   <meta name="twitter:image" content="${ogImage}">
-  <meta name="twitter:image:alt" content="Retrato ilustrado de Gustavo Costa (Guh)">
+  <meta name="twitter:image:alt" content="${OG_ALT}">
 
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon-32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon-180.png">
   <link rel="manifest" href="/site.webmanifest">
+  <link rel="preload" href="/assets/fonts/silkscreen-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/silkscreen-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/css/styles.css">`;
 }
@@ -247,7 +251,7 @@ ${article.tags.map((t) => `  <meta property="article:tag" content="${esc(t)}">`)
 /* ---------- Página completa ---------- */
 function page({ headExtras, bootstrap, pageI18n, jsonld, header, main, footer }) {
   return `<!DOCTYPE html>
-<html lang="pt-BR" data-locale="pt-BR" data-theme="light">
+<html lang="pt-BR" data-locale="pt-BR">
 <head>
 ${headExtras}
 
@@ -267,33 +271,37 @@ ${main}
 ${footer}
 
   <script src="/js/main.js" defer></script>
+  <script src="/js/play.js" defer></script>
 </body>
 </html>
 `;
 }
 
-/* ---------- Blog: card de post ---------- */
-function postCard(p) {
-  const tags = p.tags.length
-    ? `\n        <ul class="tags">${p.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`
+/* ---------- Blog: card de post ----------
+   O mesmo card serve à home (seção Blog, h3) e ao índice do blog (h2).
+   À esquerda, um agente segura uma placa com o título do post. */
+function logCard(p, { heading = 'h2', tags = true } = {}) {
+  const tagList = tags && p.tags.length
+    ? `\n          <ul class="tags">${p.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`
     : '';
-  return `      <li class="post-card">
-        <a class="post-card__link" href="/blog/${p.slug}/">
-          <p class="post-card__meta">
-            <time datetime="${iso(p.date)}">
-              <span data-t="pt">${esc(fmtPT.format(p.date))}</span><span data-t="en">${esc(fmtEN.format(p.date))}</span>
-            </time>
-            <span aria-hidden="true">·</span>
-            <span data-t="pt">${p.readingTime} min de leitura</span><span data-t="en">${p.readingTime} min read</span>
+  return `<a class="logcard box" href="/blog/${p.slug}/" data-reveal>
+        <div class="logcard__art" aria-hidden="true">
+          <div class="logcard__scene">
+            <span class="logcard__sign"><span data-t="pt">${esc(p.title)}</span><span data-t="en">${esc(p.title_en)}</span></span>
+            <span data-agent></span>
+            <span class="logcard__ground"></span>
+          </div>
+        </div>
+        <div class="logcard__body">
+          <p class="logcard__meta">
+            <time datetime="${iso(p.date)}"><span data-t="pt">${esc(fmtPT.format(p.date))}</span><span data-t="en">${esc(fmtEN.format(p.date))}</span></time>
+            · <span data-t="pt">${p.readingTime} min de leitura</span><span data-t="en">${p.readingTime} min read</span>
           </p>
-          <h2 class="post-card__title">
-            <span data-t="pt">${esc(p.title)}</span><span data-t="en">${esc(p.title_en)}</span>
-          </h2>
-          <p class="post-card__desc">
-            <span data-t="pt">${esc(p.description)}</span><span data-t="en">${esc(p.description_en)}</span>
-          </p>${tags}
-        </a>
-      </li>`;
+          <${heading} class="logcard__title"><span data-t="pt">${esc(p.title)}</span><span data-t="en">${esc(p.title_en)}</span></${heading}>
+          <p class="logcard__desc"><span data-t="pt">${esc(p.description)}</span><span data-t="en">${esc(p.description_en)}</span></p>${tagList}
+          <span class="logcard__cta"><span data-t="pt">Ler</span><span data-t="en">Read</span> <i class="i i--right"></i></span>
+        </div>
+      </a>`;
 }
 
 function blogJsonLd(posts) {
@@ -315,30 +323,28 @@ function blogJsonLd(posts) {
 }
 
 function blogIndexHtml(posts, shell) {
-  const cards = posts.map(postCard).join('\n');
+  const cards = posts.map((p) => `      <li>\n      ${logCard(p)}\n      </li>`).join('\n');
   const empty = `      <p class="post-empty">
         <span data-t="pt">Os primeiros artigos estão a caminho.</span>
         <span data-t="en">The first posts are on the way.</span>
       </p>`;
   const list = posts.length
-    ? `    <ol class="post-list">\n${cards}\n    </ol>`
+    ? `    <ol class="post-list sec-body">\n${cards}\n    </ol>`
     : empty;
 
   const main = `  <main id="main-content">
     <section class="section">
       <div class="shell">
-        <header class="sec-head" data-reveal>
-          <h1 class="sec-title"><span data-t="pt">Blog</span><span data-t="en">Blog</span></h1>
-          <p class="sec-lede">
-            <span data-t="pt">Artigos sobre engenharia mobile, IA, open source e o processo de construir produtos que as pessoas usam.</span>
-            <span data-t="en">Articles on mobile engineering, AI, open source and the craft of building products people use.</span>
-          </p>
-        </header>
+        <h1 class="sec-title">Blog</h1>
+        <p class="sec-sub">
+          <span data-t="pt">Artigos sobre engenharia mobile, IA, open source e o processo de construir produtos que as pessoas usam.</span>
+          <span data-t="en">Articles on mobile engineering, AI, open source and the craft of building products people use.</span>
+        </p>
 
 ${list}
 
-        <p class="projects__more" data-reveal>
-          <a href="/feed.xml"><span data-t="pt">Assinar o RSS</span><span data-t="en">Subscribe via RSS</span> <span aria-hidden="true">↗</span></a>
+        <p class="more">
+          <a href="/feed.xml"><span data-t="pt">Assinar o RSS</span><span data-t="en">Subscribe via RSS</span> <i class="i i--ne" aria-hidden="true"></i></a>
         </p>
       </div>
     </section>
@@ -391,9 +397,12 @@ function postHtml(p, shell) {
     <article class="post">
       <div class="shell">
         <div class="post__inner">
-          <header class="post__header" data-reveal>
+          <header class="post__header">
+            <h1 class="post__title">
+              <span data-t="pt">${esc(p.title)}</span><span data-t="en">${esc(p.title_en)}</span>
+            </h1>
             <p class="post__meta">
-              <a class="post__back-link" href="/blog/"><span data-t="pt">Blog</span><span data-t="en">Blog</span></a>
+              <a class="post__back-link" href="/blog/">Blog</a>
               <span aria-hidden="true">/</span>
               <time datetime="${iso(p.date)}">
                 <span data-t="pt">${esc(fmtPT.format(p.date))}</span><span data-t="en">${esc(fmtEN.format(p.date))}</span>
@@ -401,9 +410,6 @@ function postHtml(p, shell) {
               <span aria-hidden="true">·</span>
               <span data-t="pt">${p.readingTime} min de leitura</span><span data-t="en">${p.readingTime} min read</span>
             </p>
-            <h1 class="post__title">
-              <span data-t="pt">${esc(p.title)}</span><span data-t="en">${esc(p.title_en)}</span>
-            </h1>
             <p class="post__lead">
               <span data-t="pt">${esc(p.description)}</span><span data-t="en">${esc(p.description_en)}</span>
             </p>${tags}
@@ -414,10 +420,31 @@ function postHtml(p, shell) {
             <div data-t="en">${p.htmlEn}</div>
           </div>
 
-          <footer class="post__footer">
-            <a class="project__link" href="/blog/">
-              <span data-t="pt">Voltar para o blog</span><span data-t="en">Back to the blog</span>
-            </a>
+          <footer class="post__footer" data-post-end>
+            <aside class="follow box" aria-labelledby="follow-title">
+              <div class="follow__head">
+                <span data-agent="sm"></span>
+                <span class="follow__tag" id="follow-title"><span data-t="pt">Siga ele. Eu vou saber.</span><span data-t="en">Follow him. I'll know.</span></span>
+              </div>
+              <p>
+                <span data-t="pt">Escrevo aqui sobre mobile, IA e open source. Para ver o próximo post, me siga no X.</span>
+                <span data-t="en">I write here about mobile, AI and open source. To catch the next post, follow me on X.</span>
+              </p>
+              <p>
+                <a class="btn btn--light btn--sm" href="https://x.com/guhcostandev" target="_blank" rel="noopener me">
+                  <span data-t="pt">Seguir no X</span><span data-t="en">Follow on X</span> <i class="i i--ne" aria-hidden="true"></i>
+                </a>
+              </p>
+              <p class="follow__also">
+                <span data-t="pt">Também no</span><span data-t="en">Also on</span>
+                <a href="https://www.linkedin.com/in/guhcostan" target="_blank" rel="noopener me">LinkedIn</a>,
+                <a href="https://github.com/guhcostan" target="_blank" rel="noopener me">GitHub</a>
+                <span data-t="pt">e no</span><span data-t="en">and</span> <a href="/feed.xml">RSS</a>.
+              </p>
+            </aside>
+            <p class="more">
+              <a href="/blog/"><i class="i i--left" aria-hidden="true"></i> <span data-t="pt">Voltar para o blog</span><span data-t="en">Back to the blog</span></a>
+            </p>
           </footer>
         </div>
       </div>
@@ -453,15 +480,15 @@ function staticPageHtml(pg, shell) {
       <div class="shell">
         <div class="post__inner">
           <header class="post__header">
+            <h1 class="post__title">
+              <span data-t="pt">${esc(pg.title)}</span><span data-t="en">${esc(pg.title_en)}</span>
+            </h1>
             <p class="post__meta">
               <span data-t="pt">Atualizado em</span><span data-t="en">Updated</span>
               <time datetime="${iso(pg.updated)}">
                 <span data-t="pt">${esc(fmtPT.format(pg.updated))}</span><span data-t="en">${esc(fmtEN.format(pg.updated))}</span>
               </time>
             </p>
-            <h1 class="post__title">
-              <span data-t="pt">${esc(pg.title)}</span><span data-t="en">${esc(pg.title_en)}</span>
-            </h1>
             <p class="post__lead">
               <span data-t="pt">${esc(pg.description)}</span><span data-t="en">${esc(pg.description_en)}</span>
             </p>
@@ -504,15 +531,18 @@ function staticPageHtml(pg, shell) {
 function notFoundHtml(shell) {
   const main = `  <main id="main-content">
     <section class="section">
-      <div class="shell">
-        <header class="sec-head">
-          <h1 class="sec-title"><span data-t="pt">Página não encontrada</span><span data-t="en">Page not found</span></h1>
-        </header>
+      <div class="shell lost" data-lost>
+        <p class="lost__code" aria-hidden="true">404</p>
+        <h1 class="sec-title"><span data-t="pt">Página não encontrada</span><span data-t="en">Page not found</span></h1>
         <p class="sec-intro">
           <span data-t="pt">O endereço não existe ou mudou de lugar.</span>
           <span data-t="en">This address does not exist or has moved.</span>
         </p>
-        <p class="more"><a href="/"><span data-t="pt">Voltar ao início</span><span data-t="en">Back to the home page</span></a> · <a href="/blog/">Blog</a></p>
+        <div class="lost__scene" aria-hidden="true">
+          <span class="bubble"><span data-t="pt">Esse bloco não existe.</span><span data-t="en">This block doesn't exist.</span></span>
+          <span data-agent></span>
+        </div>
+        <p class="more"><a href="/"><span data-t="pt">Voltar ao início</span><span data-t="en">Back to the home page</span></a> <a href="/blog/">Blog</a></p>
       </div>
     </section>
   </main>`;
@@ -529,6 +559,67 @@ function notFoundHtml(shell) {
     main,
     footer: shell.footer
   });
+}
+
+/* ---------- Home: um ano em blocos e post mais recente ----------
+   O index.html traz marcadores <!-- nome:start --> ... <!-- nome:end --> com
+   um conteúdo reserva; o build troca pelo gráfico e pelo card do post. */
+async function loadContributions() {
+  let snapshot = null;
+  try {
+    snapshot = JSON.parse(await fs.readFile(CONTRIB_FILE, 'utf8'));
+  } catch {
+    log('aviso: content/data/contributions.json não encontrado (rode npm run contributions)');
+  }
+  if (process.env.CONTRIB_OFFLINE === '1') return snapshot;
+  try {
+    const live = await fetchContributions({ timeoutMs: 6000 });
+    log(`contribuições do GitHub atualizadas até ${live.updated}`);
+    return live;
+  } catch (err) {
+    log(`contribuições ao vivo indisponíveis (${err.message}); usando o snapshot`);
+    return snapshot;
+  }
+}
+
+function contribHtml(data) {
+  const CELL = 10;
+  const STEP = 13;
+  const days = data.days;
+  const offset = new Date(`${days[0].date}T00:00:00Z`).getUTCDay(); // semanas começam no domingo
+  const cols = Math.ceil((days.length + offset) / 7);
+  const rects = days
+    .map((d, i) => {
+      const n = i + offset;
+      const level = Math.max(0, Math.min(4, Number(d.level) || 0));
+      const cls = level ? ` class="l${level}"` : '';
+      return `<rect x="${Math.floor(n / 7) * STEP}" y="${(n % 7) * STEP}" width="${CELL}" height="${CELL}"${cls} data-d="${esc(d.date)}" data-c="${Number(d.count) || 0}"/>`;
+    })
+    .join('');
+  const totalPt = new Intl.NumberFormat('pt-BR').format(data.total);
+  const totalEn = new Intl.NumberFormat('en-US').format(data.total);
+  const labelPt = `Gráfico de contribuições de @${data.user} no GitHub: ${totalPt} no último ano`;
+  const labelEn = `@${data.user}'s GitHub contributions chart: ${totalEn} in the last year`;
+  return `<figure class="contrib" data-reveal>
+            <svg class="contrib__grid" viewBox="0 0 ${cols * STEP - (STEP - CELL)} ${7 * STEP - (STEP - CELL)}" role="img" data-aria-pt="${esc(labelPt)}" data-aria-en="${esc(labelEn)}" aria-label="${esc(labelPt)}">${rects}</svg>
+            <figcaption class="contrib__cap">
+              <span><a href="https://github.com/${esc(data.user)}" target="_blank" rel="noopener">@${esc(data.user)}</a> · <span data-t="pt">${totalPt} contribuições no último ano</span><span data-t="en">${totalEn} contributions in the last year</span></span>
+              <span class="legend" aria-hidden="true"><span data-t="pt">menos</span><span data-t="en">less</span> <i></i><i></i><i></i><i></i><i></i> <span data-t="pt">mais</span><span data-t="en">more</span></span>
+            </figcaption>
+          </figure>`;
+}
+
+function replaceBetween(html, name, content) {
+  const re = new RegExp(`<!-- ${name}:start[\\s\\S]*?<!-- ${name}:end -->`);
+  if (!re.test(html)) throw new Error(`não encontrei o marcador "${name}" no index.html`);
+  return html.replace(re, () => content);
+}
+
+function homeHtml(indexHtml, { posts, contrib }) {
+  let html = indexHtml;
+  if (contrib && contrib.days && contrib.days.length) html = replaceBetween(html, 'contrib', contribHtml(contrib));
+  if (posts.length) html = replaceBetween(html, 'log', logCard(posts[0], { heading: 'h3', tags: false }));
+  return html;
 }
 
 /* ---------- Feeds ---------- */
@@ -644,7 +735,7 @@ async function build() {
   await fs.mkdir(DIST, { recursive: true });
 
   // Estáticos
-  await fs.copyFile(path.join(ROOT, 'index.html'), path.join(DIST, 'index.html'));
+  await fs.writeFile(path.join(DIST, 'index.html'), homeHtml(indexHtml, { posts, contrib: await loadContributions() }));
   await fs.copyFile(path.join(ROOT, '_headers'), path.join(DIST, '_headers'));
   await fs.copyFile(path.join(ROOT, 'robots.txt'), path.join(DIST, 'robots.txt'));
   await fs.copyFile(path.join(ROOT, 'site.webmanifest'), path.join(DIST, 'site.webmanifest'));

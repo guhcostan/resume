@@ -4,6 +4,8 @@
   // gerado por `npm run build`.
   "name": "resume",
   "compatibility_date": "2026-10-05",
+  // Habilita as prévias de branches e PRs com `npx wrangler preview`.
+  "previews": {},
   "assets": {
     "directory": "./dist/",
     "not_found_handling": "404-page",
