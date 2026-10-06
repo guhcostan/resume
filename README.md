@@ -70,6 +70,8 @@ O site roda no **Cloudflare Workers** (assets estáticos, sem código de servido
 
 Push na `main` dispara o **Workers Builds** da Cloudflare, conectado a este repositório: ele roda `npm run build` e depois `npx wrangler deploy`, que publica `dist/` conforme o `wrangler.jsonc`. Endereços inexistentes caem na página `404.html` gerada pelo build.
 
+Branches e PRs usam `npx wrangler preview` para publicar uma prévia. O bloco `previews: {}` no `wrangler.jsonc` habilita esse comando; os assets e as configurações de compatibilidade continuam no nível principal.
+
 ### Prévia em /preview/
 
 `npm run build:preview` gera `dist-preview/` com o site inteiro sob `/preview/` (links prefixados, `noindex`). O Worker separado `resume-preview` (`wrangler.preview.jsonc`) publica essa pasta na rota `guhcostan.dev/preview*`, sem tocar no Worker de produção:
