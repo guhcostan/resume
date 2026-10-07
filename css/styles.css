@@ -97,6 +97,7 @@ html {
 }
 
 body {
+  position: relative; /* bloco de contenção da camada dos agentes: o clip vale para ela */
   margin: 0;
   overflow-x: clip;
   background: var(--bg);
@@ -667,7 +668,7 @@ html[data-locale="en"] [data-t="pt"] {
 html.intro .hero__name,
 html.intro .hero__reveal {
   visibility: hidden;
-  animation: intro-failsafe 0s 6s forwards;
+  animation: intro-failsafe 0s 12s forwards;
 }
 
 @keyframes intro-failsafe {
@@ -1897,6 +1898,204 @@ html.intro .hero__reveal {
   from { translate: -50% 140%; }
 }
 
+/* ---------- Cursores em pixel (só com mouse) ---------- */
+@media (hover: hover) and (pointer: fine) {
+  html {
+    cursor: url("../assets/cursors/block.svg") 7 7, auto;
+  }
+
+  a,
+  button,
+  [role="button"],
+  label[for],
+  summary,
+  .contrib__grid rect {
+    cursor: url("../assets/cursors/hand.svg") 9 2, pointer;
+  }
+
+  a:active,
+  button:active,
+  [role="button"]:active {
+    cursor: url("../assets/cursors/hand-down.svg") 9 2, pointer;
+  }
+
+  input,
+  textarea {
+    cursor: text;
+  }
+}
+
+/* ---------- A equipe de agentes (crew.js) ---------- */
+.crew-layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 35;
+  width: 100%;
+  height: 0;
+  pointer-events: none;
+}
+
+.crew-layer--ghosts {
+  z-index: 5;
+}
+
+.bot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 42px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  pointer-events: none;
+  will-change: transform;
+}
+
+button.bot {
+  pointer-events: auto;
+}
+
+.bot .agent {
+  width: 42px;
+  height: 24px;
+  transition: transform 0.12s steps(2);
+}
+
+.bot.is-flip .agent svg {
+  transform: scaleX(-1);
+}
+
+.bot .bubble {
+  z-index: 1;
+}
+
+.bot.is-jump .agent {
+  animation: bot-jump 0.6s steps(6);
+}
+
+.bot.is-spin .agent {
+  animation: bot-spin 0.6s steps(8);
+}
+
+.bot.is-wave .agent {
+  animation: bot-wave 0.6s steps(6);
+}
+
+@keyframes bot-jump {
+  40% { transform: translateY(-18px); }
+  70% { transform: translateY(-6px); }
+}
+
+@keyframes bot-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bot-wave {
+  25% { transform: rotate(-14deg); }
+  75% { transform: rotate(14deg); }
+}
+
+/* Fumaça do jetpack */
+.puff {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: var(--green);
+  pointer-events: none;
+  animation: puff 0.55s steps(4) forwards;
+}
+
+@keyframes puff {
+  to {
+    translate: 0 16px;
+    opacity: 0;
+  }
+}
+
+/* Bloco que o companheiro larga */
+.falling-block {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 12px;
+  height: 12px;
+  background: var(--green);
+  box-shadow: 2px 2px 0 var(--lv1);
+  pointer-events: none;
+}
+
+/* +XP subindo */
+.floaty {
+  position: absolute;
+  left: 0;
+  top: 0;
+  translate: -50% 0;
+  font-family: var(--font-px);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--green);
+  white-space: nowrap;
+  pointer-events: none;
+  animation: floaty 0.9s steps(6) forwards;
+}
+
+@keyframes floaty {
+  to {
+    translate: -50% -36px;
+    opacity: 0;
+  }
+}
+
+.player__lvl > span.is-pop {
+  animation: blink 0.25s steps(1) 3;
+}
+
+.contrib__grid rect.is-lit {
+  fill: var(--green);
+}
+
+/* Antes de um agente montar: o elemento some e fica o rascunho em blocos */
+/* opacity, não clip-path: o IntersectionObserver precisa ver o elemento */
+.is-assembling {
+  opacity: 0;
+  animation: none !important;
+}
+
+.is-assembling.is-sweeping {
+  opacity: 1;
+}
+
+html.crew [data-reveal],
+html.crew .hero .hero__reveal {
+  animation: none !important;
+}
+
+.assemble-ghost {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(90deg, var(--line) 2px, transparent 2px),
+    linear-gradient(var(--line) 2px, transparent 2px);
+  background-size: 10px 10px;
+  box-shadow: inset 0 0 0 2px var(--line-strong);
+  opacity: 0.85;
+}
+
+@media print {
+  .crew-layer {
+    display: none;
+  }
+
+  .is-assembling {
+    opacity: 1 !important;
+    clip-path: none !important;
+  }
+}
+
 /* ---------- Easter eggs ---------- */
 .matrix {
   position: fixed;
@@ -2418,7 +2617,7 @@ html.party .walker .agent {
      quando os agentes terminam: aí entra o mesmo wipe, em sequência. */
   html.intro .hero__reveal {
     visibility: hidden;
-    animation: intro-failsafe 0s 6s forwards;
+    animation: intro-failsafe 0s 12s forwards;
   }
 }
 

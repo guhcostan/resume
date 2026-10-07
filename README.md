@@ -14,6 +14,7 @@ Estático e sem framework de runtime: HTML, CSS e JavaScript puros. A única eta
 - `tools/contributions.mjs` — atualiza o snapshot de contribuições (`npm run contributions`)
 - `css/styles.css` — visual em pixel art: fundo quase preto, Silkscreen nos títulos e rótulos, Inter nos textos longos
 - `js/main.js` — idioma, menu móvel, seção ativa no menu e metadados por página (title, canonical, OG, JSON-LD)
+- `js/crew.js` — a equipe de agentes de jetpack: montam cada seção quando ela aparece (rascunho em blocos → conteúdo), um companheiro segue o mouse, pousa nos cards e comenta (clique faz gracinha, clique duplo desafia no jogo da velha), e agentes sentados em cima da ficha, do gráfico e do terminal fazem algo ao clique
 - `js/play.js` — a parte lúdica: agentes que constroem o nome na intro, agente que anda no chão, prévias dos projetos, terminal do contato (com jogo da velha) e segredos
 - `assets/` — avatar em pixel art (`avatar-pixel.png`, gerado a partir da logo), imagem de compartilhamento, ícones e as fontes Silkscreen e Inter auto-hospedadas (OFL)
 - `files/gustavo-costa-curriculo.pdf` — currículo completo em PDF
@@ -24,6 +25,8 @@ Estático e sem framework de runtime: HTML, CSS e JavaScript puros. A única eta
 ## Visual
 
 Tudo é construído com blocos. A Silkscreen desenha numa grade de 1/8 em, então com 32 ou 64px cada pixel da fonte vira um bloco inteiro na tela; a intro usa isso para amostrar o nome dos pixels reais da fonte e uma equipe de agentes larga cada bloco no lugar. No fim, o canvas sai e fica o texto de verdade, pixel sobre pixel.
+
+O cursor também é em pixel (`assets/cursors/`): um bloco no normal, uma mão nos links e a mão apertando no clique. Só vale com mouse.
 
 Sem JavaScript, o site continua inteiro: só não tem intro, agentes, terminal nem segredos. Com `prefers-reduced-motion`, nada se mexe. A intro roda uma vez por sessão, só na home, e dá para pular com Esc.
 

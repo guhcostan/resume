@@ -85,6 +85,10 @@
 
   // Desenha o agente no canvas; px = tamanho de cada pixel do sprite
   function drawAgent(ctx, x, y, px, frame, carrying) {
+    // jetpack: mochila cinza nas costas
+    ctx.fillStyle = '#6b6f66';
+    ctx.fillRect(Math.round(x), Math.round(y + px), Math.ceil(px), Math.ceil(px * 4));
+    ctx.fillRect(Math.round(x + px), Math.round(y + 2 * px), Math.ceil(px), Math.ceil(px * 2));
     const legs = frame ? LEGS_B : LEGS_A;
     const rows = AGENT_BODY.concat(legs);
     for (let r = 0; r < rows.length; r++) {
@@ -256,6 +260,7 @@
     let t0 = null;
     let raf = 0;
     let finished = false;
+    const exhaust = [];
 
     function agentPos(a, tm) {
       if (tm < a.start) {
@@ -314,8 +319,25 @@
 
       const legFrame = Math.floor(tm / 120) % 2;
       let lead = null;
+      // fumaça do jetpack: quadradinhos verdes que caem e somem
+      for (let i = exhaust.length - 1; i >= 0; i--) {
+        const e = exhaust[i];
+        const age = (now - e.born) / 520;
+        if (age >= 1) {
+          exhaust.splice(i, 1);
+          continue;
+        }
+        ctx.globalAlpha = 1 - Math.floor(age * 4) / 4;
+        ctx.fillStyle = COLORS.green;
+        ctx.fillRect(Math.round(e.x), Math.round(e.y + age * unit * 3), e.s, e.s);
+      }
+      ctx.globalAlpha = 1;
       agents.forEach((a, i) => {
         const pos = agentPos(a, tm);
+        if (now - (a.puffAt || 0) > 45) {
+          a.puffAt = now;
+          exhaust.push({ x: pos.x + agentPx * (0.5 + Math.random()), y: pos.y + agentPx * 5, s: Math.max(2, Math.round(agentPx * (Math.random() < 0.5 ? 1 : 1.5))), born: now });
+        }
         drawAgent(ctx, pos.x, pos.y, agentPx, legFrame, pos.carrying);
         if (i === 0) lead = pos;
       });
@@ -371,6 +393,18 @@
       if (hero) hero.classList.add('is-ready');
       markSeen();
       startWalker();
+      document.dispatchEvent(new CustomEvent('guh:intro-done'));
+    }
+
+    // Depois do nome, os agentes da equipe (crew.js) montam o resto do início
+    function buildRest() {
+      const crew = window.guhCrew;
+      if (!crew || done) return end();
+      building = true;
+      const parts = $$('.hero__reveal', hero);
+      parts.forEach(crew.prepare);
+      root.classList.remove('intro');
+      crew.buildHero(parts).then(end);
     }
 
     if (!root.classList.contains('intro') || !h1) {
@@ -390,6 +424,7 @@
 
     let run = null;
     let done = false;
+    let building = false;
     function end() {
       if (done) return;
       done = true;
@@ -397,6 +432,7 @@
       document.removeEventListener('keydown', onKey);
       window.removeEventListener('resize', onResize);
       if (run) run.skip();
+      if (window.guhCrew) window.guhCrew.finishAll();
       reveal();
     }
     function onKey(e) {
@@ -414,7 +450,7 @@
     waitForFont(1500).then((ok) => {
       if (done) return;
       if (!ok) return end();
-      run = buildName(h1, { onDone: end });
+      run = buildName(h1, { onDone: () => (building ? end() : buildRest()) });
     });
   }
 
@@ -1032,6 +1068,11 @@
       if (e.target.closest('a, button')) return;
       if (window.getSelection && String(window.getSelection())) return;
       input.focus({ preventScroll: true });
+    });
+
+    // Os agentes (crew.js) também mandam comandos: o desafio do jogo da velha
+    document.addEventListener('guh:run', (e) => {
+      if (e.detail) run(String(e.detail));
     });
 
     document.addEventListener('guh:locale', () => {
