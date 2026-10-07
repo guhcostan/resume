@@ -271,6 +271,7 @@ ${main}
 ${footer}
 
   <script src="/js/main.js" defer></script>
+  <script src="/js/crew.js" defer></script>
   <script src="/js/play.js" defer></script>
 </body>
 </html>
@@ -284,7 +285,7 @@ function logCard(p, { heading = 'h2', tags = true } = {}) {
   const tagList = tags && p.tags.length
     ? `\n          <ul class="tags">${p.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`
     : '';
-  return `<a class="logcard box" href="/blog/${p.slug}/" data-reveal>
+  return `<a class="logcard box" href="/blog/${p.slug}/" data-reveal data-perch="log">
         <div class="logcard__art" aria-hidden="true">
           <div class="logcard__scene">
             <span class="logcard__sign"><span data-t="pt">${esc(p.title)}</span><span data-t="en">${esc(p.title_en)}</span></span>
@@ -600,7 +601,7 @@ function contribHtml(data) {
   const totalEn = new Intl.NumberFormat('en-US').format(data.total);
   const labelPt = `Gráfico de contribuições de @${data.user} no GitHub: ${totalPt} no último ano`;
   const labelEn = `@${data.user}'s GitHub contributions chart: ${totalEn} in the last year`;
-  return `<figure class="contrib" data-reveal>
+  return `<figure class="contrib" data-reveal data-perch="contrib" data-sitter="commit" data-sitter-at="0.04">
             <svg class="contrib__grid" viewBox="0 0 ${cols * STEP - (STEP - CELL)} ${7 * STEP - (STEP - CELL)}" role="img" data-aria-pt="${esc(labelPt)}" data-aria-en="${esc(labelEn)}" aria-label="${esc(labelPt)}">${rects}</svg>
             <figcaption class="contrib__cap">
               <span><a href="https://github.com/${esc(data.user)}" target="_blank" rel="noopener">@${esc(data.user)}</a> · <span data-t="pt">${totalPt} contribuições no último ano</span><span data-t="en">${totalEn} contributions in the last year</span></span>
