@@ -51,10 +51,9 @@
     (function () {
       var d = document.documentElement;
       d.classList.add('js');
-      // pt-BR é o idioma primário da raiz (canonical e hreflang).
-      // EN só por ?lang=en ou preferência já salva: assim URL, conteúdo e
-      // canonical ficam coerentes também para buscadores, que chegam sem
-      // localStorage e com preferência de idioma diferente (ex.: Googlebot/en-US).
+      var calm = false;
+      try { calm = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) {}
+      if (!calm) d.classList.add('fx');
       var locale = 'pt-BR';
       try {
         var q = new URLSearchParams(location.search).get('lang');
@@ -66,17 +65,8 @@
       } catch (e) {}
       d.setAttribute('data-locale', locale);
       d.setAttribute('lang', locale === 'en' ? 'en' : 'pt-BR');
-      // Intro: na home, uma vez por sessão, os agentes constroem o nome antes
-      // do resto do início aparecer. Nunca com menos movimento ou link direto
-      // para uma seção. O CSS revela tudo sozinho se o JavaScript falhar.
-      try {
-        var home = location.pathname === '/' || /\/index\.html$/.test(location.pathname);
-        var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (home && !calm && !location.hash && !sessionStorage.getItem('guh-intro')) d.classList.add('intro');
-      } catch (e) {}
     })();
   </script>
-
 
   <!-- Versão estática (pt-BR) do grafo; o main.js reescreve no idioma ativo -->
   <script type="application/ld+json" id="ld-graph">
@@ -241,95 +231,132 @@
   </script>
 </head>
 
-<body>
+<body class="home">
   <a class="skip-link" href="#main-content">
     <span data-t="pt">Ir para o conteúdo</span><span data-t="en">Skip to content</span>
   </a>
+  <div class="scroll-bar" aria-hidden="true"></div>
 
   <header class="site-header">
-    <div class="shell header__inner">
-      <a class="brand" href="/">Gustavo Costa</a>
+    <div class="shell site-header__inner">
+      <a class="brand" href="/"><i class="brand__mark" aria-hidden="true"></i>Gustavo Costa</a>
 
-      <nav class="nav" id="menu" data-aria-pt="Navegação principal" data-aria-en="Main navigation" aria-label="Navegação principal">
-        <ul class="nav__list">
-          <li><a href="#projetos"><span data-t="pt">Projetos</span><span data-t="en">Projects</span></a></li>
-          <li><a href="#sobre"><span data-t="pt">Sobre</span><span data-t="en">About</span></a></li>
-          <li><a href="#experiencia"><span data-t="pt">Experiência</span><span data-t="en">Experience</span></a></li>
-          <li><a href="/blog/">Blog</a></li>
-          <li><a href="#contato"><span data-t="pt">Contato</span><span data-t="en">Contact</span></a></li>
-          <li><a class="nav__gh" href="https://github.com/guhcostan" target="_blank" rel="noopener me">GitHub <i class="i i--ne" aria-hidden="true"></i></a></li>
-        </ul>
+      <nav class="nav" id="menu" aria-label="Navegação principal" data-aria-pt="Navegação principal" data-aria-en="Main navigation">
+        <a href="#projetos"><span data-t="pt">Projetos</span><span data-t="en">Projects</span></a>
+        <a href="#sobre"><span data-t="pt">Sobre</span><span data-t="en">About</span></a>
+        <a href="#experiencia"><span data-t="pt">Experiência</span><span data-t="en">Experience</span></a>
+        <a href="/blog/">Blog</a>
+        <a href="#contato"><span data-t="pt">Contato</span><span data-t="en">Contact</span></a>
+        <a href="https://github.com/guhcostan" target="_blank" rel="noopener">GitHub <i class="i i--ne" aria-hidden="true"></i></a>
       </nav>
 
-      <div class="header__tools">
-        <div class="lang-switch js-only" role="group" data-aria-pt="Seleção de idioma" data-aria-en="Language selection" aria-label="Seleção de idioma">
-          <button type="button" class="lang-btn" data-lang-btn="pt-BR" lang="pt-BR" aria-pressed="true">PT</button>
-          <button type="button" class="lang-btn" data-lang-btn="en" lang="en" aria-pressed="false">EN</button>
+      <div class="site-header__tools">
+        <button class="palette-btn js-only" type="button" data-palette-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" aria-label="Paleta de comandos (Ctrl+K)" data-aria-pt="Paleta de comandos (Ctrl+K)" data-aria-en="Command palette (Ctrl+K)">
+          <kbd>Ctrl K</kbd>
+        </button>
+        <div class="lang js-only" role="group" aria-label="Seleção de idioma" data-aria-pt="Seleção de idioma" data-aria-en="Language selection">
+          <button type="button" data-lang-btn="pt-BR" aria-pressed="true">PT</button>
+          <button type="button" data-lang-btn="en" aria-pressed="false">EN</button>
         </div>
-        <button type="button" class="menu-btn js-only" data-menu-toggle aria-expanded="false" aria-controls="menu">
-          Menu
+        <button class="menu-toggle js-only" type="button" data-menu-toggle aria-expanded="false" aria-controls="menu">
+          <span class="menu-toggle__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>Menu</span>
         </button>
       </div>
     </div>
   </header>
 
   <main id="main-content">
-    <!-- INÍCIO -->
     <section class="hero" id="inicio" aria-labelledby="hero-title">
-      <div class="shell">
-        <h1 class="hero__name" id="hero-title" data-build><span class="w">Gustavo</span> <span class="w">Costa</span></h1>
+      <canvas class="aurora" data-aurora aria-hidden="true"></canvas>
+      <div class="hero__veil" aria-hidden="true"></div>
 
-        <p class="hero__sub hero__reveal">
-          <span data-t="pt">
-            <span>Engenheiro mobile e frontend.</span>
-            <span>Tech Anchor na <a class="hl hl--orange" href="https://www.thoughtworks.com/" target="_blank" rel="noopener">Thoughtworks</a>, no app LatamPass.</span>
-            <span>Criador do <a class="hl hl--green" href="https://github.com/guhcostan/mac-cleaner-cli" target="_blank" rel="noopener">mac-cleaner-cli</a>.</span>
-          </span>
-          <span data-t="en">
-            <span>Mobile &amp; frontend engineer.</span>
-            <span>Tech Anchor at <a class="hl hl--orange" href="https://www.thoughtworks.com/" target="_blank" rel="noopener">Thoughtworks</a>, on the LatamPass app.</span>
-            <span>Creator of <a class="hl hl--green" href="https://github.com/guhcostan/mac-cleaner-cli" target="_blank" rel="noopener">mac-cleaner-cli</a>.</span>
-          </span>
+      <div class="shell hero__inner">
+        <p class="hero__kicker">
+          <span class="hero__pulse" aria-hidden="true"></span>
+          <span data-t="pt">Portfólio · 2026</span><span data-t="en">Portfolio · 2026</span>
+          <span class="hero__sep" aria-hidden="true">/</span>
+          <span class="hero__clock"><span data-t="pt">São Paulo</span><span data-t="en">São Paulo</span> <span data-clock>--:--</span></span>
         </p>
 
-        <div class="hero__actions hero__reveal">
-          <a class="btn btn--light" href="#projetos">
-            <span data-t="pt">Ver projetos</span><span data-t="en">See projects</span> <i class="i i--down" aria-hidden="true"></i>
-          </a>
-          <a class="btn btn--ghost" href="https://guhcostan.dev/files/gustavo-costa-curriculo.pdf" target="_blank" rel="noopener">
-            <span data-t="pt">Currículo PDF</span><span data-t="en">Résumé PDF</span> <i class="i i--ne" aria-hidden="true"></i>
-          </a>
+        <h1 class="hero__name" id="hero-title">
+          <span class="hero__line" data-split>Gustavo</span>
+          <span class="hero__line hero__line--alt" data-split>Costa</span>
+        </h1>
+
+        <p class="roles" aria-hidden="true" data-roles-pt="Engenheiro mobile|Dev frontend|Tech Anchor|Construtor de agentes de IA" data-roles-en="Mobile engineer|Frontend dev|Tech Anchor|Builder of AI agents"><span class="roles__text">Engenheiro mobile</span><span class="caret"></span></p>
+
+        <div class="hero__body">
+          <p class="hero__lede">
+            <span class="hero__say" data-t="pt">Engenheiro mobile e frontend.</span>
+            <span class="hero__say" data-t="pt">Tech Anchor na <a class="hl hl--orange" href="https://www.thoughtworks.com/" target="_blank" rel="noopener">Thoughtworks</a>, no app LatamPass.</span>
+            <span class="hero__say" data-t="pt">Criador do <a class="hl hl--green" href="https://github.com/guhcostan/mac-cleaner-cli" target="_blank" rel="noopener">mac-cleaner-cli</a>.</span>
+            <span class="hero__say" data-t="en">Mobile &amp; frontend engineer.</span>
+            <span class="hero__say" data-t="en">Tech Anchor at <a class="hl hl--orange" href="https://www.thoughtworks.com/" target="_blank" rel="noopener">Thoughtworks</a>, on the LatamPass app.</span>
+            <span class="hero__say" data-t="en">Creator of <a class="hl hl--green" href="https://github.com/guhcostan/mac-cleaner-cli" target="_blank" rel="noopener">mac-cleaner-cli</a>.</span>
+          </p>
+
+          <div class="hero__side">
+            <div class="hero__actions">
+              <a class="btn btn--light" href="#projetos" data-magnet><span data-t="pt">Ver projetos</span><span data-t="en">See projects</span> <i class="i i--down" aria-hidden="true"></i></a>
+              <a class="btn btn--ghost" href="https://guhcostan.dev/files/gustavo-costa-curriculo.pdf" target="_blank" rel="noopener" data-magnet><span data-t="pt">Currículo PDF</span><span data-t="en">Résumé PDF</span> <i class="i i--ne" aria-hidden="true"></i></a>
+            </div>
+            <ul class="socials">
+              <li><a href="https://www.linkedin.com/in/guhcostan" target="_blank" rel="noopener me">LinkedIn</a></li>
+              <li><a href="https://github.com/guhcostan" target="_blank" rel="noopener me">GitHub</a></li>
+              <li><a href="https://x.com/guhcostandev" target="_blank" rel="noopener me">X</a></li>
+              <li><a href="https://www.npmjs.com/~guhcostan" target="_blank" rel="noopener me">npm</a></li>
+            </ul>
+          </div>
         </div>
-
-        <ul class="hero__social hero__reveal">
-          <li><a href="https://www.linkedin.com/in/guhcostan" target="_blank" rel="noopener me">LinkedIn</a></li>
-          <li><a href="https://github.com/guhcostan" target="_blank" rel="noopener me">GitHub</a></li>
-          <li><a href="https://x.com/guhcostandev" target="_blank" rel="noopener me">X</a></li>
-          <li><a href="https://www.npmjs.com/~guhcostan" target="_blank" rel="noopener me">npm</a></li>
-        </ul>
-
-        <div class="ground hero__reveal" data-ground></div>
       </div>
+
+      <div class="ground" data-ground aria-hidden="true"></div>
     </section>
 
-    <!-- PROJETOS -->
+    <ul class="stats shell" aria-label="Números" data-aria-pt="Números" data-aria-en="Numbers">
+      <li class="stat box" data-reveal>
+        <span class="stat__num" data-count="2000" data-post="+">2.000+</span>
+        <span class="stat__label"><span data-t="pt">estrelas somadas nos projetos open source</span><span data-t="en">combined stars across open source projects</span></span>
+      </li>
+      <li class="stat box" data-reveal>
+        <span class="stat__num" data-count="8" data-post="+">8+</span>
+        <span class="stat__label"><span data-t="pt">engenheiros liderados</span><span data-t="en">engineers led</span></span>
+      </li>
+      <li class="stat box" data-reveal>
+        <span class="stat__num" data-count="80" data-post="%+">80%+</span>
+        <span class="stat__label"><span data-t="pt">cobertura de testes</span><span data-t="en">test coverage</span></span>
+      </li>
+      <li class="stat box" data-reveal>
+        <span class="stat__num" data-count="35" data-pre="~" data-post="%">~35%</span>
+        <span class="stat__label"><span data-t="pt">pipelines mais rápidos</span><span data-t="en">faster pipelines</span></span>
+      </li>
+    </ul>
+
+
     <section class="section" id="projetos" aria-labelledby="projetos-title">
       <div class="shell">
-        <h2 class="sec-title" id="projetos-title"><span data-t="pt">Projetos open source</span><span data-t="en">Open source projects</span></h2>
-        <p class="sec-intro">
-          <span data-t="pt">Gustavo Costa (Guh) mantém ferramentas open source no GitHub no tempo livre. Juntas, elas somam mais de 2 mil estrelas; a mais popular é o mac-cleaner-cli, com 1.9k. As outras vão de agentes de IA feitos com Claude Code a um SDK para dados públicos brasileiros.</span>
-          <span data-t="en">Gustavo Costa (Guh) maintains open source tools on GitHub in his spare time. Together they have 2,000+ stars; the most popular is mac-cleaner-cli, with 1.9k. The others range from AI agents built with Claude Code to an SDK for Brazilian public data.</span>
-        </p>
+        <header class="sec-head">
+          <p class="sec-num" aria-hidden="true">01</p>
+          <h2 class="sec-title" id="projetos-title"><span data-t="pt">Projetos open source</span><span data-t="en">Open source projects</span></h2>
+          <p class="sec-intro">
+            <span data-t="pt">Gustavo Costa (Guh) mantém ferramentas open source no GitHub no tempo livre. Juntas, elas somam mais de 2 mil estrelas; a mais popular é o mac-cleaner-cli, com 1.9k. As outras vão de agentes de IA feitos com Claude Code a um SDK para dados públicos brasileiros.</span>
+            <span data-t="en">Gustavo Costa (Guh) maintains open source tools on GitHub in his spare time. Together they have 2,000+ stars; the most popular is mac-cleaner-cli, with 1.9k. The others range from AI agents built with Claude Code to an SDK for Brazilian public data.</span>
+          </p>
+        </header>
 
-        <ol class="cards sec-body">
-          <li class="card card--wide box" data-reveal data-perch="mac-cleaner">
-            <div class="preview" data-preview aria-hidden="true">
-              <p><span class="ps">$</span> npx mac-cleaner-cli</p>
-              <p class="dim">scanning your mac for cleanable files...</p>
-              <p><span class="pbar"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></p>
-              <p><span class="sel">[x]</span> trash      <span class="sel">[x]</span> browser cache</p>
-              <p><span class="sel">[x]</span> homebrew   <span class="sel">[x]</span> dev cache</p>
-              <p class="ok">cleaning complete!</p>
+        <ol class="cards">
+          <li class="card card--wide box" data-reveal data-tilt>
+            <div class="preview term" aria-hidden="true">
+              <div class="term__head"><i></i><i></i><i></i><span>~/mac</span></div>
+              <div class="term__body">
+                <p><span class="term__ps">$</span> <span class="term__cmd" data-type="npx mac-cleaner-cli">npx mac-cleaner-cli</span></p>
+                <p class="term__dim">scanning your mac for cleanable files...</p>
+                <p class="meter"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></p>
+                <p><span class="term__sel">[x]</span> trash &nbsp; <span class="term__sel">[x]</span> browser cache</p>
+                <p><span class="term__sel">[x]</span> homebrew &nbsp; <span class="term__sel">[x]</span> dev cache</p>
+                <p class="term__ok">cleaning complete!</p>
+              </div>
             </div>
             <div class="card__body">
               <h3 class="card__title">mac-cleaner-cli</h3>
@@ -346,13 +373,15 @@
             </div>
           </li>
 
-          <li class="card box" data-reveal data-perch="b3">
-            <div class="preview" data-preview aria-hidden="true">
-              <p><span class="ps">&gt;</span> /b3:analyze WEGE3.SA</p>
-              <div class="preview__agents" data-agents="3"></div>
-              <p class="dim"><span data-t="pt">3 agentes analisando...</span><span data-t="en">3 agents analyzing...</span></p>
-              <div class="candles"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-              <p class="ok"><span data-t="pt">relatório pronto</span><span data-t="en">report ready</span></p>
+          <li class="card box" data-reveal data-tilt>
+            <div class="preview term" aria-hidden="true">
+              <div class="term__head"><i></i><i></i><i></i><span>claude</span></div>
+              <div class="term__body">
+                <p><span class="term__ps">&gt;</span> <span class="term__cmd" data-type="/b3:analyze WEGE3.SA">/b3:analyze WEGE3.SA</span></p>
+                <p class="term__dim"><span data-t="pt">3 agentes analisando...</span><span data-t="en">3 agents analyzing...</span></p>
+                <div class="candles" data-candles></div>
+                <p class="term__ok"><span data-t="pt">relatório pronto</span><span data-t="en">report ready</span></p>
+              </div>
             </div>
             <div class="card__body">
               <h3 class="card__title">b3analysis</h3>
@@ -368,12 +397,15 @@
             </div>
           </li>
 
-          <li class="card box" data-reveal data-perch="brain">
-            <div class="preview" data-preview aria-hidden="true">
-              <p><span class="ps">&gt;</span> /plugin install mega-brain@mega-brain</p>
-              <p><span class="ps">&gt;</span> /mega-brain:init</p>
-              <div class="brain"><i class="o"></i><i class="o"></i><i></i><i></i><i></i><i></i><i></i><i class="o"></i><i class="o"></i><i class="o"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="o"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="o"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i><i></i><i></i><i class="o"></i><i class="o"></i><i class="o"></i></div>
-              <p class="ok"><span data-t="pt">base de conhecimento carregada</span><span data-t="en">knowledge base loaded</span></p>
+          <li class="card box" data-reveal data-tilt>
+            <div class="preview term" aria-hidden="true">
+              <div class="term__head"><i></i><i></i><i></i><span>claude</span></div>
+              <div class="term__body">
+                <p><span class="term__ps">&gt;</span> <span class="term__cmd" data-type="/plugin install mega-brain@mega-brain">/plugin install mega-brain@mega-brain</span></p>
+                <p><span class="term__ps">&gt;</span> <span class="term__cmd" data-type="/mega-brain:init">/mega-brain:init</span></p>
+                <div class="brain" data-brain></div>
+                <p class="term__ok"><span data-t="pt">base de conhecimento carregada</span><span data-t="en">knowledge base loaded</span></p>
+              </div>
             </div>
             <div class="card__body">
               <h3 class="card__title">claude-mega-brain</h3>
@@ -389,14 +421,18 @@
             </div>
           </li>
 
-          <li class="card box" data-reveal data-perch="windows">
-            <div class="preview" data-preview aria-hidden="true">
-              <p><span class="ps">$</span> npx windows-cleaner-cli</p>
-              <p class="dim">found 32.5 gb that can be cleaned</p>
-              <p><span class="sel">[x]</span> recycle bin        2.1 gb</p>
-              <p><span class="sel">[x]</span> development cache  15.9 gb</p>
-              <p>proceed with cleaning? <span class="ok">y</span></p>
-              <p class="ok">freed 32.5 gb of disk space!</p>
+          <li class="card box" data-reveal data-tilt>
+            <div class="preview term" aria-hidden="true">
+              <div class="term__head"><i></i><i></i><i></i><span>~/windows</span></div>
+              <div class="term__body">
+                <p><span class="term__ps">$</span> <span class="term__cmd" data-type="npx windows-cleaner-cli">npx windows-cleaner-cli</span></p>
+                <p class="term__dim">found 32.5 gb that can be cleaned</p>
+                <p><span class="term__sel">[x]</span> recycle bin &nbsp; 2.1 gb</p>
+                <p><span class="term__sel">[x]</span> development cache &nbsp; 15.9 gb</p>
+                <p><span class="term__sel">[x]</span> system temp &nbsp; 14.5 gb</p>
+                <p>proceed with cleaning? <span class="term__ok">y</span></p>
+                <p class="term__ok">freed 32.5 gb of disk space!</p>
+              </div>
             </div>
             <div class="card__body">
               <h3 class="card__title">windows-cleaner-cli</h3>
@@ -413,14 +449,17 @@
             </div>
           </li>
 
-          <li class="card box" data-reveal data-perch="brasilapi">
-            <div class="preview" data-preview aria-hidden="true">
-              <p><span class="ps">&gt;</span> await cep().getCep(<span class="str">'05010-000'</span>)</p>
-              <p class="dim">{</p>
-              <p>  state: <span class="str">"SP"</span>,</p>
-              <p>  city: <span class="str">"São Paulo"</span>,</p>
-              <p>  street: <span class="str">"Rua Caiubi"</span></p>
-              <p class="dim">}</p>
+          <li class="card box" data-reveal data-tilt>
+            <div class="preview term" aria-hidden="true">
+              <div class="term__head"><i></i><i></i><i></i><span>node</span></div>
+              <div class="term__body">
+                <p><span class="term__ps">&gt;</span> <span class="term__cmd" data-type="await cep().getCep('05010-000')">await cep().getCep('05010-000')</span></p>
+                <p class="term__dim">{</p>
+                <p>&nbsp; state: <span class="term__str">"SP"</span>,</p>
+                <p>&nbsp; city: <span class="term__str">"São Paulo"</span>,</p>
+                <p>&nbsp; street: <span class="term__str">"Rua Caiubi"</span></p>
+                <p class="term__dim">}</p>
+              </div>
             </div>
             <div class="card__body">
               <h3 class="card__title">brasilapi-sdk</h3>
@@ -445,12 +484,14 @@
       </div>
     </section>
 
-    <!-- SOBRE -->
     <section class="section" id="sobre" aria-labelledby="sobre-title">
       <div class="shell">
-        <h2 class="sec-title" id="sobre-title"><span data-t="pt">Sobre mim</span><span data-t="en">About me</span></h2>
+        <header class="sec-head">
+          <p class="sec-num" aria-hidden="true">02</p>
+          <h2 class="sec-title" id="sobre-title"><span data-t="pt">Sobre mim</span><span data-t="en">About me</span></h2>
+        </header>
 
-        <article class="player box sec-body" data-reveal data-perch="player" data-sitter="xp" data-sitter-at="0.06">
+        <article class="player box" data-reveal>
           <div class="player__art">
             <img src="assets/avatar-pixel.png" width="64" height="65" loading="lazy"
                  data-alt-pt="Avatar em pixel art de Gustavo Costa (Guh): cabelo cacheado, óculos escuros e bigode"
@@ -520,18 +561,20 @@
       </div>
     </section>
 
-    <!-- EXPERIÊNCIA -->
     <section class="section" id="experiencia" aria-labelledby="experiencia-title">
       <div class="shell">
-        <h2 class="sec-title" id="experiencia-title"><span data-t="pt">Experiência</span><span data-t="en">Experience</span></h2>
-        <p class="sec-sub js-only" data-bricks-hint><span data-t="pt">Um tijolo por trimestre em cada empresa.</span><span data-t="en">One brick per quarter at each company.</span></p>
-        <p class="sec-intro">
-          <span data-t="pt">Gustavo Costa (Guh) trabalha com desenvolvimento de software desde 2017 e passou por seis empresas: Comp Júnior, LEMAF, Equal, Descomplica, RecargaPay e Thoughtworks. Desde maio de 2022 está na Thoughtworks, no app LatamPass, onde foi de Mobile Engineer a Technical Lead e, em dezembro de 2024, a Tech Anchor.</span>
-          <span data-t="en">Gustavo Costa (Guh) has been building software since 2017 across six companies: Comp Júnior, LEMAF, Equal, Descomplica, RecargaPay and Thoughtworks. Since May 2022 he has been at Thoughtworks on the LatamPass app, growing from Mobile Engineer to Technical Lead and, in December 2024, to Tech Anchor.</span>
-        </p>
+        <header class="sec-head">
+          <p class="sec-num" aria-hidden="true">03</p>
+          <h2 class="sec-title" id="experiencia-title"><span data-t="pt">Experiência</span><span data-t="en">Experience</span></h2>
+          <p class="sec-sub js-only"><span data-t="pt">Um tijolo por trimestre em cada empresa.</span><span data-t="en">One brick per quarter at each company.</span></p>
+          <p class="sec-intro">
+            <span data-t="pt">Gustavo Costa (Guh) trabalha com desenvolvimento de software desde 2017 e passou por seis empresas: Comp Júnior, LEMAF, Equal, Descomplica, RecargaPay e Thoughtworks. Desde maio de 2022 está na Thoughtworks, no app LatamPass, onde foi de Mobile Engineer a Technical Lead e, em dezembro de 2024, a Tech Anchor.</span>
+            <span data-t="en">Gustavo Costa (Guh) has been building software since 2017 across six companies: Comp Júnior, LEMAF, Equal, Descomplica, RecargaPay and Thoughtworks. Since May 2022 he has been at Thoughtworks on the LatamPass app, growing from Mobile Engineer to Technical Lead and, in December 2024, to Tech Anchor.</span>
+          </p>
+        </header>
 
-        <ol class="jobs sec-body">
-          <li class="job" data-reveal data-perch="job">
+        <ol class="jobs" data-metro>
+          <li class="job" data-reveal>
             <div class="job__side">
               <h3 class="job__company">Thoughtworks</h3>
               <p class="job__period"><span data-t="pt">mai 2022 – hoje</span><span data-t="en">May 2022 – present</span></p>
@@ -558,7 +601,7 @@
             </div>
           </li>
 
-          <li class="job" data-reveal data-perch="job">
+          <li class="job" data-reveal>
             <div class="job__side">
               <h3 class="job__company">RecargaPay</h3>
               <p class="job__period"><span data-t="pt">jan 2022 – mai 2022</span><span data-t="en">Jan 2022 – May 2022</span></p>
@@ -573,7 +616,7 @@
             </div>
           </li>
 
-          <li class="job" data-reveal data-perch="job">
+          <li class="job" data-reveal>
             <div class="job__side">
               <h3 class="job__company">Descomplica</h3>
               <p class="job__period"><span data-t="pt">fev 2021 – jan 2022</span><span data-t="en">Feb 2021 – Jan 2022</span></p>
@@ -588,7 +631,7 @@
             </div>
           </li>
 
-          <li class="job" data-reveal data-perch="job">
+          <li class="job" data-reveal>
             <div class="job__side">
               <h3 class="job__company">Equal</h3>
               <p class="job__period"><span data-t="pt">ago 2019 – fev 2021</span><span data-t="en">Aug 2019 – Feb 2021</span></p>
@@ -603,7 +646,7 @@
             </div>
           </li>
 
-          <li class="job" data-reveal data-perch="job">
+          <li class="job" data-reveal>
             <div class="job__side">
               <h3 class="job__company">LEMAF</h3>
               <p class="job__period"><span data-t="pt">fev 2018 – ago 2019</span><span data-t="en">Feb 2018 – Aug 2019</span></p>
@@ -618,7 +661,7 @@
             </div>
           </li>
 
-          <li class="job" data-reveal data-perch="job">
+          <li class="job" data-reveal>
             <div class="job__side">
               <h3 class="job__company">Comp Júnior</h3>
               <p class="job__period"><span data-t="pt">nov 2017 – jan 2018</span><span data-t="en">Nov 2017 – Jan 2018</span></p>
@@ -636,16 +679,25 @@
       </div>
     </section>
 
-    <!-- STACK E FORMAÇÃO -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>React Native</span><span>TypeScript</span><span>iOS</span><span>Android</span><span>Node.js</span><span>LLMs</span><span>Claude Code</span><span>CI/CD</span><span>TDD</span><span>Next.js</span><span>PostgreSQL</span><span>Bitrise</span>
+        <span>React Native</span><span>TypeScript</span><span>iOS</span><span>Android</span><span>Node.js</span><span>LLMs</span><span>Claude Code</span><span>CI/CD</span><span>TDD</span><span>Next.js</span><span>PostgreSQL</span><span>Bitrise</span>
+      </div>
+    </div>
+
     <div class="section">
       <div class="shell split">
         <section id="stack" aria-labelledby="stack-title">
-          <h2 class="sec-title sec-title--q" id="stack-title"><span data-t="pt">Com quais tecnologias o Guh trabalha?</span><span data-t="en">What technologies does Guh work with?</span></h2>
-          <p class="sec-intro">
-            <span data-t="pt">Gustavo Costa (Guh) trabalha principalmente com React Native e TypeScript em apps iOS e Android, e com React e Next.js na web. Em experiências anteriores usou Node.js, Java, Spring, .NET Core, GraphQL e PostgreSQL no backend. A entrega se apoia em CI/CD com Bitrise e Jenkins, TDD e Clean Code e, desde o fim de 2024, em LLMs e agentes de IA com Claude e Cursor.</span>
-            <span data-t="en">Gustavo Costa (Guh) works mainly with React Native and TypeScript on iOS and Android apps, and with React and Next.js on the web. In previous roles he used Node.js, Java, Spring, .NET Core, GraphQL and PostgreSQL on the backend. His delivery relies on CI/CD with Bitrise and Jenkins, TDD and Clean Code and, since late 2024, LLMs and AI agents with Claude and Cursor.</span>
-          </p>
-          <dl class="rows sec-body" data-reveal>
+          <header class="sec-head">
+            <p class="sec-num" aria-hidden="true">04</p>
+            <h2 class="sec-title sec-title--q" id="stack-title"><span data-t="pt">Com quais tecnologias o Guh trabalha?</span><span data-t="en">What technologies does Guh work with?</span></h2>
+            <p class="sec-intro">
+              <span data-t="pt">Gustavo Costa (Guh) trabalha principalmente com React Native e TypeScript em apps iOS e Android, e com React e Next.js na web. Em experiências anteriores usou Node.js, Java, Spring, .NET Core, GraphQL e PostgreSQL no backend. A entrega se apoia em CI/CD com Bitrise e Jenkins, TDD e Clean Code e, desde o fim de 2024, em LLMs e agentes de IA com Claude e Cursor.</span>
+              <span data-t="en">Gustavo Costa (Guh) works mainly with React Native and TypeScript on iOS and Android apps, and with React and Next.js on the web. In previous roles he used Node.js, Java, Spring, .NET Core, GraphQL and PostgreSQL on the backend. His delivery relies on CI/CD with Bitrise and Jenkins, TDD and Clean Code and, since late 2024, LLMs and AI agents with Claude and Cursor.</span>
+            </p>
+          </header>
+          <dl class="rows" data-reveal>
             <div class="row">
               <dt>Mobile</dt>
               <dd><ul class="chips"><li>React Native</li><li>iOS</li><li>Android</li><li>Firebase</li></ul></dd>
@@ -670,12 +722,15 @@
         </section>
 
         <section id="formacao" aria-labelledby="formacao-title">
-          <h2 class="sec-title sec-title--q" id="formacao-title"><span data-t="pt">Onde o Guh estudou?</span><span data-t="en">Where did Guh study?</span></h2>
-          <p class="sec-intro">
-            <span data-t="pt">Gustavo Costa (Guh) é bacharel em Ciência da Computação pela Universidade Federal de Lavras (UFLA), onde estudou de 2015 a 2019; começou a trabalhar como desenvolvedor em 2017, ainda na graduação. Também tem certificações em arquitetura de software, DevOps, Scrum, escuta ativa e autoliderança.</span>
-            <span data-t="en">Gustavo Costa (Guh) holds a BSc in Computer Science from the Federal University of Lavras (UFLA), where he studied from 2015 to 2019; he started working as a developer in 2017, while still in college. He also holds certifications in software architecture, DevOps, Scrum, active listening and self-leadership.</span>
-          </p>
-          <dl class="rows sec-body" data-reveal>
+          <header class="sec-head">
+            <p class="sec-num" aria-hidden="true">05</p>
+            <h2 class="sec-title sec-title--q" id="formacao-title"><span data-t="pt">Onde o Guh estudou?</span><span data-t="en">Where did Guh study?</span></h2>
+            <p class="sec-intro">
+              <span data-t="pt">Gustavo Costa (Guh) é bacharel em Ciência da Computação pela Universidade Federal de Lavras (UFLA), onde estudou de 2015 a 2019; começou a trabalhar como desenvolvedor em 2017, ainda na graduação. Também tem certificações em arquitetura de software, DevOps, Scrum, escuta ativa e autoliderança.</span>
+              <span data-t="en">Gustavo Costa (Guh) holds a BSc in Computer Science from the Federal University of Lavras (UFLA), where he studied from 2015 to 2019; he started working as a developer in 2017, while still in college. He also holds certifications in software architecture, DevOps, Scrum, active listening and self-leadership.</span>
+            </p>
+          </header>
+          <dl class="rows" data-reveal>
             <div class="row">
               <dt>2015 – 2019</dt>
               <dd>
@@ -691,7 +746,7 @@
                   <li>DevOps Essentials Professional Certificate (DEPCP)</li>
                   <li>Scrum Foundations Professional Certificate (SFPC)</li>
                   <li>Active Listening: You Can Be a Great Listener</li>
-                  <li>Formação Autoliderança</li>
+                  <li><span data-t="pt">Formação Autoliderança</span><span data-t="en">Self-leadership training</span></li>
                 </ul>
               </dd>
             </div>
@@ -700,14 +755,16 @@
       </div>
     </div>
 
-    <!-- UM ANO EM BLOCOS -->
     <section class="section" id="blocos" aria-labelledby="blocos-title">
       <div class="shell">
-        <h2 class="sec-title" id="blocos-title"><span data-t="pt">Um ano em blocos</span><span data-t="en">A year in blocks</span></h2>
-        <p class="sec-sub">
-          <span data-t="pt">Cada dia com commit é um bloco. Quanto mais verde, mais eu entreguei.</span>
-          <span data-t="en">Every day I committed is a block. The greener, the more I shipped.</span>
-        </p>
+        <header class="sec-head">
+          <p class="sec-num" aria-hidden="true">06</p>
+          <h2 class="sec-title" id="blocos-title"><span data-t="pt">Um ano em blocos</span><span data-t="en">A year in blocks</span></h2>
+          <p class="sec-intro">
+            <span data-t="pt">Cada dia com commit é um bloco. Quanto mais verde, mais eu entreguei.</span>
+            <span data-t="en">Every day I committed is a block. The greener, the more I shipped.</span>
+          </p>
+        </header>
         <div class="sec-body">
           <!-- contrib:start (o build troca este bloco pelo gráfico de contribuições) -->
           <p class="more">
@@ -720,16 +777,18 @@
       </div>
     </section>
 
-    <!-- BLOG -->
     <section class="section" id="log" aria-labelledby="log-title">
       <div class="shell">
-        <h2 class="sec-title" id="log-title">Blog</h2>
-        <div class="sec-body">
-          <!-- log:start (o build troca este bloco pelo post mais recente) -->
+        <header class="sec-head">
+          <p class="sec-num" aria-hidden="true">07</p>
+          <h2 class="sec-title" id="log-title">Blog</h2>
           <p class="sec-intro">
             <span data-t="pt">Artigos sobre engenharia mobile, IA, open source e o processo de construir produtos que as pessoas usam.</span>
             <span data-t="en">Articles on mobile engineering, AI, open source and the craft of building products people use.</span>
           </p>
+        </header>
+        <div class="sec-body">
+          <!-- log:start (o build troca este bloco pelo post mais recente) -->
           <!-- log:end -->
         </div>
         <p class="more">
@@ -738,18 +797,33 @@
       </div>
     </section>
 
-    <!-- CONTATO -->
     <section class="section" id="contato" aria-labelledby="contato-title">
       <div class="shell">
-        <h2 class="sec-title" id="contato-title"><span data-t="pt">Contato</span><span data-t="en">Contact</span></h2>
-        <p class="sec-sub">
-          <span data-t="pt">Para oportunidades, projetos ou uma conversa sobre mobile, frontend e IA.</span>
-          <span data-t="en">For opportunities, projects or a chat about mobile, frontend and AI.</span>
-        </p>
+        <header class="sec-head">
+          <p class="sec-num" aria-hidden="true">08</p>
+          <h2 class="sec-title" id="contato-title"><span data-t="pt">Contato</span><span data-t="en">Contact</span></h2>
+          <p class="sec-intro">
+            <span data-t="pt">Para oportunidades, projetos ou uma conversa sobre mobile, frontend e IA.</span>
+            <span data-t="en">For opportunities, projects or a chat about mobile, frontend and AI.</span>
+          </p>
+        </header>
 
         <div class="contact sec-body">
-          <ul class="links">
-            <li><a href="mailto:guhcostan@gmail.com"><span class="links__name">E-mail</span><span class="links__handle">guhcostan@gmail.com <i class="i i--ne" aria-hidden="true"></i></span></a></li>
+          <div class="contact__card box" data-reveal>
+            <p class="contact__label"><span data-t="pt">Fale comigo</span><span data-t="en">Get in touch</span></p>
+            <p class="contact__mail">guhcostan@gmail.com</p>
+            <div class="contact__actions">
+              <button type="button" class="btn btn--light" data-copy-email="guhcostan@gmail.com">
+                <span data-t="pt">Copiar e-mail</span><span data-t="en">Copy e-mail</span>
+              </button>
+              <a class="btn btn--ghost" href="mailto:guhcostan@gmail.com">
+                <span data-t="pt">Abrir no e-mail</span><span data-t="en">Open in mail</span> <i class="i i--ne" aria-hidden="true"></i>
+              </a>
+            </div>
+            <p class="copy-status" data-copy-status role="status"></p>
+          </div>
+
+          <ul class="links" data-reveal>
             <li><a href="https://www.linkedin.com/in/guhcostan" target="_blank" rel="noopener me"><span class="links__name">LinkedIn</span><span class="links__handle">@guhcostan <i class="i i--ne" aria-hidden="true"></i></span></a></li>
             <li><a href="https://github.com/guhcostan" target="_blank" rel="noopener me"><span class="links__name">GitHub</span><span class="links__handle">@guhcostan <i class="i i--ne" aria-hidden="true"></i></span></a></li>
             <li><a href="https://x.com/guhcostandev" target="_blank" rel="noopener me"><span class="links__name">X</span><span class="links__handle">@guhcostandev <i class="i i--ne" aria-hidden="true"></i></span></a></li>
@@ -757,22 +831,6 @@
             <li><a href="https://guhcostan.dev/files/gustavo-costa-curriculo.pdf" target="_blank" rel="noopener"><span class="links__name"><span data-t="pt">Currículo</span><span data-t="en">Résumé</span></span><span class="links__handle">PDF <i class="i i--ne" aria-hidden="true"></i></span></a></li>
             <li><a href="tel:+5535998785953"><span class="links__name"><span data-t="pt">Telefone</span><span data-t="en">Phone</span></span><span class="links__handle">+55 35 99878-5953</span></a></li>
           </ul>
-
-          <div class="term box js-only" data-term data-perch="term" data-sitter="term" data-sitter-at="0.62">
-            <div class="term__bar"><span class="term__dots" aria-hidden="true"></span> <span data-t="pt">visitante@guhcostan.dev</span><span data-t="en">guest@guhcostan.dev</span></div>
-            <div class="term__screen" data-term-screen>
-              <div class="term__out" data-term-out role="log" aria-live="polite"></div>
-              <form class="term__prompt" data-term-form autocomplete="off">
-                <label class="term__ps1" for="term-input"><span class="u"><span data-t="pt">visitante</span><span data-t="en">guest</span></span> <span class="p">~ $</span></label>
-                <input class="term__input" id="term-input" data-term-input type="text" enterkeyhint="send" autocapitalize="off" spellcheck="false">
-              </form>
-            </div>
-            <div class="term__actions">
-              <button type="button" class="btn btn--light btn--sm" data-cmd="nota"><span data-t="pt">Escrever nota</span><span data-t="en">Write a note</span></button>
-              <button type="button" class="btn btn--dark btn--sm" data-cmd="velha"><span data-t="pt">Jogo da velha</span><span data-t="en">Tic-tac-toe</span></button>
-              <button type="button" class="btn btn--dark btn--sm" data-cmd="ajuda"><span data-t="pt">Ajuda</span><span data-t="en">Help</span></button>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -786,14 +844,106 @@
         <li><a href="/termos/" rel="terms-of-service"><span data-t="pt">Termos de uso</span><span data-t="en">Terms of use</span></a></li>
         <li><a href="#inicio"><span data-t="pt">Voltar ao topo</span><span data-t="en">Back to top</span> <i class="i i--up" aria-hidden="true"></i></a></li>
       </ul>
-      <button type="button" class="secrets js-only" data-secrets aria-expanded="false">
-        <span data-t="pt">Segredos</span><span data-t="en">Secrets</span> <b data-secrets-count>0/10</b>
-      </button>
     </div>
   </footer>
 
+  <dialog class="palette" id="palette" aria-labelledby="palette-title">
+    <div class="palette__frame box">
+      <div class="palette__top">
+        <p class="palette__title" id="palette-title"><span data-t="pt">Paleta de comandos</span><span data-t="en">Command palette</span></p>
+        <button type="button" class="palette__close" data-palette-close aria-label="Fechar" data-aria-pt="Fechar" data-aria-en="Close">
+          <kbd>Esc</kbd>
+        </button>
+      </div>
+
+      <div class="palette__field">
+        <input class="palette__input" id="palette-input" type="text" role="combobox" aria-expanded="true" aria-controls="palette-list" aria-autocomplete="list" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Buscar comandos" data-aria-pt="Buscar comandos" data-aria-en="Search commands" placeholder="Buscar seções, links e comandos…" data-ph-pt="Buscar seções, links e comandos…" data-ph-en="Search sections, links and commands…">
+      </div>
+
+      <ul class="palette__list" id="palette-list" role="listbox" aria-label="Comandos" data-aria-pt="Comandos" data-aria-en="Commands">
+        <li role="option" id="pal-projetos" class="palette__item" aria-selected="false" data-href="#projetos" data-search="projetos projects open source github">
+          <span class="palette__label"><span data-t="pt">Projetos</span><span data-t="en">Projects</span></span>
+          <span class="palette__kind"><span data-t="pt">Seção</span><span data-t="en">Section</span></span>
+        </li>
+        <li role="option" id="pal-sobre" class="palette__item" aria-selected="false" data-href="#sobre" data-search="sobre about perfil profile player">
+          <span class="palette__label"><span data-t="pt">Sobre</span><span data-t="en">About</span></span>
+          <span class="palette__kind"><span data-t="pt">Seção</span><span data-t="en">Section</span></span>
+        </li>
+        <li role="option" id="pal-experiencia" class="palette__item" aria-selected="false" data-href="#experiencia" data-search="experiencia experience empresas companies trabalho work jobs">
+          <span class="palette__label"><span data-t="pt">Experiência</span><span data-t="en">Experience</span></span>
+          <span class="palette__kind"><span data-t="pt">Seção</span><span data-t="en">Section</span></span>
+        </li>
+        <li role="option" id="pal-stack" class="palette__item" aria-selected="false" data-href="#stack" data-search="stack tecnologias technologies react typescript node">
+          <span class="palette__label">Stack</span>
+          <span class="palette__kind"><span data-t="pt">Seção</span><span data-t="en">Section</span></span>
+        </li>
+        <li role="option" id="pal-formacao" class="palette__item" aria-selected="false" data-href="#formacao" data-search="formacao formação education estudos ufla certificacoes certifications">
+          <span class="palette__label"><span data-t="pt">Formação</span><span data-t="en">Education</span></span>
+          <span class="palette__kind"><span data-t="pt">Seção</span><span data-t="en">Section</span></span>
+        </li>
+        <li role="option" id="pal-blocos" class="palette__item" aria-selected="false" data-href="#blocos" data-search="blocos blocks contribuicoes contributions github heatmap">
+          <span class="palette__label"><span data-t="pt">Um ano em blocos</span><span data-t="en">A year in blocks</span></span>
+          <span class="palette__kind"><span data-t="pt">Seção</span><span data-t="en">Section</span></span>
+        </li>
+        <li role="option" id="pal-contato" class="palette__item" aria-selected="false" data-href="#contato" data-search="contato contact email contatar">
+          <span class="palette__label"><span data-t="pt">Contato</span><span data-t="en">Contact</span></span>
+          <span class="palette__kind"><span data-t="pt">Seção</span><span data-t="en">Section</span></span>
+        </li>
+        <li role="option" id="pal-blog" class="palette__item" aria-selected="false" data-href="/blog/" data-search="blog posts artigos articles escrita writing">
+          <span class="palette__label">Blog</span>
+          <span class="palette__kind"><span data-t="pt">Página</span><span data-t="en">Page</span></span>
+        </li>
+        <li role="option" id="pal-cv" class="palette__item" aria-selected="false" data-href="https://guhcostan.dev/files/gustavo-costa-curriculo.pdf" data-external data-search="curriculo cv resume pdf">
+          <span class="palette__label"><span data-t="pt">Currículo PDF</span><span data-t="en">Résumé PDF</span></span>
+          <span class="palette__kind"><span data-t="pt">Link</span><span data-t="en">Link</span></span>
+        </li>
+        <li role="option" id="pal-github" class="palette__item" aria-selected="false" data-href="https://github.com/guhcostan" data-external data-search="github codigo code repos">
+          <span class="palette__label">GitHub</span>
+          <span class="palette__kind"><span data-t="pt">Link</span><span data-t="en">Link</span></span>
+        </li>
+        <li role="option" id="pal-linkedin" class="palette__item" aria-selected="false" data-href="https://www.linkedin.com/in/guhcostan" data-external data-search="linkedin carreira career">
+          <span class="palette__label">LinkedIn</span>
+          <span class="palette__kind"><span data-t="pt">Link</span><span data-t="en">Link</span></span>
+        </li>
+        <li role="option" id="pal-privacidade" class="palette__item" aria-selected="false" data-href="/privacidade/" data-search="privacidade privacy dados data lgpd">
+          <span class="palette__label"><span data-t="pt">Privacidade</span><span data-t="en">Privacy</span></span>
+          <span class="palette__kind"><span data-t="pt">Página</span><span data-t="en">Page</span></span>
+        </li>
+        <li role="option" id="pal-termos" class="palette__item" aria-selected="false" data-href="/termos/" data-search="termos terms uso legal">
+          <span class="palette__label"><span data-t="pt">Termos de uso</span><span data-t="en">Terms of use</span></span>
+          <span class="palette__kind"><span data-t="pt">Página</span><span data-t="en">Page</span></span>
+        </li>
+        <li role="option" id="pal-topo" class="palette__item" aria-selected="false" data-href="#inicio" data-search="topo top inicio home voltar">
+          <span class="palette__label"><span data-t="pt">Voltar ao topo</span><span data-t="en">Back to top</span></span>
+          <span class="palette__kind"><span data-t="pt">Ação</span><span data-t="en">Action</span></span>
+        </li>
+        <li role="option" id="pal-copiar" class="palette__item" aria-selected="false" data-cmd="copy" data-search="copiar copy email e-mail mail contato">
+          <span class="palette__label"><span data-t="pt">Copiar e-mail</span><span data-t="en">Copy e-mail</span></span>
+          <span class="palette__kind"><span data-t="pt">Ação</span><span data-t="en">Action</span></span>
+        </li>
+        <li role="option" id="pal-pt" class="palette__item" aria-selected="false" data-lang="pt-BR" data-search="idioma language portugues pt-br pt">
+          <span class="palette__label">Português</span>
+          <span class="palette__kind"><span data-t="pt">Idioma</span><span data-t="en">Language</span></span>
+        </li>
+        <li role="option" id="pal-en" class="palette__item" aria-selected="false" data-lang="en" data-search="idioma language english ingles en">
+          <span class="palette__label">English</span>
+          <span class="palette__kind"><span data-t="pt">Idioma</span><span data-t="en">Language</span></span>
+        </li>
+      </ul>
+
+      <p class="palette__empty" data-palette-empty hidden>
+        <span data-t="pt">Nada encontrado. Tente outro termo.</span><span data-t="en">Nothing found. Try another term.</span>
+      </p>
+
+      <p class="palette__hint" aria-hidden="true">
+        <kbd>↑</kbd><kbd>↓</kbd> <span data-t="pt">navegar</span><span data-t="en">move</span>
+        <kbd>Enter</kbd> <span data-t="pt">abrir</span><span data-t="en">open</span>
+        <kbd>Esc</kbd> <span data-t="pt">fechar</span><span data-t="en">close</span>
+      </p>
+    </div>
+  </dialog>
+
   <script src="js/main.js" defer></script>
-  <script src="js/crew.js" defer></script>
-  <script src="js/play.js" defer></script>
+  <script src="js/home.js" defer></script>
 </body>
 </html>

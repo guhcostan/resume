@@ -5,8 +5,6 @@
    1. Troca de idioma (PT/EN) com metadados coerentes (title, description,
       canonical, Open Graph, Twitter Card, JSON-LD, alt e aria-label)
    2. Menu móvel acessível e seção ativa no menu
-   A parte lúdica (agentes, intro, terminal, segredos) fica em play.js,
-   que ouve o evento "guh:locale" disparado aqui a cada troca de idioma.
    ========================================================================== */
 (function () {
   'use strict';

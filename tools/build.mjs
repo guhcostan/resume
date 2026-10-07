@@ -271,27 +271,21 @@ ${main}
 ${footer}
 
   <script src="/js/main.js" defer></script>
-  <script src="/js/crew.js" defer></script>
-  <script src="/js/play.js" defer></script>
 </body>
 </html>
 `;
 }
 
 /* ---------- Blog: card de post ----------
-   O mesmo card serve à home (seção Blog, h3) e ao índice do blog (h2).
-   À esquerda, um agente segura uma placa com o título do post. */
+   O mesmo card serve à home (seção Blog, h3) e ao índice do blog (h2). */
 function logCard(p, { heading = 'h2', tags = true } = {}) {
   const tagList = tags && p.tags.length
     ? `\n          <ul class="tags">${p.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`
     : '';
-  return `<a class="logcard box" href="/blog/${p.slug}/" data-reveal data-perch="log">
+  return `<a class="logcard" href="/blog/${p.slug}/" data-reveal>
         <div class="logcard__art" aria-hidden="true">
-          <div class="logcard__scene">
-            <span class="logcard__sign"><span data-t="pt">${esc(p.title)}</span><span data-t="en">${esc(p.title_en)}</span></span>
-            <span data-agent></span>
-            <span class="logcard__ground"></span>
-          </div>
+          <span class="logcard__year">${p.date.getUTCFullYear()}</span>
+          <span class="logcard__ground"></span>
         </div>
         <div class="logcard__body">
           <p class="logcard__meta">
@@ -424,7 +418,6 @@ function postHtml(p, shell) {
           <footer class="post__footer" data-post-end>
             <aside class="follow box" aria-labelledby="follow-title">
               <div class="follow__head">
-                <span data-agent="sm"></span>
                 <span class="follow__tag" id="follow-title"><span data-t="pt">Siga ele. Eu vou saber.</span><span data-t="en">Follow him. I'll know.</span></span>
               </div>
               <p>
@@ -531,19 +524,18 @@ function staticPageHtml(pg, shell) {
 /* ---------- 404 ---------- */
 function notFoundHtml(shell) {
   const main = `  <main id="main-content">
-    <section class="section">
-      <div class="shell lost" data-lost>
+    <section class="lost">
+      <div class="shell">
         <p class="lost__code" aria-hidden="true">404</p>
-        <h1 class="sec-title"><span data-t="pt">Página não encontrada</span><span data-t="en">Page not found</span></h1>
-        <p class="sec-intro">
+        <h1 class="lost__title"><span data-t="pt">Página não encontrada</span><span data-t="en">Page not found</span></h1>
+        <p class="lost__intro">
           <span data-t="pt">O endereço não existe ou mudou de lugar.</span>
           <span data-t="en">This address does not exist or has moved.</span>
         </p>
-        <div class="lost__scene" aria-hidden="true">
-          <span class="bubble"><span data-t="pt">Esse bloco não existe.</span><span data-t="en">This block doesn't exist.</span></span>
-          <span data-agent></span>
-        </div>
-        <p class="more"><a href="/"><span data-t="pt">Voltar ao início</span><span data-t="en">Back to the home page</span></a> <a href="/blog/">Blog</a></p>
+        <p class="lost__actions">
+          <a class="btn btn--light" href="/"><span data-t="pt">Voltar ao início</span><span data-t="en">Back to the home page</span></a>
+          <a class="btn btn--ghost" href="/blog/">Blog</a>
+        </p>
       </div>
     </section>
   </main>`;
@@ -601,7 +593,7 @@ function contribHtml(data) {
   const totalEn = new Intl.NumberFormat('en-US').format(data.total);
   const labelPt = `Gráfico de contribuições de @${data.user} no GitHub: ${totalPt} no último ano`;
   const labelEn = `@${data.user}'s GitHub contributions chart: ${totalEn} in the last year`;
-  return `<figure class="contrib" data-reveal data-perch="contrib" data-sitter="commit" data-sitter-at="0.04">
+  return `<figure class="contrib" data-reveal>
             <svg class="contrib__grid" viewBox="0 0 ${cols * STEP - (STEP - CELL)} ${7 * STEP - (STEP - CELL)}" role="img" data-aria-pt="${esc(labelPt)}" data-aria-en="${esc(labelEn)}" aria-label="${esc(labelPt)}">${rects}</svg>
             <figcaption class="contrib__cap">
               <span><a href="https://github.com/${esc(data.user)}" target="_blank" rel="noopener">@${esc(data.user)}</a> · <span data-t="pt">${totalPt} contribuições no último ano</span><span data-t="en">${totalEn} contributions in the last year</span></span>

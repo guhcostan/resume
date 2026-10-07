@@ -2,7 +2,11 @@
 
 Site pessoal, currículo e blog de **Gustavo Costa (Guh)**, Lead Mobile & Frontend Engineer, Tech Anchor na Thoughtworks.
 
-Estático e sem framework de runtime: HTML, CSS e JavaScript puros. A única etapa de build é o gerador do blog, que transforma Markdown em HTML. Conteúdo em português e inglês, alternável pelo seletor PT/EN no cabeçalho (o estado vive em `?lang=en`). Todas as informações vêm do currículo oficial em `files/gustavo-costa-curriculo.pdf`.
+Estático e sem framework de runtime: HTML, CSS e JavaScript puros. A única etapa de build é o gerador, que transforma Markdown em HTML para o blog e injeta na home o gráfico de contribuições e o post mais recente.
+
+Conteúdo em português e inglês. O padrão é PT-BR; `?lang=en` abre em inglês, e o seletor PT/EN no cabeçalho troca o idioma e lembra a escolha no navegador (`localStorage`, chave `guh-locale`).
+
+O conteúdo segue o currículo oficial em `files/gustavo-costa-curriculo.pdf`. As estrelas dos projetos e o contador "2.000+" da home não vêm do currículo: são valores fixos no `index.html` (as estrelas também estão no `llms.txt`) e precisam ser atualizados à mão.
 
 ## Estrutura
 
@@ -12,10 +16,9 @@ Estático e sem framework de runtime: HTML, CSS e JavaScript puros. A única eta
 - `content/data/contributions.json` — snapshot do último ano de contribuições no GitHub (seção "Um ano em blocos")
 - `tools/build.mjs` — gerador: blog, RSS, sitemap e a home (injeta o gráfico de contribuições e o post mais recente)
 - `tools/contributions.mjs` — atualiza o snapshot de contribuições (`npm run contributions`)
-- `css/styles.css` — visual em pixel art: fundo quase preto, Silkscreen nos títulos e rótulos, Inter nos textos longos
-- `js/main.js` — idioma, menu móvel, seção ativa no menu e metadados por página (title, canonical, OG, JSON-LD)
-- `js/crew.js` — a equipe de agentes de jetpack: montam cada seção quando ela aparece (rascunho em blocos → conteúdo), um companheiro segue o mouse, pousa nos cards e comenta (clique faz gracinha, clique duplo desafia no jogo da velha), e agentes sentados em cima da ficha, do gráfico e do terminal fazem algo ao clique
-- `js/play.js` — a parte lúdica: agentes que constroem o nome na intro, agente que anda no chão, prévias dos projetos, terminal do contato (com jogo da velha) e segredos
+- `css/styles.css` — visual escuro: fundo quase preto, Silkscreen nos títulos e rótulos, Inter nos textos longos
+- `js/main.js` — idioma (PT/EN), menu móvel, seção ativa no menu e metadados trocados com o idioma (title, canonical, OG, JSON-LD)
+- `js/home.js` — efeitos da home, todos opcionais: aurora em WebGL, revelação ao rolar, contadores, terminais que digitam, paleta de comandos (Ctrl/Cmd+K) e cópia do e-mail
 - `assets/` — avatar em pixel art (`avatar-pixel.png`, gerado a partir da logo), imagem de compartilhamento, ícones e as fontes Silkscreen e Inter auto-hospedadas (OFL)
 - `files/gustavo-costa-curriculo.pdf` — currículo completo em PDF
 - `robots.txt`, `llms.txt`, `site.webmanifest` — SEO e AI SEO (`sitemap.xml` é gerado no build)
@@ -24,11 +27,11 @@ Estático e sem framework de runtime: HTML, CSS e JavaScript puros. A única eta
 
 ## Visual
 
-Tudo é construído com blocos. A Silkscreen desenha numa grade de 1/8 em, então com 32 ou 64px cada pixel da fonte vira um bloco inteiro na tela; a intro usa isso para amostrar o nome dos pixels reais da fonte e uma equipe de agentes larga cada bloco no lugar. No fim, o canvas sai e fica o texto de verdade, pixel sobre pixel.
+Fundo escuro com tokens de cor em `:root`, Silkscreen nos títulos e rótulos e Inter nos textos longos, as duas fontes auto-hospedadas. Os projetos são cards de terminal, com o comando digitado e a saída.
 
-O cursor também é em pixel (`assets/cursors/`): um bloco no normal, uma mão nos links e a mão apertando no clique. Só vale com mouse.
+A aurora de fundo é um shader WebGL renderizado em 1/3 da resolução e ampliado com `image-rendering: pixelated`, o que mantém o custo baixo e dá aspecto de pixel art.
 
-Sem JavaScript, o site continua inteiro: só não tem intro, agentes, terminal nem segredos. Com `prefers-reduced-motion`, nada se mexe. A intro roda uma vez por sessão, só na home, e dá para pular com Esc.
+Sem JavaScript, a página inteira aparece em português, sem animação. O `js/home.js` liga os efeitos e marca `html.is-live` quando inicializa. A classe `html.fx`, que liga o movimento, não é aplicada com `prefers-reduced-motion`: nesse caso o conteúdo já aparece no estado final.
 
 O gráfico "Um ano em blocos" vem do build: ele tenta baixar as contribuições mais recentes e, se a rede falhar, usa o snapshot versionado. Para builds sem rede, `CONTRIB_OFFLINE=1 npm run build`.
 
@@ -97,7 +100,7 @@ A implementação anterior (app Next.js + Vite) segue preservada no histórico d
 
 Os headers de segurança (CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy) e de cache ficam no arquivo `_headers`, versionado aqui. O HSTS e o HTTPS obrigatório são configurações da zona na Cloudflare.
 
-A CSP libera o script inline de bootstrap (idioma e intro, no `<head>` do `index.html`) pelo hash SHA-256 dele. Se esse script mudar, o `npm run build` falha e mostra o hash novo para colocar no `_headers`. Para calcular à mão:
+A CSP libera o script inline de bootstrap (idioma, no `<head>` do `index.html`) pelo hash SHA-256 dele. Se esse script mudar, o `npm run build` falha e mostra o hash novo para colocar no `_headers`. Para calcular à mão:
 
 ```sh
 node -e "const s=require('fs').readFileSync('index.html','utf8').match(/<script>([\s\S]*?)<\/script>/)[1];console.log('sha256-'+require('crypto').createHash('sha256').update(s).digest('base64'))"
