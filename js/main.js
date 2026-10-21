@@ -41,6 +41,7 @@
       jobTitle: 'Lead Mobile & Frontend Engineer',
       personDescription:
         'Engenheiro mobile e frontend com 8+ anos fazendo apps usados por milhões de pessoas. Tech Anchor na Thoughtworks, responsável pela direção técnica do app LatamPass, com IA em produção desde 2024.',
+      fioDescription: 'Agenda online para salão de beleza, barbearia, esmalteria e estética.',
       profileName: 'Gustavo Costa (Guh): currículo e portfólio',
       alumni: 'Universidade Federal de Lavras',
       knows: ['Português', 'Inglês', 'Espanhol'],
@@ -102,6 +103,7 @@
       jobTitle: 'Lead Mobile & Frontend Engineer',
       personDescription:
         "Mobile and frontend engineer with 8+ years building apps used by millions of people. Tech Anchor at Thoughtworks, leading the technical direction of the LatamPass app, with AI in production since 2024.",
+      fioDescription: 'Online booking for beauty salons, barbershops, nail salons and aesthetic clinics.',
       profileName: 'Gustavo Costa (Guh): résumé and portfolio',
       alumni: 'Federal University of Lavras',
       knows: ['Portuguese', 'English', 'Spanish'],
@@ -245,6 +247,16 @@
               }
             };
           })
+        },
+        {
+          '@type': 'SoftwareApplication',
+          '@id': 'https://fio.guhcostan.dev/#software',
+          name: 'Fio',
+          url: 'https://fio.guhcostan.dev/',
+          applicationCategory: 'BusinessApplication',
+          operatingSystem: 'Web',
+          description: M.fioDescription,
+          author: { '@id': personId }
         }
       ]
     };

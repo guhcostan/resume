@@ -39,6 +39,10 @@ React Native, TypeScript, iOS, Android, Node.js, React, Next.js, Firebase, Graph
 - [windows-cleaner-cli](https://github.com/guhcostan/windows-cleaner-cli) (84+ estrelas / stars): CLI de limpeza de caches e arquivos temporários para Windows. Node.js, npm.
 - [brasilapi-sdk](https://github.com/guhcostan/brasilapi-sdk) (70+ estrelas / stars): SDK TypeScript para a BrasilAPI (CEP, CNPJ, bancos, FIPE, IBGE).
 
+## Produto / Product
+
+- [Fio](https://fio.guhcostan.dev): agenda online para salão de beleza, barbearia, esmalteria e estética / online booking for beauty salons, barbershops, nail salons and aesthetic clinics. Produto próprio de Gustavo Costa (Guh), aplicação web.
+
 ## Certificações / Certifications
 
 - Active Listening: You Can Be a Great Listener Instructor (Lauren Powers)
